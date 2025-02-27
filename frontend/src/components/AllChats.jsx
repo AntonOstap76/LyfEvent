@@ -162,7 +162,7 @@ const AllChats = () => {
           {/* SIDEBAR RIGHT 1 */}
           <div className="truncate flex-1 bg-white shadow-md ring-2 ring-black rounded-lg
            h-[45vh] w-[300px] flex flex-col relative p-4 mb-4">
-            <h1 className="truncate flex-1 flex justify-center text-2xl font-bold text-black mb-2">
+            <h1 className="truncate flex-2 flex justify-center text-2xl font-bold text-black mb-2">
               {selectedChat.chat_name}
             </h1>
 
