@@ -10,6 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     participants = UserSerializer(many=True, required=False)
+    host = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -17,6 +18,11 @@ class EventSerializer(serializers.ModelSerializer):
                   "category", "image", "participants", 'date', 'location']
         read_only_fields = ['updated', 'created', 'host']
 
+    def get_host(self, obj):
+        return {
+            "id": obj.host.id,
+            "username": obj.host.username
+        }
 
 class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()

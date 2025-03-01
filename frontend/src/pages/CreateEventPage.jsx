@@ -4,7 +4,7 @@ import Modal from "../components/Modal"
 import { AuthContext } from '../context/AuthContext'
 import {useFormik} from "formik"
 import basicSchema from '../schemas/FormValidator';
-
+import Swal from "sweetalert2";
 
 const CreateEventPage = ({eventId}) => {
 
@@ -50,12 +50,32 @@ const CreateEventPage = ({eventId}) => {
         const data = await response.json();
   
         if (response.ok) {
+
+          Swal.fire({
+            title: "🎉 Success!",
+            text: "Your event has been created or changed!",
+            icon: "success",
+            confirmButtonColor: "#4CAF50",
+          });
+          navigate("/my-events");  // Redirect to 'My Events' page
+
           navigate("/my-events");  // Navigate after successful creation or update
+
         } else {
-          console.error('Error:', data.errors || data.message || 'Unknown error');
+          Swal.fire({
+            title: "⚠️ Oops!",
+            text: data.detail || "You can only create up to 8 events.",
+            icon: "error",
+            confirmButtonColor: "#d33",
+          });
         }
       } catch (error) {
-        console.error('Network Error:', error);
+        Swal.fire({
+          title: "❌ Error!",
+          text: "Something went wrong. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+        });
       }
     },
   });
@@ -145,7 +165,11 @@ const CreateEventPage = ({eventId}) => {
 
     return(
       <div className="min-h-screen container mx-auto p-4 max-w-2xl bg-white shadow-lg rounded-lg">
+
+        <h1 className="text-center text-4xl font-bold text-black-800 mb-6">{eventId ? "Edit Event" : "Create Event"}</h1>
+
         <h1 className="text-4xl font-bold text-gray-800 mb-6">{eventId ? "Edit Event" : "Create Event"}</h1>
+
 
         <form className="grid grid-cols-1 gap-6" onSubmit={formik.handleSubmit}>
   
@@ -253,7 +277,7 @@ const CreateEventPage = ({eventId}) => {
             ) : (
               <label
                 htmlFor="image-upload"
-                className={`block w-full h-48 rounded-md cursor-pointer flex flex-col items-center justify-center border-2 
+                className={`bg-gray-50 block w-full h-48 rounded-md cursor-pointer flex flex-col items-center justify-center border-2 
                 ${formik.errors.image && formik.touched.image ? " border-red-600" : 'border-dashed border-gray-400 p-4'}`}
               >
                 <div className="text-center">

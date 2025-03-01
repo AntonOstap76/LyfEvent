@@ -7,14 +7,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const Profile = () => {
 
   const { user, authTokens} = useContext(AuthContext);
-  const [modalJoined, setModalJoined] = useState(false)
+  const [modalJoined, setModalJoined] = useState(false);
   const [joinedEvents, setJoinedEvents] = useState([]);
-  const [data, setData] = useState([])
-  const { state } = useLocation()
-  const userOther = state?.user
-  const [following, setFollowing] = useState(false)
-  const navigate = useNavigate()
-
+  const [data, setData] = useState([]);
+  const { state } = useLocation();
+  const userOther = state?.user;
+  const [following, setFollowing] = useState(false);
+  const navigate = useNavigate();
+  
 
 
   useEffect(()=>{
