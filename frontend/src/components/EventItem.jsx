@@ -24,7 +24,7 @@ const EventItem = ({ event }) => {
         {/* Event details */}
         <div className="px-5 pb-2">
           {/* Title */}
-          <h5 className="text-xl font-semibold tracking-tight text-gray-900">
+          <h5 className="truncate flex-1 text-xl font-semibold tracking-tight text-gray-900">
             {event?.title}
           </h5>
 

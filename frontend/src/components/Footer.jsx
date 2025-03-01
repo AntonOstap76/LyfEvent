@@ -2,8 +2,9 @@ import React from 'react'
 import logo from "../assets/logo/logo.svg"
 const Footer = () => {
     return (
-      
-<div div className="w-full bg-gradient-to-r from-blue-900 to-yellow-600 text-white py-6 text-center rounded-lg shadow-lg ">
+     
+<div className="w-full bg-[#6d6fff] text-white py-6 text-center">
+
   <h2 className="text-2xl font-bold mb-2">Connect with Founders</h2>
   
   

@@ -97,7 +97,7 @@ const EventPage = () => {
             {/* Action Buttons */}
             <div className="mt-8 flex justify-center gap-4">
               {user?.user_id === event?.host ? (
-                <>
+                <>  
                   <button
                     className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
                     onClick={handleEdit}
