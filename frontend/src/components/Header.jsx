@@ -49,7 +49,7 @@ const Header = () => {
                   </a>
 
                   <a
-                    href="#"
+                    href="/register"
                     className="text-white bg-customBlue-600 hover:bg-customBlue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-lg px-5 py-2.5 mr-4 transition-all duration-200"
                   >
                     Get started

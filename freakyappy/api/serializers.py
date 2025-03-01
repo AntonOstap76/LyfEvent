@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User 
 from .models import Event, Profile
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -37,3 +38,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_followers(self, obj):
         return [profile.user.id for profile in obj.followers.all()]
+    

@@ -24,7 +24,7 @@ const LoginPage = () => {
                     type="text"
                     name="username"
                     id="username"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-customBlue-500 focus:border-customBlue-500 block w-full p-2.5"
                     placeholder="Enter your username"
                     required
                 />
@@ -41,7 +41,7 @@ const LoginPage = () => {
                     name="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-customBlue-500 focus:border-customBlue-500 block w-full p-2.5"
                     required
                   />
                 </div>
@@ -49,7 +49,7 @@ const LoginPage = () => {
 
                   <a
                     href="#"
-                    className="text-sm font-medium text-blue-600 hover:underline"
+                    className="text-sm font-medium text-customBlue-600 hover:underline"
                   >
                     Forgot password?
                   </a>
@@ -57,7 +57,7 @@ const LoginPage = () => {
                 
                 <button
                   type="submit"
-                  className="w-full text-white bg-customBlue-600 hover:bg-customBlue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="w-full text-white bg-customBlue-600 hover:bg-customBlue-700 focus:ring-4 focus:outline-none focus:ring-customBlue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Sign in
                 </button>

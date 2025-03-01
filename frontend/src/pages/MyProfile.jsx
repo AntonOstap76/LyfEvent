@@ -80,7 +80,7 @@ const MyProfile = () => {
       {user ? (
         edit ? (
           
-          <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl blur-md relative">
+          <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative">
         
             <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
   
@@ -88,7 +88,7 @@ const MyProfile = () => {
             <div className="rounded-lg ring-1 ring-black h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
   
             {/* Avatar (Exempt from Blur) */}
-            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-20">
+            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
               <img src={ava} alt="" />
             </div>
   
@@ -97,34 +97,6 @@ const MyProfile = () => {
           <h2 className="font-semibold">{user.username}</h2>
         </div>
   
-            {/* Blur Wrapper (Everything Else) */}
-            <div className={`relative  transition-all duration-300 z-0`}>
-              {/* Follow Section */}
-              <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Followers
-                    <span>{data?.followers?.length ?? 0}</span>
-                  </li>
-                </button>
-                <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Following
-                    <span>{data?.following?.length ?? 0}</span>
-                  </li>
-                </button>
-              </ul>
-  
-              {/* Buttons */}
-              <div className="flex justify-center mt-4">
-                <button
-                  onClick={getJoinedEvents}
-                  className="p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold w-2/6 flex items-center justify-center hover:scale-110 transition"
-                >
-                  Joined Events
-                </button>
-              </div>
-            </div>
   
             {/* Facts Section (Exempt from Blur) */}
             <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">

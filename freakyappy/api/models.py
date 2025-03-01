@@ -1,9 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 from django.core.exceptions import ValidationError
 
 
+import uuid
+from django.conf import settings
+
+
+class ActivationToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="activation_token")
+    token = models.CharField(max_length=100, unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Activation Token for {self.user.username}"
+    
 
 class Event(models.Model):
     host=models.ForeignKey(User,on_delete=models.CASCADE, null=True, related_name='events')

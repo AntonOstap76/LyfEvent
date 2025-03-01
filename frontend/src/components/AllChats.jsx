@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import ChatPage from '../pages/ChatPage';
 import { Link, useNavigate } from "react-router-dom";
 import UsersModal from './UsersModal';
+import ava from '../assets/img/ava.svg';
 
 
 const AllChats = () => {
@@ -214,8 +215,12 @@ const AllChats = () => {
             onClick={() => navigate('/profile', { state: { user } })}  // ✅ Fixed Syntax
             className="flex items-center gap-3 p-1 hover:bg-customBlue-100 transition cursor-pointer"
           >
+
             <img src={user.avatar || "assets/img/ava.svg"}
             className="w-10 h-10 rounded-full" alt={user.avatar}/>
+
+            <img src={ava}  className=" ring-1 ring-black w-10 h-10 rounded-full" alt="User"/>
+
             <span className="font-medium">{user.username}</span>
           </div>
         )) 

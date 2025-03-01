@@ -1,5 +1,6 @@
 # Ignore Python bytecode files and cache
-__pycache__/
+**/__pycache__/
+
 *.py[cod]
 
 # Ignore Django migration files except __init__.py
@@ -9,3 +10,6 @@ __pycache__/
 # Ignore database files
 *.sqlite3
 db.sqlite3
+
+media/event_images/*
+media/profile_images/avatars/*

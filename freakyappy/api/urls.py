@@ -17,9 +17,7 @@ urlpatterns = [
     path('profile/<str:pk>/', views.profile, name='profile'),
     path('follow/<str:pk>/', views.follow, name='follow'),
     path('unfollow/<str:pk>/', views.unfollow, name='unfollow'),
+    path('register/', views.register, name='register'),
+    path('activate/<str:token>/', views.activate_account, name='activate')
     
-
-
-
-
 ]

@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import  HttpResponse
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import EventSerializer, ProfileSerializer
-from .models import Event, Profile
+from .models import Event, Profile, ActivationToken
 from django.contrib.auth.models import User
 from rest_framework import status
 
@@ -15,6 +15,14 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Q
 
 from django.shortcuts import get_object_or_404
+
+from django.core.mail import send_mail
+
+import uuid
+
+from django.conf import settings
+
+from django.urls import reverse
 
 
 
@@ -311,4 +319,61 @@ def unfollow(request, pk):
     return Response(serializer.data, status=200)
 
 
+@api_view(['POST'])
+def register(request):
+    email = request.data.get('email')
+    username = request.data.get('username')
+    password = request.data.get('password1')
 
+    # Check if the username or email already exists
+    if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+        return Response({"error": "Username or email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+    user = User.objects.create_user(username=username, email=email, password=password)
+    user.is_active = False 
+    user.save()
+
+    activation_token = str(uuid.uuid4())  
+    ActivationToken.objects.create(user=user, token=activation_token)  
+
+    activation_link = request.build_absolute_uri(reverse('activate', args=[activation_token]))
+
+    email_subject = "LyfeVents Email Confirmation"
+    email_body = f"Click the link to activate your account: {activation_link}"
+
+    send_mail(
+        subject=email_subject,
+        message=email_body,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+
+    return Response({"message": "User created successfully. Check your email for activation."}, status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])
+def activate_account(request, token):
+    try:
+        user_token = ActivationToken.objects.get(token=token) 
+        
+        user = user_token.user
+        
+        user.is_active = True
+        user.save()
+        
+        user_token.delete()
+        
+        html_content = f"""
+        <html>
+            <body>
+                <h2>Email was Confirmed!</h2>
+                <p>Your account has been activated successfully. You can now <a href="{settings.FRONTEND}/login/"> sign in </a>.</p>
+            </body>
+        </html>
+        """
+        return HttpResponse(html_content)
+    
+    except ActivationToken.DoesNotExist:
+        return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)

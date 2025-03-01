@@ -19,6 +19,7 @@ import ChatPage from './pages/ChatPage'
 import Chat from './pages/Chat'
 import EventsFiltered from './pages/EventsFiltered'
 import MyProfile from './pages/MyProfile'
+import Register from './pages/Register'
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
             <Route path='/events-search' element={<EventsFiltered />}/>
             
             <Route path='/about' element={<About/>}/>
+
+            <Route path='/register' element={<Register/>}/>
 
             <Route path='/create-event/*' element={
               <PrivateRoute element={<CreateEventPage/>}/>

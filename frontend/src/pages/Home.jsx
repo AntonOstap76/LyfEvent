@@ -66,7 +66,7 @@ const Home = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full bg-white placeholder:text-slate-400 text-slate-900 text-md border border-slate-200 rounded-lg
-            pl-3 pr-28 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            pl-3 pr-10 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
             placeholder="Search events..." 
           />
           <button
