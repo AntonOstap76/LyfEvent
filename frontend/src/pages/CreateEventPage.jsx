@@ -519,7 +519,7 @@ const CreateEventPage = ({eventId}) => {
 
     return(
       <div className="min-h-screen container mx-auto p-4 max-w-2xl bg-white shadow-lg rounded-lg">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6">{eventId ? "Edit Event" : "Create Event"}</h1>
+        <h1 className="text-center text-4xl font-bold text-black-800 mb-6">{eventId ? "Edit Event" : "Create Event"}</h1>
         <form className="grid grid-cols-1 gap-6" onSubmit={formik.handleSubmit}>
   
         <div>
@@ -626,7 +626,7 @@ const CreateEventPage = ({eventId}) => {
             ) : (
               <label
                 htmlFor="image-upload"
-                className={`block w-full h-48 rounded-md cursor-pointer flex flex-col items-center justify-center border-2 
+                className={`bg-gray-50 block w-full h-48 rounded-md cursor-pointer flex flex-col items-center justify-center border-2 
                 ${formik.errors.image && formik.touched.image ? " border-red-600" : 'border-dashed border-gray-400 p-4'}`}
               >
                 <div className="text-center">
