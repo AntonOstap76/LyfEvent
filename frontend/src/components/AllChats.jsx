@@ -4,7 +4,7 @@ import ChatPage from '../pages/ChatPage';
 import { Link, useNavigate } from "react-router-dom";
 import UsersModal from './UsersModal';
 import ava from '../assets/img/ava.svg';
-
+import bg_chat from '../assets/img/bg-chat.svg';
 
 const AllChats = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
@@ -17,6 +17,7 @@ const AllChats = () => {
   const [filteredChats, setFilteredChats] = useState([])
   const [search, setSearch] = useState("");
   const navigate = useNavigate()
+  const [avatars, setAvatars] = useState({});
 
   useEffect(() => {
     getChats();
@@ -89,6 +90,32 @@ const AllChats = () => {
     const query = e.target.value.toLowerCase();
     setSearch(query);
     setFilteredChats(chats.filter((chat) => chat.chat_name.toLowerCase().includes(query)));
+  };
+
+
+  const profilePic = async (userId) => {
+    const response = await fetch(`/api/profile/${userId}/`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + String(authTokens.access),
+      }
+    }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.avatar;
+    }
+    return ''; 
+  };
+
+  const handleImageLoad = async (userId) => {
+    // Fetch the avatar and set it in the state to prevent repeated calls
+    const avatar = await profilePic(userId);
+    setAvatars((prevAvatars) => ({
+      ...prevAvatars,
+      [userId]: avatar || ava,  // Use default avatar if no avatar found
+    }));
   };
   
 
@@ -200,12 +227,14 @@ const AllChats = () => {
             </Link>
           </div>
 
+
           {/* SIDEBAR RIGHT 2 (Now below Sidebar 1) */}
           <div className="bg-white shadow-md ring-2 ring-black rounded-lg
            h-[33vh] w-[300px] flex flex-col relative p-4">
             <h1 className="flex justify-center text-2xl font-bold text-black mb-2">
               Users Joined
             </h1>
+
 
 
             {selectedEvent ? 
@@ -215,7 +244,12 @@ const AllChats = () => {
             onClick={() => navigate('/profile', { state: { user } })}  // ✅ Fixed Syntax
             className="flex items-center gap-3 p-1 hover:bg-customBlue-100 transition cursor-pointer"
           >
-            <img src={ava}  className=" ring-1 ring-black w-10 h-10 rounded-full" alt="User"/>
+              <img
+                src={avatars[user.id] || ava} // Use avatar if available or default image
+                className="ring-1 ring-black w-10 h-10 rounded-full"
+                alt="User"
+                onLoad={() => handleImageLoad(user.id)} // Trigger fetch on image load
+              />
 
             <span className="truncate flex-1 font-medium">{user.username}</span>
           </div>
@@ -238,7 +272,17 @@ const AllChats = () => {
       ) : 
       
       (
-        <p className="text-xl font-bold text-gray-600">Select a chat</p>
+        <div>
+        <p className="text-xl font-bold text-gray-600  absolute top-0 ">Select a chat</p>
+
+
+
+      <div className="flex flex-col items-center justify-center h-[80vh] text-center">
+        
+        <img src={bg_chat} alt="img-bg-chat" className="w-58 h-auto " />
+      </div>
+      </div>
+
       )}
     </div>
     </div>
