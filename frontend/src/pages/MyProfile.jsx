@@ -184,7 +184,7 @@ const MyProfile = () => {
             </div>
   
             {/* Username (Exempt from Blur) */}
-            <div className="text-center mt-2 relative z-20">
+            <div className="truncate flex-1 text-center mt-2 relative z-10">
               <h2 className="font-semibold">{user.username}</h2>
             </div>
   

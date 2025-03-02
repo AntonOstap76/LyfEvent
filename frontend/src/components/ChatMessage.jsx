@@ -1,5 +1,6 @@
 import React, { useContext,  } from 'react'
 import { AuthContext } from '../context/AuthContext';
+import ava from '../assets/img/ava.svg';
 
 const ChatMessage = ({ content, authorName}) => {
     let {user} = useContext(AuthContext)
@@ -10,23 +11,30 @@ const ChatMessage = ({ content, authorName}) => {
   return (
         <div>
             {authorName===user.username ? (
-                <li class="flex justify-end mb-4"> 
-                <div class="bg-customBlue-200 rounded p-4 chat-bubble">
-                    <p class="break-words">
-                        {content}
-                    </p>
-                </div> 
-            </li> ) : (            
-                <li>
-                <div class="flex justify-start">
-                    <div class="bg-gray-200 p-4 rounded chat-bubble">
-                        <span>{content}</span>
-                    </div>  
-                </div>
-                <div class="text-sm font-light py-1 ml-5">
-                    <span class="text-black">{authorName}</span>
-                </div>
-            </li>) }
+                
+                <li className="flex justify-end items-end mb-4">
+  {/* Message Bubble */}
+  
+  <div 
+  key={user.username} 
+  onClick={() => navigate('/profile', { state: { user } })}
+  className="bg-blue-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal " >
+    
+    <span className="block text-sm font-medium text-black mb-1"></span> {/* Username */}
+    <span>{content}</span> {/* Message */}
+  </div>
+  
+  {/* Avatar on the Right */}
+  <img src={ava} className="w-8 h-8 rounded-full ml-2 mb-3" alt="User" />
+</li> ) : (            
+                <li className="flex justify-start mb-4 items-center gap-2">
+                <img src={ava} className="w-8 h-8 rounded-full" alt="Author Avatar" />
+                <div className="bg-gray-200 p-4 rounded chat-bubble max-w-xs break-words">
+    <span className="truncate flex-1 block text-sm font-medium text-black mb-1 break-words overflow-wrap break-word">{authorName}</span> {/* Username */}
+    <span>{content}</span> {/* Message */}
+  </div>
+                
+              </li>) }
 
     </div>
   )
