@@ -29,7 +29,7 @@ const EventItem = ({ event }) => {
           </h5>
 
           {/* Host (Clickable) */}
-          {event.host && (
+          {/* {event.host && (
             <p className="truncate flex-1 mt-1 text-sm text-gray-600">
               Hosted by:  
               <span 
@@ -42,7 +42,7 @@ const EventItem = ({ event }) => {
                 {event.host.username}
               </span>
             </p>
-          )}
+          )} */}
 
           {/* Description & Category */}
           <div className="flex items-center mt-2 text-md text-gray-700">

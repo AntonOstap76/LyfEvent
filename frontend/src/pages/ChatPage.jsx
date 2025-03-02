@@ -148,6 +148,7 @@ const ChatPage = ({name}) => {
                   authorName={message.author_username}
                   content={message.text}
                 />
+                
               ))}
             </ul>
           </div>
