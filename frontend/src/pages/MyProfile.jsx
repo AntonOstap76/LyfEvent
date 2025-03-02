@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../context/AuthContext';
 import JoinedModal from '../components/JoinedModal'
 import ava from '../assets/img/ava.svg';
+import Plus from '../components/PlusIcon';
+import { motion } from "framer-motion";
 
 const MyProfile = () => {
 
@@ -81,38 +83,68 @@ const MyProfile = () => {
         edit ? (
           
           <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative">
-        
-            <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
-  
-            {/* Banner (Exempt from Blur) */}
-            <div className="rounded-lg ring-1 ring-black h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
-  
-            {/* Avatar (Exempt from Blur) */}
-            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
-              <img src={ava} alt="" />
-            </div>
-  
-        {/* Username (Exempt from Blur) */}
-        <div className="text-center mt-2 relative z-20">
-          <h2 className="font-semibold">{user.username}</h2>
-        </div>
-  
-  
-            {/* Facts Section (Exempt from Blur) */}
-            <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
-              {[1, 2, 3].map((fact) => (
-                <div
-                  key={fact}
-                  className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col"
-                >
-                  <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
-                  <hr className="my-2 mx-4 border-gray-300" />
-                  <div className="flex flex-col gap-2 mt-2">
-                    <div className="w-full h-4 bg-gray-300 rounded"></div>
-                    <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                    <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-                  </div>
-                </div>
+          {/* Blurred Background */}
+          <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
+    
+    
+          <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500 relative z-10 flex items-top justify-center">
+          </div>
+    
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10 flex items-center justify-center"
+          >
+            <img src={ava} alt="Avatar" className="absolute w-full h-full object-cover" />
+            <motion.div
+                animate={{ rotate: 180 }} // Default state
+                whileHover={{ rotate: 0 }} // Rotates back on hover (triggered by motion.div)
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute w-12 h-12 bg-white/40 flex items-center justify-center rounded-full mb-2"
+              >
+                <Plus className="text-white" />
+              </motion.div>
+          </motion.button>
+
+
+    
+          {/* Username */}
+          <div className="text-center mt-2 relative z-20">
+            <h2 className="font-semibold">{user.username}</h2>
+          </div>
+    
+          {/* Facts Section */}
+          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
+            {[1, 2, 3].map((fact) => (
+              <motion.button
+              key={fact}
+              whileHover={{ scale: 1.1 }} // Scale effect on hover
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col items-center justify-center transition relative"
+            >
+              {/* Plus Icon rotates when hovering on the entire Fact div */}
+              <motion.div
+                animate={{ rotate: 180 }} // Default state
+                whileHover={{ rotate: 0 }} // Rotates back on hover (triggered by motion.div)
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute w-12 h-12 bg-white/40 flex items-center justify-center rounded-full mb-2"
+              >
+                <Plus className="text-white" />
+              </motion.div>
+              
+              <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
+              <hr className="my-2 mx-4 border-gray-300" />
+              <div className="flex flex-col gap-2 mt-2">
+                <div className="w-full h-4 bg-gray-300 rounded"></div>
+                <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+              </div>
+            </motion.button>
+
+
+
+
               ))}
             </div>
   
@@ -144,7 +176,7 @@ const MyProfile = () => {
             <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
   
             {/* Banner (Exempt from Blur) */}
-            <div className="rounded-lg ring-1 ring-black h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
+            <div className="rounded-lg  h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
   
             {/* Avatar (Exempt from Blur) */}
             <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
