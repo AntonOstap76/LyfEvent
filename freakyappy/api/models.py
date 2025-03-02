@@ -2,8 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+from django.core.exceptions import ValidationError
+
+
 import uuid
 from django.conf import settings
+
 
 class ActivationToken(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="activation_token")
@@ -15,7 +19,7 @@ class ActivationToken(models.Model):
     
 
 class Event(models.Model):
-    host=models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    host=models.ForeignKey(User,on_delete=models.CASCADE, null=True, related_name='events')
     title = models.CharField(max_length=255,verbose_name="Event Title")
     description = models.TextField(verbose_name="Event Description")
     updated=models.DateTimeField(auto_now=True)
@@ -27,6 +31,10 @@ class Event(models.Model):
     date = models.DateTimeField(verbose_name="Event Date")
     location = models.CharField(max_length=255, verbose_name="Event Location")
 
+    def save(self, *args, **kwargs):
+        if not self.pk and self.host.events.count() >= 8:  # Only check limit when creating (not updating)
+            raise ValidationError("You can only create up to 8 events.")
+        super().save(*args, **kwargs)
    
     def __str__(self):
         return f"{self.title} - Event"
@@ -36,6 +44,9 @@ class Event(models.Model):
 
     def is_user_joined(self, user):
         return self.participants.filter(id=user.id).exists()
+    
+    
+    
     
 
 class Profile(models.Model):

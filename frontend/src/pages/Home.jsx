@@ -70,7 +70,7 @@ const Home = () => {
             placeholder="Search events..." 
           />
           <button
-            className="absolute top-2 bottom-2 right-2 flex items-center rounded bg-slate-900 m-auto
+            className="absolute top-2 bottom-2 right-2 flex items-center rounded bg-[#6d6fff] m-auto
              py-1 px-2.5 border border-transparent text-md text-white transition-all hover:scale-125"
             type="submit"
           >

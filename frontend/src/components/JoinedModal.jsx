@@ -51,13 +51,13 @@ const JoinedModal = ({closeModal, events}) => {
                   className="flex items-center justify-between gap-3 p-2 hover:bg-customBlue-100 transition"
                 >
                   {/* Left side: Image & Title */}
-                  <div className="flex items-center gap-3">
+                  <div className="truncate flex-1 flex items-center gap-3">
                     <img
                       src={event.image}
                       className="w-10 h-10 rounded-full"
                       alt="User"
                     />
-                    <span className="font-medium">{event.title}</span>
+                    <span className="truncate flex-1 font-medium">{event.title}</span>
                   </div>
 
                   {/* Right side: Date & Time */}

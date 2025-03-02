@@ -57,9 +57,11 @@ const UsersModal = ({closeModal, eventID}) => {
             <div className="mt-4">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <div key={user.id} className="flex items-center gap-3 p-2 hover:bg-customBlue-100 transition">
+                  <div key={user.username} 
+                  className="truncate flex-1 flex items-center gap-3 p-2 hover:bg-customBlue-100 transition" >
                     <img src="" className="w-10 h-10 rounded-full" alt="User" />
-                    <span className="font-medium">{user.username}</span>
+                    
+                    <span className="truncate flex-1 font-medium">{user.username}</span>
                   </div>
                 ))
               ) : (

@@ -59,17 +59,6 @@ const EventsPage = () => {
         )}
       </div>
 
-      {/* Pagination */}
-      {myEvents.length > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 py-4 container mx-auto">
-        <Pagination
-          eventsPerPage={eventsPerPage}
-          totalEvents={myEvents.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
-      </div>
-      )}
     </div>
   );
 };

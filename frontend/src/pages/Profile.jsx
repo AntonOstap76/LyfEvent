@@ -128,7 +128,7 @@ const Profile = () => {
           </div>
 
           <div className="text-center mt-2">
-            <h2 className="font-semibold">{userOther.username}</h2>
+            <h2 className="truncate flex-1 font-semibold">{userOther.username}</h2>
           </div>
 
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
