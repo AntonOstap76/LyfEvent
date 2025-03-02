@@ -3,7 +3,7 @@ from django.shortcuts import  HttpResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import EventSerializer, ProfileSerializer
+from .serializers import EventSerializer, ProfileSerializer, UserSerializer
 from .models import Event, Profile, ActivationToken
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -377,3 +377,14 @@ def activate_account(request, token):
     
     except ActivationToken.DoesNotExist:
         return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET'])
+def get_user_by_id(request, pk):
+    user = get_object_or_404(User, id=pk)
+    return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_user_by_username(request, username):
+    user = get_object_or_404(User, username=username)
+    return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
