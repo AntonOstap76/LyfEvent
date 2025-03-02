@@ -15,7 +15,7 @@ const ChatMessage = ({ content, authorName }) => {
           <div 
             // key={user.username} 
             // onClick={() => navigate('/profile', { state: { user } })}
-            className="bg-blue-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal"
+            className="bg-customBlue-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal"
           >
             <span>{content}</span> {/* Message */}
           </div>
