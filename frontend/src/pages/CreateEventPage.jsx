@@ -26,6 +26,7 @@ const CreateEventPage = ({eventId}) => {
       capacity: '',
       category: '',
     },
+    
     validationSchema: basicSchema,
     onSubmit: async (values) => {
       const finalData = {
