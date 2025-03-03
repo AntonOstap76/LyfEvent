@@ -173,6 +173,7 @@ def eventUpdate(request, pk):
         "errors": serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['DELETE'])
 def eventDelete(request, pk):
     event = Event.objects.get(id=pk)
@@ -188,6 +189,7 @@ def myEvents(request):
     serializer = EventSerializer(my_events, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def joinedEvents(request, pk):
@@ -195,6 +197,7 @@ def joinedEvents(request, pk):
     joined_events = user.joined_event.all().order_by('-updated') 
     serializer = EventSerializer(joined_events, many=True)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -209,6 +212,7 @@ def joinEvent(request, pk):
 
     serializer = EventSerializer(event)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -388,3 +392,38 @@ def get_user_by_id(request, pk):
 def get_user_by_username(request, username):
     user = get_object_or_404(User, username=username)
     return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+
+@api_view(['PUT'])
+def profile_update(request, pk):
+    profile = get_object_or_404(Profile, user__id=pk)
+
+    # Check if the image in the request data is a new one or not
+    if 'avatar' in request.data:
+        # If the image is a new file (base64 encoded), process it
+        if "data:image" in request.data['avatar']:
+            # Get the base64 image string
+            format, imgstr = request.data['avatar'].split(';base64,') 
+            ext = format.split('/')[-1]  # Extract the image extension (e.g., 'png', 'jpeg')
+
+            # Decode the base64 image string and create a ContentFile to attach to the serializer
+            image_data = base64.b64decode(imgstr)
+            image_name = f"{request.user}_image.{ext}"  # Naming the image dynamically based on event title
+            request.data['avatar'] = ContentFile(image_data, name=image_name)
+        else:
+            # If it's a URL (i.e., the image is not being changed), leave the image as it is
+            # This assumes the image URL is already set on the event model
+            request.data['avatar'] = profile.avatar
+
+    # Now we proceed with the regular update logic
+    serializer = ProfileSerializer(instance=profile, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+
+    return Response({
+        "status": "error",
+        "message": "Invalid data",
+        "errors": serializer.errors
+    }, status=status.HTTP_400_BAD_REQUEST)
