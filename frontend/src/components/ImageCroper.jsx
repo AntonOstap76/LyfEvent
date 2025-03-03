@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-let ASPECT_RATIO = 16 / 9;
-let MIN_DIMENSION = 150;
+let ASPECT_RATIO = 4 / 3;
+let MIN_DIMENSION = 1500;
 
 const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
 

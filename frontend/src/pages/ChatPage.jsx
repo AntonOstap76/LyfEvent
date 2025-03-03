@@ -132,7 +132,7 @@ const ChatPage = ({name}) => {
           <p className="text-lg font-semibold">{name} Event</p>
           <p
             id="online_count"
-            className="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2"
+            className="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2 font-semibold"
           >
             Online: {onlineUsers}
           </p>
@@ -169,7 +169,7 @@ const ChatPage = ({name}) => {
               <button
                 id="send-button"
                 type="submit"
-                className="bg-[#6d6fff] text-white px-4 py-2 rounded-r-md hover:bg-[#5a5ae6] transition duration-300"
+                className="bg-[#6d6fff] text-white px-4 py-2 rounded-r-md hover:bg-[#5a5ae6] transition duration-300 font-semibold"
               >
                 Send
               </button>

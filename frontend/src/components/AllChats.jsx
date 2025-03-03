@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import ChatPage from '../pages/ChatPage';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UsersModal from './UsersModal';
 import ava from '../assets/img/ava.svg';
 import bg_chat from '../assets/img/bg-chat.svg';
@@ -11,7 +11,8 @@ const AllChats = () => {
   const [chats, setChats] = useState([]);
   const [events, setEvents] = useState([]);
   const { user, authTokens } = useContext(AuthContext);
-  const [selectedEvent, setSelectedEvent] = useState(null)
+  const location = useLocation(); // Corrected useLocation usage
+  const [selectedEvent, setSelectedEvent] = useState(location.state?.Event || null);
   const [modal, setModal] = useState(false)
 
   const [filteredChats, setFilteredChats] = useState([])

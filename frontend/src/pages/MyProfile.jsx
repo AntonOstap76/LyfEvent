@@ -4,6 +4,7 @@ import JoinedModal from '../components/JoinedModal'
 import ava from '../assets/img/ava.svg';
 import Plus from '../components/PlusIcon';
 import { motion } from "framer-motion";
+import FollowersModal from '../components/FollowersModal';
 
 const MyProfile = () => {
 
@@ -12,7 +13,15 @@ const MyProfile = () => {
   const [joinedEvents, setJoinedEvents] = useState([]);
   const [data, setData] = useState([])
   const [edit, setEdit] = useState(false)
+  const [modalType, setModalType] = useState(null);
 
+const openFollowersModal = (type) => {
+  setModalType(type);
+};
+
+const closeFollowersModal = () => {
+  setModalType(null);
+};
 
   useEffect(()=>{
     getProfileData()
@@ -74,8 +83,7 @@ const MyProfile = () => {
     setEdit(true)
 
   }
-
-
+  console.log("data: ",data);
 
   return (
     <div className="min-h-screen flex flex-col items-center relative">
@@ -192,19 +200,19 @@ const MyProfile = () => {
             <div className={`relative ${edit ? "blur-md" : ""} transition-all duration-300 z-0`}>
               {/* Follow Section */}
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-                <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Followers
-                    <span>{data?.followers?.length ?? 0}</span>
-                  </li>
-                </button>
-                <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Following
-                    <span>{data?.following?.length ?? 0}</span>
-                  </li>
-                </button>
-              </ul>
+  <button onClick={() => openFollowersModal("followers")}>
+    <li className="flex flex-col items-center text-lg">
+      Followers
+      <span>{data?.followers?.length ?? 0}</span>
+    </li>
+  </button>
+  <button onClick={() => openFollowersModal("following")}>
+    <li className="flex flex-col items-center text-lg">
+      Following
+      <span>{data?.following?.length ??  0}</span>
+    </li>
+  </button>
+</ul>
   
               {/* Buttons */}
               <div className="flex justify-center mt-4">
@@ -255,6 +263,13 @@ const MyProfile = () => {
   
             {/* Modal */}
             {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} />}
+            {modalType && (
+  <FollowersModal
+    closeModal={closeFollowersModal}
+    users={modalType === "followers" ? data.followers : data.following}
+    title={modalType === "followers" ? "Followers" : "Following"}
+  />
+)}
           </div>
         )
       ) : null}
