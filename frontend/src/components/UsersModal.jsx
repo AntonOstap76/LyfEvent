@@ -70,6 +70,7 @@ const UsersModal = ({ closeModal, eventID }) => {
         <div className="relative w-[60%] sm:w-[50%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
           <div className="px-5 py-5">
             <div className="border-b-2 py-4 px-2">
+              
               <input
                 type="text"
                 placeholder="Search users"

@@ -9,6 +9,7 @@ import {useFormik} from "formik"
 import Swal from "sweetalert2";
 import ModalAva from '../components/ModalAva';
 import { useNavigate } from 'react-router-dom';
+import FactsModal from '../components/FactsModal';
 
 const MyProfile = () => {
 
@@ -19,9 +20,10 @@ const MyProfile = () => {
   const [edit, setEdit] = useState(false)
 
   const [avaModal, setAvaModal] = useState(false)
-  const [fact1Modal, setFact1Modal] = useState(false)
-  const [fact2Modal, setFact2Modal] = useState(false)
-  const [fact3Modal, setFact3Modal] = useState(false)
+  const [factModal, setFactModal] = useState(false)
+
+  const [selectedFact, setSelectedFact] = useState(null);
+  const [selectedFactText, setSelectedFactText] = useState(null);
 
   const [imageSrc, setImageSrc] = useState(null);
   const picUrl = useRef(null);
@@ -92,43 +94,38 @@ const MyProfile = () => {
     if (user.user_id && !isFormSet.current) { // Only fetch if form is not set yet
       const fetchProfileData = async () => {
         try {
-          try {
-            const response = await fetch(`/api/profile/${user.user_id}/`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + String(authTokens.access),
-              },
-            });
-      
-            if (!response.ok) {
-              throw new Error('Failed to fetch profile data');
-            }
-      
-            const data = await response.json();
-            setData(data);
-
-            formik.setValues({
-              avatar: data.avatar || '',
-              fact1: data.fact1 || '',
-              fact2: data.fact2 || '',
-              fact3: data.fact3 || '',
-            });
-    
-            isFormSet.current = true; 
-
-          } catch (error) {
-            console.error('Error fetching profile  data:', error.message);
+          const response = await fetch(`/api/profile/${user.user_id}/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + String(authTokens.access),
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error('Failed to fetch profile data');
           }
-
+  
+          const data = await response.json();
+          setData(data);
+  
+          formik.setValues({
+            avatar: data.avatar || '',
+            fact1: data.fact1 || '',
+            fact2: data.fact2 || '',
+            fact3: data.fact3 || '',
+          });
+  
+          isFormSet.current = true;
         } catch (error) {
-          console.error('Error fetching profile data:', error);
+          console.error('Error fetching profile data:', error.message);
         }
       };
   
       fetchProfileData();
     }
-  }, [user.user_id, formik]);
+  }, [user.user_id]);
+  
 
 
   useEffect(()=>{
@@ -141,7 +138,27 @@ const MyProfile = () => {
     }
 
   },[formik.values.avatar])
-  
+
+
+  const handleFactClick = (fact) => {
+    setSelectedFact(fact);
+  };
+
+
+  // useEffect(() => {
+  //   if (selectedFact !== null && formik.values) {
+      
+  //     setSelectedFactText(formik.values[`fact${selectedFact}`]);
+
+  //   }
+  // }, [selectedFact, formik.values]);
+
+  useEffect(() => {
+    if (selectedFact !== null && formik.values) {
+      setSelectedFactText(formik.values[`fact${selectedFact}`]);
+      setFactModal(true);
+    }
+  }, [selectedFact]);
   
 
   const onSelectFile = (e) => {
@@ -174,6 +191,11 @@ const MyProfile = () => {
     const updatePic = (image) => {
         picUrl.current = image;
       };
+
+  const updateFact = (updatedFact) => {
+    formik.setFieldValue(`fact${selectedFact}`, updatedFact);
+    setSelectedFactText(null)
+    };
 
   
 
@@ -251,36 +273,54 @@ const MyProfile = () => {
             <h2 className="font-semibold">{user.username}</h2>
           </div>
     
-          {/* Facts Section */}
-          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
-            {[1, 2, 3].map((fact) => (
-              <motion.button
-              key={fact}
-              whileHover={{ scale: 1.1 }} // Scale effect on hover
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col items-center justify-center transition relative"
-            >
-              {/* Plus Icon rotates when hovering on the entire Fact div */}
-              <motion.div
-                animate={{ rotate: 180 }} // Default state
-                whileHover={{ rotate: 0 }} // Rotates back on hover (triggered by motion.div)
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="absolute w-12 h-12 bg-white/40 flex items-center justify-center rounded-full mb-2"
-              >
-                <Plus className="text-white" />
-              </motion.div>
-              
-              <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
-              <hr className="my-2 mx-4 border-gray-300" />
-              <div className="flex flex-col gap-2 mt-2">
-                <div className="w-full h-4 bg-gray-300 rounded"></div>
-                <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-              </div>
-            </motion.button>
-              ))}
-            </div>
-  
+{/* Facts Section */}
+<div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
+  {[1, 2, 3].map((fact) => (
+    <motion.button
+      type="button"
+      key={fact}
+      onClick={() => handleFactClick(fact)}
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
+      className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col justify-between items-center transition relative"
+    >
+      {/* Centered Plus Icon */}
+      <motion.div
+        animate={{ rotate: 180 }}
+        whileHover={{ rotate: 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="absolute mt-16  w-12 h-12 bg-white/40 flex items-center justify-center rounded-full"
+      >
+        <Plus className="text-white" />
+      </motion.div>
+
+      {/* Title with Fixed Height */}
+      <div className="h-10 flex items-center">
+        <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
+      </div>
+
+      {/* Divider with Fixed Height for Consistency */}
+      <div className="h-4 flex items-center w-full">
+        <hr className="border-gray-300 w-full" />
+      </div>
+
+      {/* Fact Content / Placeholder */}
+      <div className="flex flex-col gap-2 w-full flex-grow">
+        {formik.values[`fact${fact}`] ? (
+          <p className="text-center">{formik.values[`fact${fact}`]}</p>
+        ) : (
+          <>
+            <div className="w-full h-4 bg-gray-300 rounded"></div>
+            <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+            <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+          </>
+        )}
+      </div>
+    </motion.button>
+  ))}
+</div>
+
+
             {/* Edit & Logout Buttons */}
             <div className="flex justify-center items-center mt-8 relative z-10">
               <div className="flex flex-row justify-around w-full">
@@ -309,6 +349,17 @@ const MyProfile = () => {
   
             {avaModal && <ModalAva closeModal={() => setAvaModal(false)} imageSrc={imageSrc} updatePic={updatePic}/>}
 
+            {factModal && (
+                    <FactsModal
+                      closeModal={() => {
+                        setFactModal(false);
+                        setSelectedFact(null);
+                      }}
+                      Fact={selectedFactText}
+                      updateFact={updateFact}
+                    />
+                  )}
+
           {/* </div> */}
           
           </form>   
@@ -316,25 +367,23 @@ const MyProfile = () => {
 
         ) : (
           <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative">
-            {/* Background Blur Effect (applies only to the content inside) */}
+
             <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
   
-            {/* Banner (Exempt from Blur) */}
+
             <div className="rounded-lg  h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
   
-            {/* Avatar (Exempt from Blur) */}
             <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
                <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
             </div>
   
-            {/* Username (Exempt from Blur) */}
             <div className="truncate flex-1 text-center mt-2 relative z-10">
               <h2 className="font-semibold">{user.username}</h2>
             </div>
   
-            {/* Blur Wrapper (Everything Else) */}
+    
             <div className={`relative ${edit ? "blur-md" : ""} transition-all duration-300 z-0`}>
-              {/* Follow Section */}
+   
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
                 <button>
                   <li className="flex flex-col items-center text-lg">
@@ -371,19 +420,33 @@ const MyProfile = () => {
                   <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
                   <hr className="my-2 mx-4 border-gray-300" />
                   <div className="flex flex-col gap-2 mt-2">
-                    <div className="w-full h-4 bg-gray-300 rounded"></div>
-                    <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                    <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+                    {formik.values[`fact${fact}`] ? (
+                      <p className="text-center">{formik.values[`fact${fact}`]}</p>
+                    ) : (
+                      <>
+                        <div className="w-full h-4 bg-gray-300 rounded"></div>
+                        <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                        <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-  
+
             {/* Edit & Logout Buttons */}
             <div className="flex justify-center items-center mt-8 relative z-10">
               <div className="flex flex-row justify-around w-full">
                 <button
-                  onClick={() => setEdit(!edit)}
+                  onClick={() => {
+                    if (edit) {
+                      formik.handleSubmit();
+                    } else {
+                      setEdit(true);
+                      setAvaModal(false);
+                      setFactModal(false);
+                    }
+                  }}
                   className="w-2/6 bg-customBlue-500 text-white py-2 rounded-lg hover:bg-customBlue-600 transition"
                 >
                   {edit ? "Save" : "Edit Profile"}
@@ -398,7 +461,8 @@ const MyProfile = () => {
             </div>
   
             {/* Modal */}
-            {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} />}
+            {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents}/>}
+
           </div>
         )
       ) : null}
