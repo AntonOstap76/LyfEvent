@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2"
 
 const Join = ({ eventId }) => {
   const [joined, setJoined] = useState(false);
@@ -33,26 +34,56 @@ const Join = ({ eventId }) => {
   };
 
   const handleJoin = async () => {
-
     if (!user) {
-    navigate ("/login")
-  }
-
+      navigate("/login");
+      return;
+    }
+  
     try {
-      const response = await fetch(`/api/events-join/${eventId}/`, {
-        method: 'POST',
+      const response = await fetch(`/api/events-detail/${eventId}/`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch event details.");
+      }
+  
+      const eventData = await response.json();
+  
+      // Check if event is full
+      if (eventData.participants.length >= eventData.capacity) {
+        Swal.fire({
+          title: "⚠️ Oops!",
+          text: "The event is full.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+        });
+        return;
+      }
+  
+      // Proceed with joining
+      const joinResponse = await fetch(`/api/events-join/${eventId}/`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${authTokens.access}`,
         },
       });
-
-      if (response.ok) {
-        setJoined(true); // Successfully joined the event
-      } 
+  
+      if (joinResponse.ok) {
+        setJoined(true);
+        Swal.fire({
+          title: "🎉 Success!",
+          text: "You have successfully joined the event.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
+      }
     } catch (error) {
       console.error("Error joining the event:", error);
-      
+      Swal.fire({
+        title: "⚠️ Oops!",
+        text: "Something went wrong. Please try again later.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
     }
   };
 

@@ -20,6 +20,7 @@ import Chat from './pages/Chat'
 import EventsFiltered from './pages/EventsFiltered'
 import MyProfile from './pages/MyProfile'
 import Register from './pages/Register'
+import AllChats from './components/AllChats'
 
 
 function App() {
@@ -53,7 +54,7 @@ function App() {
             }/>
 
             <Route path='/chat/*' element={
-              <PrivateRoute element={<Chat/>}/>
+              <PrivateRoute element={<AllChats/>}/>
             }/>
 
             <Route path='/my-events/*' element={

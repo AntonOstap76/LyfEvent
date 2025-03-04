@@ -23,7 +23,8 @@ class EventSerializer(serializers.ModelSerializer):
             "id": obj.host.id,
             "name": obj.host.username
         }
-
+    def get_joined_count(self, obj):
+        return obj.participants.count()
 
 class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()

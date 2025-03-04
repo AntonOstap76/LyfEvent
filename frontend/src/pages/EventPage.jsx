@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import CreateEventPage from "./CreateEventPage";
 import { AuthContext } from "../context/AuthContext";
 import Join from "../components/Join";
+
 
 const EventPage = () => {
   const { id } = useParams();
@@ -43,10 +44,11 @@ const EventPage = () => {
     }
   };
 
-
+console.log(event?.host)
 
   return (
     <div className="min-h-screen  text-gray-900 flex flex-col items-center py-12 px-6">
+      <h1 className='flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]'>Event Overview</h1>
       {editOpen ? (
         <CreateEventPage eventId={id} />
       ) : (
@@ -71,52 +73,87 @@ const EventPage = () => {
             </p>
 
             {/* Event Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-800">
-              {event?.category && (
-                <p>
-                  <span className="font-semibold">🏷 Category:</span> {event?.category}
-                </p>
-              )}
-              {event?.location && (
-                <p>
-                  <span className="font-semibold">📍 Location:</span> {event?.location}
-                </p>
-              )}
-              {event?.date && (
-                <>
-                  <p>
-                    <span className="font-semibold">📅 Date:</span>{" "}
-                    {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
-                  </p>
-                  <p>
-                    <span className="font-semibold">⏰ Time:</span>{" "}
-                    {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
-                  </p>
-                </>
-              )}
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-800 text-center">
+  {event?.category && (
+    <p>
+      <span className="font-semibold">🏷 Category:</span> {event?.category}
+    </p>
+  )}
+  {event?.location && (
+    <p>
+      <span className="font-semibold">📍 Location:</span> {event?.location}
+    </p>
+    
+  )}
+  
+  {event?.date && (
+    <>
+      <p>
+        <span className="font-semibold">📅 Date:</span>{" "}
+        {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
+      </p>
+      <p>
+        <span className="font-semibold">⏰ Time:</span>{" "}
+        {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
+      </p>
+    </>
+  )}
+  
+  {event?.participants &&(
+    <p>
+      <strong className="font-semibold">👥 Joined: </strong>{event?.participants.length || 0} / {event?.capacity}
+    </p>
+  )}
+  {/* Centered "Hosted by" Section */}
+  {event?.host && (
+
+      <p className="truncate flex-1 text-lg text-gray-700 font-semibold">
+      👤 Hosted by:
+        <span 
+          className="text-blue-600 hover:underline font-medium ml-2 cursor-pointer"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/profile/`, { state: { user: event?.host } });
+          }}
+        >
+          {event?.host.username}
+        </span>
+      </p>
+
+  )}
+</div>
 
             {/* Action Buttons */}
-            <div className="mt-8 flex justify-center gap-4">
-              {user?.user_id === event?.host ? (
-                <div className="mt-8 flex gap-4">  
-                  <button
-                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-                    onClick={handleEdit}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button
-                    className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
-                    onClick={handleDelete}
-                  >
-                    🗑 Delete
-                  </button>
-                </div>
-              ) : (
-                <Join eventId={id} />
-              )}
-            </div>
+<div className="mt-4 flex justify-center gap-4">
+  {user?.user_id === event?.host.id ? (
+    <div className="flex gap-4">
+      <button
+        className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+        onClick={handleEdit}
+      >
+        ✏️ Edit
+      </button>
+      <button
+        className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+        onClick={handleDelete}
+      >
+        🗑 Delete
+      </button>
+      <Link
+        to={{ pathname: "/chat", state: { Event: event.id } }}
+        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-center"
+      >
+        💬 Go to Chat
+      </Link>
+    </div>
+  ) : (
+    <div className="mt-[-20px] ">
+      <Join eventId={id} />
+    </div>
+  )}
+</div>
+
+
           </div>
         </>
       )}

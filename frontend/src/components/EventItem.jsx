@@ -28,22 +28,6 @@ const EventItem = ({ event }) => {
             {event?.title}
           </h5>
 
-          {/* Host (Clickable) */}
-          {/* {event.host && (
-            <p className="truncate flex-1 mt-1 text-sm text-gray-600">
-              Hosted by:  
-              <span 
-                className="truncate flex-1 text-blue-600 hover:underline font-medium ml-1 cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault(); // ✅ Prevents Link from opening the event
-                  navigate(`/profile/`, { state: { user: event.host } });
-                }}
-              >
-                {event.host.username}
-              </span>
-            </p>
-          )} */}
-
           {/* Description & Category */}
           <div className="flex items-center mt-2 text-md text-gray-700">
             <p className="truncate flex-1">{event?.description}</p>
@@ -56,6 +40,11 @@ const EventItem = ({ event }) => {
           {/* Date and Location */}
           <p><strong>Date:</strong> {formattedDate}</p>
           <p><strong>Location:</strong> {event?.location || "Unknown"}</p>
+
+          {/* Attendees */}
+          <p className=" text-black-700">
+  <strong>Joined:</strong> {event?.participants?.length || 0} / {event?.capacity || "Unlimited"}
+</p>  
         </div>
       </div>
     </Link>
