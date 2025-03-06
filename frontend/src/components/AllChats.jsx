@@ -182,7 +182,7 @@ const AllChats = () => {
       {selectedChat ? (
         <>
         <div className="truncate flex-1 flex-1 mr-6">
-          <ChatPage name={selectedChat.chat_name} />
+          <ChatPage chat={selectedChat} />
         </div>
 
         <div className="flex flex-col ml-4">

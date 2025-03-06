@@ -1,22 +1,21 @@
-import React, { useContext, useEffect, useState , useRef} from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import ChatMessage from "../components/ChatMessage";
 import { AuthContext } from "../context/AuthContext";
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router-dom";
 
-
-const ChatPage = ({name}) => {
-  let { user, authTokens} = useContext(AuthContext);
+const ChatPage = ({ chat }) => {
+  let { user, authTokens } = useContext(AuthContext);
   let [messages, setMessages] = useState([]);
-  let [onlineUsers, setOnlineUsers] = useState(0); 
-  const [input, setInput] = useState(""); 
-  const [ws, setWs] = useState(null); 
-  const chatContainerRef = useRef(null)
-  let [isJoined, setIsJoined] = useState(false)
+  let [onlineUsers, setOnlineUsers] = useState(0);
+  const [input, setInput] = useState("");
+  const [ws, setWs] = useState(null);
+  const chatContainerRef = useRef(null);
+  let [isJoined, setIsJoined] = useState(false);
 
   useEffect(() => {
     const checkJoined = async () => {
       try {
-        let response = await fetch(`/api/chat/${name}`, {
+        let response = await fetch(`/api/chat/${chat.id}`, {
           headers: {
             Authorization: `Bearer ${authTokens.access}`, // Include token if required
           },
@@ -42,18 +41,16 @@ const ChatPage = ({name}) => {
     };
 
     checkJoined();
-  }, [name, authTokens.access, user.user_id]);
-  
-
+  }, [chat.id, authTokens.access, user.user_id]);
 
   // Initialize WebSocket
   useEffect(() => {
-    if (!isJoined) return
+    if (!isJoined) return;
     const token = authTokens.access;
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(
-      `${protocol}://localhost:8000/ws/chat/${encodeURIComponent(name)}/?token=${encodeURIComponent(token)}`
-  )
+      `${protocol}://localhost:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
+    );
 
     socket.onopen = () => {
       console.log("WebSocket connected");
@@ -79,24 +76,22 @@ const ChatPage = ({name}) => {
         socket.close();
       }
     };
-  }, [name, isJoined, authTokens.access])
-
+  }, [chat.id, isJoined, authTokens.access]);
 
   useEffect(() => {
-    if (!isJoined) return
+    if (!isJoined) return;
     getMessages();
-  }, [name, isJoined, authTokens.access])
+  }, [chat.id, isJoined, authTokens.access]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages])
-
+  }, [messages]);
 
   const getMessages = async () => {
     try {
-      let response = await fetch(`/api/chat/${name}`);
+      let response = await fetch(`/api/chat/${chat.id}`);
       if (response.ok) {
         let chat_data = await response.json();
         setMessages(chat_data.chat_messages);
@@ -107,6 +102,7 @@ const ChatPage = ({name}) => {
       console.error("Network error:", error);
     }
   };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (ws && input.trim()) {
@@ -115,21 +111,19 @@ const ChatPage = ({name}) => {
         token: `Bearer ${authTokens.access}`,
       };
       ws.send(JSON.stringify(data));
-      setInput(""); 
+      setInput("");
     }
   };
 
-
   if (!isJoined) {
-    return <p>Join event to have access to this chat group.</p>; 
+    return <p>Join event to have access to this chat group.</p>;
   }
 
   return (
     <div className="container mx-auto ">
       <div className="bg-white shadow-md rounded-lg  h-[80vh]  flex flex-col">
-
         <div className="p-4 border-b bg-[#6d6fff] text-white rounded-t-lg flex justify-between items-center relative">
-          <p className="text-lg font-semibold">{name} Event</p>
+          <p className="text-lg font-semibold">{chat.chat_name} Event</p>
           <p
             id="online_count"
             className="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2 font-semibold"
@@ -138,9 +132,8 @@ const ChatPage = ({name}) => {
           </p>
         </div>
 
-        <div id="chat_container" className="p-4 flex-1 overflow-y-auto" ref={chatContainerRef} >
+        <div id="chat_container" className="p-4 flex-1 overflow-y-auto" ref={chatContainerRef}>
           <div id="chatbox" className="mb-2">
-
             <ul id="chat_messages" className="flex flex-col justify-end gap-2 p-4">
               {messages.map((message) => (
                 <ChatMessage
@@ -148,7 +141,6 @@ const ChatPage = ({name}) => {
                   authorName={message.author_username}
                   content={message.text}
                 />
-                
               ))}
             </ul>
           </div>

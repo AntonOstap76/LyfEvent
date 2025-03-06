@@ -6,18 +6,26 @@ from rest_framework import status
 from .models import ChatGroup, GroupMessage
 from api.models import Event
 
+from urllib.parse import unquote
+
+
+from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from .models import ChatGroup
+from .serializers import GroupMessageSerializer, ChatGroupSerializer
 
 @permission_classes([IsAuthenticated])
 @api_view(['POST', 'GET'])
-def chat_view(request, chat_name):
+def chat_view(request, chat_id):
     try:
-        chat_group = ChatGroup.objects.get(chat_name=chat_name)
+        # Use chat_id instead of chat_name
+        chat_group = ChatGroup.objects.get(id=chat_id)
 
     except ChatGroup.DoesNotExist:
         return Response({"error": "Chat group not found."}, status=status.HTTP_404_NOT_FOUND)
-
-    except ChatGroup.DoesNotExist:
-        return Response({"error": "Chat group not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         # Retrieve last 30 messages
@@ -40,7 +48,7 @@ def chat_view(request, chat_name):
             return Response(GroupMessageSerializer(message).data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])
