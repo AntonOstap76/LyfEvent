@@ -385,6 +385,7 @@ def activate_account(request, token):
 
 @api_view(['GET'])
 def get_user_by_id(request, pk):
+    print(pk)
     user = get_object_or_404(User, id=pk)
     return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 

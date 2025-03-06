@@ -47,8 +47,8 @@ const EventPage = () => {
 console.log(event?.host)
 
   return (
-    <div className="min-h-screen  text-gray-900 flex flex-col items-center py-12 px-6">
-      <h1 className='flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]'>Event Overview</h1>
+    <div className="min-h-screen  text-gray-900 flex flex-col items-center pb-12 px-6">
+      <h1 className='flex justify-center text-4xl font-bold text-black mb-6'>Event Overview</h1>
       {editOpen ? (
         <CreateEventPage eventId={id} />
       ) : (
@@ -76,7 +76,7 @@ console.log(event?.host)
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-800 text-center">
   {event?.category && (
     <p>
-      <span className="font-semibold">🏷 Category:</span> {event?.category}
+      <span className="font-semibold">📌 Category:</span> {event?.category}
     </p>
   )}
   {event?.location && (
@@ -110,7 +110,7 @@ console.log(event?.host)
       <p className="truncate flex-1 text-lg text-gray-700 font-semibold">
       👤 Hosted by:
         <span 
-          className="text-blue-600 hover:underline font-medium ml-2 cursor-pointer"
+          className="text-customBlue-600 hover:underline font-medium ml-2 cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
             navigate(`/profile/`, { state: { user: event?.host } });
@@ -139,12 +139,7 @@ console.log(event?.host)
       >
         🗑 Delete
       </button>
-      <Link
-        to={{ pathname: "/chat", state: { Event: event.id } }}
-        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-center"
-      >
-        💬 Go to Chat
-      </Link>
+
     </div>
   ) : (
     <div className="mt-[-20px] ">

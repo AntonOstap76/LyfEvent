@@ -124,7 +124,7 @@ const AllChats = () => {
   return (
     <>
     {/* SIDEBAR LEFT */}
-    <div className="flex">
+    <div className="flex mb-6">
       <div className="flex flex-col h-[82vh] w-1/4 border-r-2 overflow-y-auto">
         <div className="border-b-2 py-4 px-2">
 
@@ -278,10 +278,10 @@ const AllChats = () => {
 
 
 
-      <div className="flex flex-col items-center justify-center h-[80vh] text-center">
+      {/* <div className="flex flex-col items-center justify-center h-[80vh] text-center">
         
         <img src={bg_chat} alt="img-bg-chat" className="w-58 h-auto " />
-      </div>
+      </div> */}
       </div>
 
       )}

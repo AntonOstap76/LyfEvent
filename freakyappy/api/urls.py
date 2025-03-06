@@ -20,7 +20,7 @@ urlpatterns = [
     path('unfollow/<str:pk>/', views.unfollow, name='unfollow'),
     path('register/', views.register, name='register'),
     path('activate/<str:token>/', views.activate_account, name='activate'),
-    path('user_by_id/<str:id>/', views.get_user_by_id, name='user-by-id'), 
+    path('user_by_id/<str:pk>/', views.get_user_by_id, name='user-by-id'), 
     path('user_by_username/<str:username>/', views.get_user_by_username, name='user-by-username'), 
 
     

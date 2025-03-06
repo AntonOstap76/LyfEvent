@@ -97,7 +97,7 @@ const Home = () => {
         {/* Left Side - Text */}
         <div className="max-w-2xl flex flex-col">
           <h3 className="text-xl font-normal text-gray-700 leading-relaxed">
-            LyfeVents helps you find all kinds of events where you can meet new people, discover new activities,
+            LyfEvents helps you find all kinds of events where you can meet new people, discover new activities,
             and make lasting memories. Whether it's for fun, work, or learning,
             LyfeVents connects you to events that fit your interests. Join your first event now.
           </h3>
