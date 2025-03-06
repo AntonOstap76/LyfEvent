@@ -110,6 +110,7 @@ const AllChats = () => {
     return ''; 
   };
 
+
   const handleImageLoad = async (userId) => {
     // Fetch the avatar and set it in the state to prevent repeated calls
     const avatar = await profilePic(userId);
@@ -141,34 +142,37 @@ const AllChats = () => {
         <ul>
           {filteredChats.length > 0 ? (
             filteredChats.map((chat) => (
-            <li
-              key={chat.id}
-              onClick={() => setSelectedChatId(chat.id)} 
-              className={`flex flex-row py-4 px-2 items-center border-b-2 cursor-pointer ${
-                selectedChatId === chat.id
-                  ? 'border-l-4 border-[#6d6fff] bg-customBlue-50'
-                  : ''
-              }`}
-            >
+<li
+  key={chat.id}
+  onClick={() => setSelectedChatId(chat.id)} 
+  className={`flex flex-row py-4 px-2 items-center border-b-2 cursor-pointer ${
+    selectedChatId === chat.id ? 'border-l-4 border-[#6d6fff] bg-customBlue-50' : ''
+  }`}
+>
 
-              <div className="w-1/4">
-                <img
-                  src={(() => {
-                    const event = events.find(event => event.id === chat.event); 
-                    return event ? event.image : ''; 
-                  })()}
-                  className="truncate flex-1 object-cover h-12 w-12 rounded-full"
-                  alt={chat.chat_name}
-                  loading="lazy"
-                />
-              </div>
+  {/* Ensure image remains visible */}
+  <div className="w-12 h-12 flex-shrink-0">
+    <img
+      src={(() => {
+        const event = events.find(event => event.id === chat.event);
+        return event ? event.image : ''; 
+      })()}
+      className="object-cover h-12 w-12 rounded-full"
+      alt={chat.chat_name}
+      loading="lazy"
+    />
+  </div>
 
-              <div className="w-full ml-2">
-                <div className="truncate flex-1 text-lg font-semibold">{chat.chat_name}</div>
-                <span className="text-gray-500">{chat.last_message}</span>
-              </div>
+  {/* Prevent long chat names from pushing the image away */}
+  <div className="w-full ml-2 overflow-hidden">
+    <div className="truncate text-lg font-semibold max-w-[250px]">
+      {chat.chat_name}
+    </div>
+    <span className="text-gray-500 truncate block max-w-[180px]">{chat.last_message}</span>
+  </div>
 
-            </li>
+</li>
+
           ))):(
             <p className="text-center text-gray-500">No chats found</p>
           )
@@ -282,6 +286,7 @@ const AllChats = () => {
         
         <img src={bg_chat} alt="img-bg-chat" className="w-58 h-auto " />
       </div> */}
+
       </div>
 
       )}

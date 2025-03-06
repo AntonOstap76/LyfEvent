@@ -120,7 +120,7 @@ const Profile = () => {
 
       {userOther && (
         <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl ">
-          <div className="rounded-lg ring-1 ring-black h-32 overflow-hidden bg-customBlue-500">
+          <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500">
       
           </div>
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200">

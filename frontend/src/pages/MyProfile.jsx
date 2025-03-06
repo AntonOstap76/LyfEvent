@@ -85,7 +85,7 @@ const closeFollowersModal = () => {
 
           Swal.fire({
             title: "🎉 Success!",
-            text: "Your profile has been changed!",
+            text: "Your profile has been saved!",
             icon: "success",
             confirmButtonColor: "#4CAF50",
           });

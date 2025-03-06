@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-const ASPECT_RATIO = 1; // Circular crop
+const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 150;
 
 const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
@@ -14,12 +14,14 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
   const handleCropChange = (newCrop) => {
     setCrop(newCrop);
   };
-  
 
   const onImageLoad = (e) => {
     const { width, height } = e.currentTarget;
-    const cropWidthInPercent = (MIN_DIMENSION / width) * 100;
-
+    
+    // Start with the max possible size
+    const maxSize = Math.min(width, height);
+    const cropWidthInPercent = (maxSize / width) * 100;
+    
     const crop = makeAspectCrop(
       {
         unit: "%",
@@ -32,9 +34,6 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
   };
-
-
-
 
   const handleSaveClick = () => {
     if (canvasRef.current && imgRef.current && crop) {
@@ -50,29 +49,26 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
     }
   };
 
-  
-
   const setCanvas = (image, canvas, crop) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) {
       throw new Error("No 2d context");
     }
-  
+
     const pixelRatio = window.devicePixelRatio;
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-  
+
     canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
     canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
-  
+
     ctx.scale(pixelRatio, pixelRatio);
     ctx.imageSmoothingQuality = "high";
     ctx.save();
-  
+
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleY;
-  
-    // Move the crop origin to the canvas origin (0,0)
+
     ctx.translate(-cropX, -cropY);
     ctx.drawImage(
       image,
@@ -85,10 +81,9 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
       image.naturalWidth,
       image.naturalHeight
     );
-  
+
     ctx.restore();
   };
-  
 
   return (
     <>
@@ -100,14 +95,14 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
             keepSelection
             circularCrop
             aspect={ASPECT_RATIO}
-            minWidth={MIN_DIMENSION} // Ensure minimum size is applied correctly
-            minHeight={MIN_DIMENSION} // Ensure minimum size is applied correctly
+            minWidth={MIN_DIMENSION}
+            minHeight={MIN_DIMENSION}
           >
             <img
               ref={imgRef}
               src={imageSrc}
               alt="Upload"
-              style={{ maxHeight: '70vh'}}
+              style={{ maxHeight: '70vh' }}
               onLoad={onImageLoad}
             />
           </ReactCrop>
@@ -131,7 +126,7 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
       <canvas
         ref={canvasRef}
         className="mt-4"
-        style={{ display: 'none' }} 
+        style={{ display: 'none' }}
       />
     </>
   );
