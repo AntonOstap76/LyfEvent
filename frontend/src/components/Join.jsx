@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import UsersModal from '../components/UsersModal';
 
-const Join = ({ eventId }) => {
+const Join = ({ eventId, onJoinSuccess, onLeaveSuccess }) => {  // Added onJoinSuccess as a prop
   const [joined, setJoined] = useState(false);
   const { authTokens, user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -45,6 +45,11 @@ const Join = ({ eventId }) => {
       if (joinResponse.ok) {
         setJoined(true);
         Swal.fire({ title: "🎉 Success!", text: "You have successfully joined the event.", icon: "success", confirmButtonColor: "#3085d6" });
+
+        // Invoke the onJoinSuccess callback to notify the parent component
+        if (onJoinSuccess) {
+          onJoinSuccess();  // This will trigger the parent's update (e.g., re-fetching event data)
+        }
       }
     } catch (error) {
       console.error("Error joining the event:", error);
@@ -72,6 +77,10 @@ const Join = ({ eventId }) => {
             setJoined(false);
             Swal.fire({ title: "Left!", text: "You have successfully left the event.", icon: "success" });
           }
+
+          if (onLeaveSuccess) {
+            onLeaveSuccess();  // This will trigger the parent's update (e.g., re-fetching event data)
+          }
         } catch (error) {
           console.error("Error leaving the event:", error);
           Swal.fire({ title: "Error!", text: "Something went wrong.", icon: "error" });
@@ -86,25 +95,15 @@ const Join = ({ eventId }) => {
         <>
           <p className="text-lg font-medium text-gray-700">You've already joined this event.</p>
           <div className="flex items-center space-x-4">
-
-          <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300" 
-          >
-            
-            See All Users
-          </button>
-
-          <Link
-            to="/chat"
-            state={{ eventId }}
-          >
-            <button className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
-            💬 Go to Chat
-
+            <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
+              See All Users
             </button>
-
-          </Link>
-
-        </div>
+            <Link to="/chat" state={{ eventId }}>
+              <button className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
+                💬 Go to Chat
+              </button>
+            </Link>
+          </div>
           <button
             onClick={handleLeave}
             className="px-7 py-3 text-lg font-semibold rounded-md shadow bg-red-600 text-white hover:bg-red-800"
@@ -114,9 +113,6 @@ const Join = ({ eventId }) => {
 
           {modal && <UsersModal closeModal={() => setModal(false)} eventID={eventId} />}
         </>
-
-     
-
       ) : (
         <>
           <p className="text-lg font-medium text-gray-700">Join if you plan on participating in this event.</p>

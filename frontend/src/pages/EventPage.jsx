@@ -12,11 +12,13 @@ const EventPage = () => {
   const [hasJoined, setHasJoined] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false);
+  
   
   useEffect(() => {
     getEvent();
-  }, [id]);
+    console.log(hasJoined);
+  }, [id, hasJoined]);
 
   const getEvent = async () => {
     try {
@@ -36,9 +38,6 @@ const EventPage = () => {
     }
   };
 
-  
-
-
   const handleEdit = () => setEditOpen(true);
 
   const handleDelete = async () => {
@@ -55,8 +54,14 @@ const EventPage = () => {
   };
 
   const handleJoinSuccess = () => {
-    setHasJoined(true); // Update the state when the user successfully joins
+    setHasJoined(true);
   };
+
+  const handleLeaveSuccess = () => {
+    setHasJoined(false);
+  }
+
+
 
   return (
     <div className="min-h-screen text-gray-900 flex flex-col items-center py-12 px-6">
@@ -95,58 +100,50 @@ const EventPage = () => {
                 <p>
                   <span className="font-semibold">📍 Location:</span> {event?.location}
                 </p>
-                
               )}
               
-          {event?.date && (
-            <>
-              <p>
-                <span className="font-semibold">📅 Date:</span>{" "}
-                {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
-              </p>
-              <p>
-                <span className="font-semibold">⏰ Time:</span>{" "}
-                {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
-              </p>
-            </>
-          )}
-  
-  {event?.participants &&(
-    <p>
-      <strong className="font-semibold">👥 Joined: </strong>{event?.participants.length || 0} / {event?.capacity}
-    </p>
-  )}
-  {/* Centered "Hosted by" Section */}
-  {event?.host && (
+              {event?.date && (
+                <>
+                  <p>
+                    <span className="font-semibold">📅 Date:</span>{" "}
+                    {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
+                  </p>
+                  <p>
+                    <span className="font-semibold">⏰ Time:</span>{" "}
+                    {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
+                  </p>
+                </>
+              )}
 
-      <p className="truncate flex-1 text-lg text-gray-700 font-semibold">
-      👤 Hosted by:
-        <span 
-          className="text-customBlue-600 hover:underline text-md font-semibold ml-2 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(`/profile/`, { state: { user: event?.host } });
-          }}
-        >
-          {event?.host.username}
-        </span>
-      </p>
+                <p>
+                  <strong className="font-semibold">👥 Joined: </strong>{event?.participants?.length || 0} / {event?.capacity}
+                </p>
 
-  )}
-</div>
+              {/* Centered "Hosted by" Section */}
+              {event?.host && (
+                <p className="truncate flex-1 text-lg text-gray-700 font-semibold">
+                  👤 Hosted by:
+                  <span 
+                    className="text-customBlue-600 hover:underline text-md font-semibold ml-2 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/profile/`, { state: { user: event?.host } });
+                    }}
+                  >
+                    {event?.host.username}
+                  </span>
+                </p>
+              )}
+            </div>
 
             {/* Action Buttons */}
             <div className="mt-4 flex justify-center gap-4">
-              
               {user?.user_id === event?.host.id ? (
-
                 <div className="flex flex-col items-center space-y-4">
                   {/* First row: See All Users & Go to Chat */}
-                  
                   <div className="flex items-center space-x-4">
-                  <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300" 
-                    >
-                      
+
+                    <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
                       See All Users
                     </button>
 
@@ -155,8 +152,6 @@ const EventPage = () => {
                         💬 Go to Chat
                       </button>
                     </Link>
-
-
                   </div>
 
                   {/* Second row: Edit & Delete */}
@@ -179,19 +174,12 @@ const EventPage = () => {
                   {/* Users Modal */}
                   {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
                 </div>
-
-              
               ) : (
-                
-                <div className="mt-[-20px] font-bold ">
-                  
-                  <Join eventId={id} onJoinSuccess={handleJoinSuccess} className="font-bold "/>
-
-                    {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
+                <div className="mt-[-20px] font-bold">
+                  <Join eventId={id} onJoinSuccess={handleJoinSuccess} onLeaveSuccess = {handleLeaveSuccess} className="font-bold" />
+                  {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
                 </div>
-                
               )}
-              
             </div>
           </div>
         </>
