@@ -385,6 +385,7 @@ def activate_account(request, token):
 
 @api_view(['GET'])
 def get_user_by_id(request, pk):
+    print(pk)
     user = get_object_or_404(User, id=pk)
     return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
@@ -394,33 +395,47 @@ def get_user_by_username(request, username):
     return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
 
+from django.core.files.base import ContentFile
+import base64
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import Profile
+from .serializers import ProfileSerializer
+
+
+
+
 @api_view(['PUT'])
 def profile_update(request, pk):
     profile = get_object_or_404(Profile, user__id=pk)
 
-    # Check if the image in the request data is a new one or not
-    if 'avatar' in request.data:
-        # If the image is a new file (base64 encoded), process it
-        if "data:image" in request.data['avatar']:
-            # Get the base64 image string
-            format, imgstr = request.data['avatar'].split(';base64,') 
-            ext = format.split('/')[-1]  # Extract the image extension (e.g., 'png', 'jpeg')
-
-            # Decode the base64 image string and create a ContentFile to attach to the serializer
-            image_data = base64.b64decode(imgstr)
-            image_name = f"{request.user}_image.{ext}"  # Naming the image dynamically based on event title
-            request.data['avatar'] = ContentFile(image_data, name=image_name)
+    # Process avatar only if it exists and is not None
+    avatar = request.data.get('avatar', None)
+    if avatar:
+        if "data:image" in avatar:
+            try:
+                format, imgstr = avatar.split(';base64,') 
+                ext = format.split('/')[-1]  # Extract image extension
+                image_data = base64.b64decode(imgstr)
+                image_name = f"{request.user}_image.{ext}"
+                request.data['avatar'] = ContentFile(image_data, name=image_name)
+            except Exception as e:
+                return Response({
+                    "status": "error",
+                    "message": "Invalid image format",
+                    "error": str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # If it's a URL (i.e., the image is not being changed), leave the image as it is
-            # This assumes the image URL is already set on the event model
+            # If the avatar is a URL, retain the existing avatar
             request.data['avatar'] = profile.avatar
 
-    # Now we proceed with the regular update logic
     serializer = ProfileSerializer(instance=profile, data=request.data, partial=True)
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response({
         "status": "error",

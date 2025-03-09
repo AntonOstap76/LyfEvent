@@ -124,7 +124,7 @@ const Profile = () => {
       
           </div>
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200">
-            <img src={ava} alt="" />
+            <img src={data.avatar || ava} alt="" />
           </div>
 
           <div className="text-center mt-2">
@@ -157,54 +157,28 @@ const Profile = () => {
           </div>
 
           {/* Facts */}
-          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6">
-
-            <div className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col">
-              <h1 className="text-center text-lg font-bold">Fact 1</h1>
-
-              {/* Divider Line */}
-              <hr className="my-2 mx-4 border-gray-300" />
-
-              {/* Placeholder "Written Text" Effect */}
-              <div className="flex flex-col gap-2 mt-2">
-                <div className="w-full h-4 bg-gray-300 rounded"></div>
-                <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-              </div>
-              
+          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
+              {[1, 2, 3].map((fact) => (
+                <div
+                  key={fact}
+                  className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col"
+                >
+                  <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
+                  <hr className="my-2 mx-4 border-gray-300 " />
+                  <div className="flex flex-col gap-2 mt-2">
+                    {data[`fact${fact}`] ? (
+                      <p className="text-center">{data[`fact${fact}`]}</p>
+                    ) : (
+                      <>
+                        <div className="w-full h-4 bg-gray-300 rounded"></div>
+                        <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                        <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-
-
-            <div className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col">
-              <h1 className="text-center text-lg font-bold">Fact 2</h1>
-
-              {/* Divider Line */}
-              <hr className="my-2 mx-4 border-gray-300" />
-
-              {/* Placeholder "Written Text" Effect */}
-              <div className="flex flex-col gap-2 mt-2">
-                <div className="w-full h-4 bg-gray-300 rounded"></div>
-                <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-              </div>
-            </div>
-
-            
-            <div className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col">
-
-              <h1 className="text-center text-lg font-bold">Fact 3</h1>
-
-              {/* Divider Line */}
-              <hr className="my-2 mx-4 border-gray-300" />
-
-              {/* Placeholder "Written Text" Effect */}
-              <div className="flex flex-col gap-2 mt-2">
-                <div className="w-full h-4 bg-gray-300 rounded"></div>
-                <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-                <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-              </div>
-            </div>
-          </div>
 
 
           <div className="flex justify-center items-center mt-8">
