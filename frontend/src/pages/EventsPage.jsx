@@ -18,8 +18,11 @@ const EventsPage = () => {
   const getEvents = async () => {
     let response = await fetch("/api/events-list/");
     let data = await response.json();
-    console.log(data);
-    setEvents(data);
+    const today = new Date().toISOString().split("T")[0];
+    const validEvents = data.filter(event => event.date >= today);
+
+    console.log(validEvents);
+    setEvents(validEvents);
   };
 
   // Get Current Events (Pagination)
@@ -64,7 +67,7 @@ const EventsPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Content Wrapper */}
-      <h1 className='flex justify-center text-4xl font-bold text-black mb-6'>All Events</h1>
+      
 
       <div className="flex items-center mb-6">
   {/* Left Box (Empty or something else) */}
@@ -73,6 +76,7 @@ const EventsPage = () => {
   {/* Center Box (Search Input) */}
   {/* Search Bar */}
 <div className="w-full flex justify-center mb-6">
+  
   <div className="w-full max-w-2xl z-10">
     <div className="relative">
       <form onSubmit={filterEvents}>
@@ -94,7 +98,9 @@ const EventsPage = () => {
         </button> 
       </form>
     </div>
+    <h1 className='flex justify-center text-4xl font-bold text-black mt-4'>All Events</h1>    
   </div>
+  
 </div>
 
 

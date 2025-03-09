@@ -21,9 +21,9 @@ const Carousele = ({ events }) => {
   const slider = React.useRef(null);
 
   return (
-    <div className="slider-container w-full max-w-2xl">
+    <div className="slider-container w-full max-w-2xl pl-10">
       <div className="flex justify-center ">
-        <h1 className="text-center text-xl font-bold">UPCOMING EVENTS</h1>
+        <h1 className="text-center text-2xl font-bold pb-4">UPCOMING EVENTS</h1>
       </div>
       
       <Slider ref={slider} {...settings}>

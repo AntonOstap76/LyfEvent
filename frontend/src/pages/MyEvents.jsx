@@ -39,7 +39,7 @@ const EventsPage = () => {
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
   const currentEvents = myEvents.slice(indexOfFirstEvent, indexOfLastEvent);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+ 
 
   return (
     <div className="flex flex-col min-h-screen">

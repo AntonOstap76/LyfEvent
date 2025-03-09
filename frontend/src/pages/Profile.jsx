@@ -119,8 +119,8 @@ const Profile = () => {
       {/* <h1 className="flex justify-center text-4xl font-bold text-black">Profile</h1> */}
 
       {userOther && (
-        <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl ">
-          <div className="rounded-lg ring-1 ring-black h-32 overflow-hidden bg-customBlue-500">
+        <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative ">
+          <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500">
       
           </div>
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200">
@@ -171,6 +171,7 @@ const Profile = () => {
                 <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
                 <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
               </div>
+              
             </div>
 
 

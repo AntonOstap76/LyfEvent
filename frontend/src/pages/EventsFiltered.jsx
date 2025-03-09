@@ -56,7 +56,7 @@ const EventFiltered = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Content Wrapper */}
-      <h1 className='flex justify-center text-4xl font-bold text-black mb-6'>All Matching Events</h1>
+      
 
       <div className="flex items-center mb-6">
   {/* Left Box (Empty or something else) */}
@@ -86,6 +86,7 @@ const EventFiltered = () => {
         </button>
       </form>
     </div>
+    <h1 className='flex justify-center text-4xl font-bold text-black mt-4'>All Matching Events</h1>
   </div>
 </div>
 
