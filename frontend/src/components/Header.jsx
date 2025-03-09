@@ -54,11 +54,11 @@ const Header = () => {
             </>
           ) : (
             <>
-              <a href="/login" className="text-gray-800 hover:bg-gray-50 rounded-lg px-4 py-2 transition-all">
+              <a href="/login" className="text-gray-800 hover:bg-gray-50 rounded-lg px-4 py-2 transition-all font-semibold">
                 Log in
               </a>
 
-              <a href="/register" className="text-white bg-customBlue-600 hover:bg-customBlue-700 rounded-lg px-4 py-2 ml-2 transition-all">
+              <a href="/register" className="text-white bg-customBlue-600 hover:bg-customBlue-700 rounded-lg px-4 py-2 ml-2 transition-all font-semibold">
                 Get started
               </a>
             </>
