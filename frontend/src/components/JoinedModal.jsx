@@ -2,12 +2,12 @@ import {  useState } from "react";
 import CloseIcon from "./CloseIcon";
 import { Link } from "react-router-dom";
 
-const JoinedModal = ({closeModal, events}) => {
+const JoinedModal = ({closeModal, events, profile}) => {
 
   const [filteredEvents, setFilteredEvents] = useState(events)
   const [search, setSearch] = useState("");
 
-
+  console.log(profile)
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -26,10 +26,12 @@ const JoinedModal = ({closeModal, events}) => {
         
       </div>
       <div className="fixed inset-0 z-10 flex justify-center pt-12 pb-12">
-        <div className="relative w-[60%] sm:w-[50%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white  text-left shadow-xl transition-all
+        <div className="relative w-[45%] sm:w-[45%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white  text-left shadow-xl transition-all
          overflow-auto"> 
           <div className="px-5 py-5">
-          <h1 className="text-center text-xl font-bold">Joined Events</h1>
+          <h1 className="text-center text-xl font-bold">  Joined Events of</h1>
+          <h1 className="text-center text-xl font-bold"> {profile?.user?.username}  </h1>
+
 
           <div className="border-b-2 py-4 px-2">
               <input
@@ -57,8 +59,19 @@ const JoinedModal = ({closeModal, events}) => {
                       className="w-10 h-10 rounded-full"
                       alt="User"
                     />
-                    <span className="truncate flex-1 font-medium">{event.title}</span>
+
+                    {event.host.id === profile.user.id ? (
+                    <div className="flex flex-col gap-2 justify-between  overflow-hidden whitespace-nowrap">
+                      <span className="font-medium text-lg truncate  ">{event.title}</span>
+                      <span className="text-xs text-center text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full">Host</span>
+                    </div>
+                    ) : (
+                      <span className="font-medium text-lg truncate  ">{event.title}</span>
+                    )}
+
+
                   </div>
+
 
                   {/* Right side: Date & Time */}
                   <div className="flex items-center gap-2 text-gray-600">

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const EventsPage = () => {
   let [events, setEvents] = useState([]);
   let [currentPage, setCurrentPage] = useState(1);
-  let [eventsPerPage] = useState(8);
+  let [eventsPerPage] = useState(12);
   const [searchText, setSearchText] = useState()
   const navigate = useNavigate();
 
@@ -114,7 +114,7 @@ const EventsPage = () => {
 
       <div className="px-6">
         {events.length > 0 ? (
-          <div className="grid lg:grid-cols-4 gap-6 container mx-auto ">
+          <div className="grid lg:grid-cols-6 gap-6 container mx-auto ">
             {currentEvents.map((event) => (
               <EventItem key={event.id} event={event} />
             ))}

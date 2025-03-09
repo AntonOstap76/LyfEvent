@@ -4,6 +4,8 @@ import JoinedModal from '../components/JoinedModal'
 import ava from '../assets/img/ava.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import FollowersModal from '../components/FollowersModal';
+
 const Profile = () => {
 
   const { user, authTokens} = useContext(AuthContext);
@@ -15,7 +17,16 @@ const Profile = () => {
   const [following, setFollowing] = useState(false)
   const navigate = useNavigate()
 
+  const [modalType, setModalType] = useState(null);
 
+
+  const openFollowersModal = (type) => {
+    setModalType(type);
+  };
+
+  const closeFollowersModal = () => {
+    setModalType(null);
+  };
 
   useEffect(()=>{
     getProfileData()
@@ -128,25 +139,25 @@ const Profile = () => {
           </div>
 
           <div className="text-center mt-2">
-            <h2 className="truncate flex-1 font-semibold">{userOther.username}</h2>
+            <h2 className="truncate flex-1 text-lg font-semibold">{userOther.username}</h2>
           </div>
 
-              <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
-              <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Followers
-                    <span>{data?.followers?.length ?? 0}</span> 
-                  </li>
-                </button>
 
-                <button>
-                  <li className="flex flex-col items-center text-lg">
-                    Following
-                    <span>{data?.following?.length ?? 0}</span> 
+          <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
+              <button onClick={() => openFollowersModal("followers")}>
+                <li className="flex flex-col items-center text-lg">
+                  Followers
+                  <span>{data?.followers?.length ?? 0}</span>
+                </li>
+              </button>
+              <button onClick={() => openFollowersModal("following")}>
+                <li className="flex flex-col items-center text-lg">
+                  Following
+                  <span>{data?.following?.length ??  0}</span>
+                </li>
+              </button>
+            </ul>
 
-                  </li>
-                </button>
-              </ul>
 
           <div className="flex justify-center mt-4">
             <button 
@@ -167,7 +178,7 @@ const Profile = () => {
                   <hr className="my-2 mx-4 border-gray-300 " />
                   <div className="flex flex-col gap-2 mt-2">
                     {data[`fact${fact}`] ? (
-                      <p className="text-center">{data[`fact${fact}`]}</p>
+                      <p className="text-center font-bold break-words" >{data[`fact${fact}`]}</p>
                     ) : (
                       <>
                         <div className="w-full h-4 bg-gray-300 rounded"></div>
@@ -192,7 +203,16 @@ const Profile = () => {
           </button>
         </div>
 
-          {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} />}
+        {modalJoined &&   <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} profile={data ? data : null}/>}
+
+          {modalType && (
+              <FollowersModal
+                closeModal={closeFollowersModal}
+                users={modalType === "followers" ? data.followers : data.following}
+                title={modalType === "followers" ? "Followers" : "Following"}
+              />
+            )}
+            
           </div>
       )}
     </div>

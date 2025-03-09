@@ -206,7 +206,10 @@ const CreateEventPage = ({eventId}) => {
           <option value="Music">Music</option>
           <option value="Sports">Sports</option>
           <option value="Arts">Arts</option>
-          <option value="Technology">Technology</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Study">Study</option>
+          <option value="Chill">Chill</option>
+          
         </select>
         {formik.errors.category && formik.touched.category && (
           <p className="text-red-600 text-sm mt-1">{formik.errors.category}</p>
