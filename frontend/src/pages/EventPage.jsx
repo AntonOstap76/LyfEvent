@@ -139,37 +139,55 @@ const EventPage = () => {
             <div className="mt-4 flex justify-center gap-4">
               
               {user?.user_id === event?.host.id ? (
-                <div className="flex gap-4">
-                  <button
-                    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-                    onClick={handleEdit}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button onClick={() => setModal(true)} className="w-full bg-[#6d6fff] text-white py-2 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
-                See All Users
-              </button>
-              
-                  <button
-                    className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
-                    onClick={handleDelete}
-                  >
-                    🗑 Delete
-                  </button>
-                  
 
-              {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
+                <div className="flex flex-col items-center space-y-4">
+                  {/* First row: See All Users & Go to Chat */}
+                  
+                  <div className="flex items-center space-x-4">
+                  <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300" 
+                    >
+                      
+                      See All Users
+                    </button>
+
+                    <Link to="/chat" state={{ eventId: event.id }}>  
+                      <button className="bg-[#6d6fff] text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
+                        💬 Go to Chat
+                      </button>
+                    </Link>
+
+
+                  </div>
+
+                  {/* Second row: Edit & Delete */}
+                  <div className="flex items-center space-x-4">
+                    <button
+                      className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                      onClick={handleEdit}
+                    >
+                      ✏️ Edit
+                    </button>
+
+                    <button
+                      className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+                      onClick={handleDelete}
+                    >
+                      🗑 Delete
+                    </button>
+                  </div>
+
+                  {/* Users Modal */}
+                  {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
                 </div>
+
               
               ) : (
                 
                 <div className="mt-[-20px] font-bold ">
                   
                   <Join eventId={id} onJoinSuccess={handleJoinSuccess} className="font-bold "/>
-                  <button onClick={() => setModal(true)} className="bg-[#6d6fff] text-white py-5 px-6 mt-2 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
-                See All Users
-              </button>
-              {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
+
+                    {modal && <UsersModal closeModal={() => setModal(false)} eventID={event?.id} />}
                 </div>
                 
               )}

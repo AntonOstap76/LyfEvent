@@ -41,7 +41,7 @@ const Header = () => {
         </nav>
 
         {/* Right Side - Icons and Auth Links */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           {user ? (
             <>
               <a href="/chat" className="px-4 py-2 hover:scale-110 transition-transform">
