@@ -410,13 +410,13 @@ const closeFollowersModal = () => {
    
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
               <button onClick={() => openFollowersModal("followers")}>
-                <li className="flex flex-col items-center text-lg">
+                <li className="flex flex-col items-center text-lg font-semibold">
                   Followers
                   <span>{data?.followers?.length ?? 0}</span>
                 </li>
               </button>
               <button onClick={() => openFollowersModal("following")}>
-                <li className="flex flex-col items-center text-lg">
+                <li className="flex flex-col items-center text-lg font-semibold">
                   Following
                   <span>{data?.following?.length ??  0}</span>
                 </li>
@@ -427,7 +427,7 @@ const closeFollowersModal = () => {
               <div className="flex justify-center mt-4">
                 <button
                   onClick={getJoinedEvents}
-                  className="p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold w-2/6 flex items-center justify-center hover:scale-110 transition"
+                  className="p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold w-2/6 flex items-center justify-center hover:scale-110 transition "
                 >
                   Joined Events
                 </button>
