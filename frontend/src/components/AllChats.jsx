@@ -5,20 +5,34 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import UsersModal from './UsersModal';
 import ava from '../assets/img/ava.svg';
 import bg_chat from '../assets/img/bg-chat.svg';
+import { use } from 'react';
 
 const AllChats = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user, authTokens } = useContext(AuthContext);
+
   const [selectedChatId, setSelectedChatId] = useState(null);
+
+  const [selectedChat, setSelectedChat] = useState(null);
+
   const [chats, setChats] = useState([]);
   const [events, setEvents] = useState([]);
-  const { user, authTokens } = useContext(AuthContext);
-  const location = useLocation(); // Corrected useLocation usage
-  const [selectedEvent, setSelectedEvent] = useState(location.state?.Event || null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [modal, setModal] = useState(false);
-
   const [filteredChats, setFilteredChats] = useState([]);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
+
   const [avatars, setAvatars] = useState({});
+
+  useEffect(() => {
+    if (location.state?.eventId) {
+      setSelectedChatId(Number(location.state.eventId)); // Ensure it's a number
+      // Clear the location state
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname, selectedChat, selectedEvent]);
+  
 
   useEffect(() => {
     getChats();
@@ -29,13 +43,27 @@ const AllChats = () => {
   }, [user]);
 
   useEffect(() => {
-    if (selectedChatId) {
-      const event = events.find((event) => event.id === selectedChat.event);
-      setSelectedEvent(event);
-    } else {
-      return;
+    if (location.state?.eventId) {
+      setSelectedChatId(Number(location.state.eventId)); // Ensure it's a number
     }
-  }, [selectedChatId]);
+  }, [location.state]);
+  
+      
+
+  useEffect(() => {
+    if (selectedChatId && chats.length > 0 && events.length > 0) {
+      const chattt = chats.find((chat) => Number(chat.id) === Number(selectedChatId));
+      setSelectedChat(chattt || null);
+      if (selectedChat) {
+        const event = events.find((event) => Number(event.id) === Number(selectedChat.event));
+        setSelectedEvent(event || null);
+      }
+    }
+  }, [selectedChatId, chats, events, selectedChat]);
+
+
+
+
 
   const getChats = async () => {
     try {
@@ -80,14 +108,13 @@ const AllChats = () => {
     }
   };
 
-  const selectedChat = chats.find((chat) => chat.id === selectedChatId);
-
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearch(query);
     setFilteredChats(chats.filter((chat) => chat.chat_name.toLowerCase().includes(query)));
   };
 
+  
   const profilePic = async (userId) => {
     const response = await fetch(`/api/profile/${userId}/`, {
       method: "GET",
@@ -96,6 +123,7 @@ const AllChats = () => {
         'Authorization': 'Bearer ' + String(authTokens.access),
       }
     });
+
     if (response.ok) {
       const data = await response.json();
       return data.avatar;
@@ -104,13 +132,14 @@ const AllChats = () => {
   };
 
   const handleImageLoad = async (userId) => {
-    // Fetch the avatar and set it in the state to prevent repeated calls
     const avatar = await profilePic(userId);
     setAvatars((prevAvatars) => ({
       ...prevAvatars,
-      [userId]: avatar || ava,  // Use default avatar if no avatar found
+      [userId]: avatar || ava,
     }));
   };
+
+  // const selectedChat = chats.find((chat) => Number(chat.id) === Number(selectedChatId));
 
   return (
     <>
@@ -130,14 +159,13 @@ const AllChats = () => {
           <ul>
             {filteredChats.length > 0 ? (
               filteredChats.map((chat) => (
-                <li
-                  key={chat.id}
-                  onClick={() => setSelectedChatId(chat.id)}
-                  className={`flex flex-row py-4 px-2 items-center border-b-2 cursor-pointer ${
-                    selectedChatId === chat.id ? 'border-l-4 border-[#6d6fff] bg-customBlue-50' : ''
-                  }`}
-                >
-                  {/* Ensure image remains visible */}
+                    <li
+                      key={chat.id}
+                      onClick={() => setSelectedChatId(Number(chat.id))}
+                      className={`flex flex-row py-4 px-2 items-center border-b-2 cursor-pointer ${
+                        Number(selectedChatId) === Number(chat.id) ? 'border-l-4 border-[#6d6fff] bg-customBlue-50' : ''
+                      }`}
+                    >
                   <div className="w-12 h-12 flex-shrink-0">
                     <img
                       src={(() => {
@@ -150,7 +178,6 @@ const AllChats = () => {
                     />
                   </div>
 
-                  {/* Prevent long chat names from pushing the image away */}
                   <div className="w-full ml-2 overflow-hidden">
                     <div className="truncate text-lg font-semibold max-w-[250px]">
                       {chat.chat_name}
@@ -214,17 +241,16 @@ const AllChats = () => {
 
                 {/* SIDEBAR RIGHT 2 (Now below Sidebar 1) */}
                 <div className="bg-white shadow-md ring-2 ring-black rounded-lg h-[28vh] w-[300px] flex flex-col relative p-4">
-                  {/* Header with participant count */}
                   <h1 className="text-center text-2xl font-bold text-black">
                     Users Joined ({selectedEvent?.participants.length} / {selectedEvent?.capacity})
                   </h1>
 
-                  {/* Host centered */}
                   <div className="flex flex-col  justify-center flex-1">
                     <div
                       onClick={() => navigate('/profile', { state: { user: selectedEvent?.host } })}
                       className="flex items-center gap-3 p-2 hover:bg-customBlue-100 transition cursor-pointer rounded-lg"
                     >
+
                       <img
                         src={avatars[selectedEvent?.host?.id] || ava}
                         className="ring-1 ring-black w-12 h-12 rounded-full"
@@ -239,7 +265,6 @@ const AllChats = () => {
                     </div>
                   </div>
 
-                  {/* Button at bottom */}
                   <div className="mt-auto">
                     <button 
                       onClick={() => setModal(true)}

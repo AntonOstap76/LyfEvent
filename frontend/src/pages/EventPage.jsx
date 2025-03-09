@@ -74,30 +74,30 @@ console.log(event?.host)
 
             {/* Event Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg text-gray-800 text-center">
-  {event?.category && (
-    <p>
-      <span className="font-semibold">📌 Category:</span> {event?.category}
-    </p>
-  )}
-  {event?.location && (
-    <p>
-      <span className="font-semibold">📍 Location:</span> {event?.location}
-    </p>
-    
-  )}
-  
-  {event?.date && (
-    <>
-      <p>
-        <span className="font-semibold">📅 Date:</span>{" "}
-        {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
-      </p>
-      <p>
-        <span className="font-semibold">⏰ Time:</span>{" "}
-        {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
-      </p>
-    </>
-  )}
+              {event?.category && (
+                <p>
+                  <span className="font-semibold">📌 Category:</span> {event?.category}
+                </p>
+              )}
+              {event?.location && (
+                <p>
+                  <span className="font-semibold">📍 Location:</span> {event?.location}
+                </p>
+                
+              )}
+              
+          {event?.date && (
+            <>
+              <p>
+                <span className="font-semibold">📅 Date:</span>{" "}
+                {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(new Date(event.date))}
+              </p>
+              <p>
+                <span className="font-semibold">⏰ Time:</span>{" "}
+                {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(event.date))}
+              </p>
+            </>
+          )}
   
   {event?.participants &&(
     <p>
@@ -110,7 +110,7 @@ console.log(event?.host)
       <p className="truncate flex-1 text-lg text-gray-700 font-semibold">
       👤 Hosted by:
         <span 
-          className="text-customBlue-600 hover:underline font-medium ml-2 cursor-pointer"
+          className="text-customBlue-600 hover:underline text-md font-semibold ml-2 cursor-pointer"
           onClick={(e) => {
             e.preventDefault();
             navigate(`/profile/`, { state: { user: event?.host } });
