@@ -15,8 +15,6 @@ import {AuthProvider} from "./context/AuthContext"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Profile from './pages/Profile'
 import MyEvents from './pages/MyEvents'
-import ChatPage from './pages/ChatPage'
-import Chat from './pages/Chat'
 import EventsFiltered from './pages/EventsFiltered'
 import MyProfile from './pages/MyProfile'
 import Register from './pages/Register'
@@ -53,9 +51,11 @@ function App() {
               <PrivateRoute element={<Profile/>}/>
             }/>
 
+
             <Route path='/chat/*' element={
               <PrivateRoute element={<AllChats/>}/>
             }/>
+
 
             <Route path='/my-events/*' element={
               <PrivateRoute element={<MyEvents/>}/>

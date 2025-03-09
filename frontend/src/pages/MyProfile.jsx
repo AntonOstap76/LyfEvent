@@ -168,6 +168,7 @@ const closeFollowersModal = () => {
   //   }
   // }, [selectedFact, formik.values]);
 
+
   useEffect(() => {
     if (selectedFact !== null && formik.values) {
       setSelectedFactText(formik.values[`fact${selectedFact}`]);
@@ -243,6 +244,7 @@ const closeFollowersModal = () => {
     setEdit(true)
 
   }
+
   console.log("data: ",data);
 
 
@@ -297,52 +299,55 @@ const closeFollowersModal = () => {
             <h2 className="font-semibold text-2xl">{user.username}</h2>
           </div>
     
-{/* Facts Section */}
-<div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
-  {[1, 2, 3].map((fact) => (
-    <motion.button
-      type="button"
-      key={fact}
-      onClick={() => handleFactClick(fact)}
-      whileHover={{ scale: 1.1 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col justify-between items-center transition relative"
-    >
-      {/* Centered Plus Icon */}
-      <motion.div
-        animate={{ rotate: 180 }}
-        whileHover={{ rotate: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="absolute mt-16  w-12 h-12 bg-white/40 flex items-center justify-center rounded-full"
-      >
-        <Plus className="text-white" />
-      </motion.div>
+          {/* Facts Section */}
+          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
+            {[1, 2, 3].map((fact) => (
+              <motion.button
+                type="button"
+                key={fact}
+                onClick={() => handleFactClick(fact)}
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                className="w-1/3 shadow-xl border bg-customBlue-100 rounded-xl h-full p-4 flex flex-col justify-between items-center transition relative"
+              >
+                {/* Centered Plus Icon */}
+                <motion.div
+                  animate={{ rotate: 180 }}
+                  whileHover={{ rotate: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="absolute mt-16 w-12 h-12 bg-white/40 flex items-center justify-center rounded-full"
+                >
+                  <Plus className="text-white" />
+                </motion.div>
 
-      {/* Title with Fixed Height */}
-      <div className="h-10 flex items-center">
-        <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
-      </div>
+                {/* Title with Fixed Height */}
+                <div className="h-10 flex items-center">
+                  <h1 className="text-center text-lg font-bold">Fact {fact}</h1>
+                </div>
 
-      {/* Divider with Fixed Height for Consistency */}
-      <div className="h-4 flex items-center w-full">
-        <hr className="border-gray-300 w-full" />
-      </div>
+                {/* Divider with Fixed Height for Consistency */}
+                <div className="h-4 flex items-center w-full">
+                  <hr className="border-gray-300 w-full" />
+                </div>
 
-      {/* Fact Content / Placeholder */}
-      <div className="flex flex-col gap-2 w-full flex-grow">
-        {formik.values[`fact${fact}`] ? (
-          <p className="text-center">{formik.values[`fact${fact}`]}</p>
-        ) : (
-          <>
-            <div className="w-full h-4 bg-gray-300 rounded"></div>
-            <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
-            <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
-          </>
-        )}
-      </div>
-    </motion.button>
-  ))}
-</div>
+                {/* Fact Content / Placeholder */}
+                <div className="flex flex-col gap-2 w-full flex-grow">
+                  {formik.values[`fact${fact}`] ? (
+                    <p className="text-center font-bold break-words">
+                      {formik.values[`fact${fact}`]}
+                    </p>
+                  ) : (
+                    <>
+                      <div className="w-full h-4 bg-gray-300 rounded"></div>
+                      <div className="w-5/6 h-4 bg-gray-300 rounded"></div>
+                      <div className="w-4/6 h-4 bg-gray-300 rounded"></div>
+                    </>
+                  )}
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
 
 
             {/* Edit & Logout Buttons */}
@@ -406,7 +411,7 @@ const closeFollowersModal = () => {
             </div>
   
     
-            <div className={`relative ${edit ? "blur-md" : ""} transition-all duration-300 z-0`}>
+            <div className={`relative  transition-all duration-300 z-0`}>
    
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
               <button onClick={() => openFollowersModal("followers")}>
@@ -445,7 +450,9 @@ const closeFollowersModal = () => {
                   <hr className="my-2 mx-4 border-gray-300" />
                   <div className="flex flex-col gap-2 mt-2">
                     {formik.values[`fact${fact}`] ? (
-                      <p className="text-center">{formik.values[`fact${fact}`]}</p>
+                      <p className="text-center font-bold break-words">
+                      {formik.values[`fact${fact}`]}
+                    </p>
                     ) : (
                       <>
                         <div className="w-full h-4 bg-gray-300 rounded"></div>
@@ -485,17 +492,15 @@ const closeFollowersModal = () => {
             </div>
   
             {/* Modal */}
-            {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents}/>}
-
-            {modalJoined && <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} />}
+            {modalJoined &&   <JoinedModal closeModal={() => setModalJoined(false)} events={joinedEvents} profile={data ? data : null}/>}
 
             {modalType && (
-  <FollowersModal
-    closeModal={closeFollowersModal}
-    users={modalType === "followers" ? data.followers : data.following}
-    title={modalType === "followers" ? "Followers" : "Following"}
-  />
-)}
+              <FollowersModal
+                closeModal={closeFollowersModal}
+                users={modalType === "followers" ? data.followers : data.following}
+                title={modalType === "followers" ? "Followers" : "Following"}
+              />
+            )}
           </div>
         )
       ) : null}

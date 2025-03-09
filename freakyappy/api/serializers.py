@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 from .models import Event, Profile
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username'] 
+        fields = ['id', 'username']
 
 class EventSerializer(serializers.ModelSerializer):
     host = UserSerializer(read_only=True)
@@ -23,12 +22,14 @@ class EventSerializer(serializers.ModelSerializer):
             "id": obj.host.id,
             "name": obj.host.username
         }
+
     def get_joined_count(self, obj):
         return obj.participants.count()
 
 class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Profile
@@ -40,4 +41,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_followers(self, obj):
         return [profile.user.id for profile in obj.followers.all()]
-    
+

@@ -139,12 +139,13 @@ const Join = ({ eventId }) => {
       {joined ? (
         <div className="mt-8">
 
-                {/* <Link
-        to={{ pathname: "/chat", state: { eventId: eventId } }}
-        className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-center"
-      >
-        💬 Go to Chat
-      </Link> */}
+            <Link
+              to="/chat"
+              state={{ eventId: eventId }} // ✅ Correct way in React Router v6
+              className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition text-center"
+            >
+              💬 Go to Chat
+            </Link>
 
         <p className="text-lg font-medium text-gray-700 mb-4">
           You've already joined this event.

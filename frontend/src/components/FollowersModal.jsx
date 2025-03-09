@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import CloseIcon from "./CloseIcon";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ava from "../assets/img/ava.svg"; 
 import { AuthContext } from '../context/AuthContext';
 
@@ -11,9 +11,6 @@ const FollowersModal = ({ closeModal, users, title }) => {
   const [search, setSearch] = useState("");
   const [profiles, setProfiles] = useState([]);
   const navigate = useNavigate();
-
-
-
 
   useEffect(() => {
     if (users && users.length > 0) {
@@ -48,11 +45,11 @@ const FollowersModal = ({ closeModal, users, title }) => {
       );
 
       setProfiles(profileData);
+      setFilteredUsers(profileData);  // Initially, show all profiles
     } catch (error) {
       console.error("Error fetching profiles:", error);
     }
   };
-
 
   const getSelectedUser = async (userId) => {
     try {    
@@ -69,8 +66,8 @@ const FollowersModal = ({ closeModal, users, title }) => {
 
       const data = await response.json();
       console.log("Selected user data:", data);
-      // Navigate to the profile page with the selected user data in state
-      navigate(`/profile/`, { state: {user: data} });
+      navigate(`/profile/`, { state: { user: data } });
+      closeModal();
 
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -80,14 +77,19 @@ const FollowersModal = ({ closeModal, users, title }) => {
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearch(query);
-    setFilteredUsers(users.filter((user) => user.username.toLowerCase().includes(query)));
+
+    // Filter the profiles array based on the search input
+    const filtered = profiles.filter((profile) => 
+      profile.user.username.toLowerCase().includes(query)
+    );
+    setFilteredUsers(filtered);
   };
 
   return (
     <div className="relative z-10" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-opacity-80 transition-all backdrop-blur-sm"></div>
       <div className="fixed inset-0 z-10 flex justify-center pt-12 pb-12">
-        <div className="relative w-[60%] sm:w-[50%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
+        <div className="relative w-[40%] sm:w-[40%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
           <div className="px-5 py-5">
             <h1 className="text-center text-xl font-bold">{title}</h1>
 
@@ -103,15 +105,15 @@ const FollowersModal = ({ closeModal, users, title }) => {
 
             {/* Users List */}
             <div className="mt-4">
-              {profiles.length > 0 ? (
-                profiles.map((profile) => (
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((profile) => (
                   <div 
                     key={profile.id} 
-                    onClick={() => getSelectedUser(profile.user)} 
+                    onClick={() => getSelectedUser(profile.user.id)} 
                     className="cursor-pointer flex items-center gap-3 p-2 hover:bg-gray-100 transition"
                   >
                     <img src={profile.avatar || ava} className="w-10 h-10 rounded-full" alt="User Avatar" />
-                    <span className="truncate font-medium">{profile.username}</span>
+                    <span className="truncate font-medium">{profile?.user?.username}</span>
                   </div>
                 ))
               ) : (
