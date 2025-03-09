@@ -250,12 +250,12 @@ const closeFollowersModal = () => {
 
   return (
   
-    <div className="min-h-screen flex flex-col items-center relative">
+    <div className="min-h-screen flex flex-col items-center px-4 sm:px-7 lg:px-8">
 
       {user ? (
         edit ? (
           
-          <form action=" " onSubmit={formik.handleSubmit} className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative">
+          <form action=" " onSubmit={formik.handleSubmit} className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative">
           
           {/* <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative"> */}
 
@@ -296,7 +296,7 @@ const closeFollowersModal = () => {
     
           {/* Username */}
           <div className="text-center mt-2 relative ">
-            <h2 className="font-semibold text-lg ">{user.username}</h2>
+            <h2 className="font-semibold text-2xl">{user.username}</h2>
           </div>
     
           {/* Facts Section */}
@@ -362,14 +362,14 @@ const closeFollowersModal = () => {
                   }
                 }}
                 type={edit ? "submit" : "button"} // Ensure proper form behavior
-                className="w-2/6 bg-customBlue-500 text-white py-2 rounded-lg hover:bg-customBlue-600 transition"
+                className="w-2/6 bg-customBlue-500 text-white py-2 rounded-lg hover:bg-customBlue-600 transition font-semibold"
               >
                 {edit ? "Save" : "Edit Profile"}
               </button>
 
                 <button
                   onClick={logoutUser}
-                  className="w-2/6 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+                  className="w-2/6 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-semibold"
                 >
                   Logout
                 </button>
@@ -395,8 +395,8 @@ const closeFollowersModal = () => {
 
 
         ) : (
-          <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl relative">
-
+          <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative">
+            {/* Background Blur Effect (applies only to the content inside) */}
             <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
   
 
@@ -407,7 +407,7 @@ const closeFollowersModal = () => {
             </div>
   
             <div className="truncate flex-1 text-center mt-2 relative z-10">
-              <h2 className="font-semibold text-lg ">{user.username}</h2>
+              <h2 className="font-semibold text-2xl">{user.username}</h2>
             </div>
   
     
@@ -484,7 +484,7 @@ const closeFollowersModal = () => {
                 </button>
                 <button
                   onClick={logoutUser}
-                  className="w-2/6 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+                  className="w-2/6 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-semibold"
                 >
                   Logout
                 </button>

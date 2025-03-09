@@ -52,11 +52,13 @@ const CreateEventPage = ({eventId}) => {
   
         if (response.ok) {
 
+          let timerInterval;
           Swal.fire({
-            title: "🎉 Success!",
-            text: "Your event has been created or changed!",
+            position: "top-end",
             icon: "success",
-            confirmButtonColor: "#4CAF50",
+            title: "Event has been created.",
+            showConfirmButton: false,
+            timer: 1500
           });
           navigate("/my-events");  // Redirect to 'My Events' page
 

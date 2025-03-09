@@ -88,23 +88,51 @@ const Join = ({ eventId }) => {
   };
 
   const handleLeave = async () => {
-    try {
-      const response = await fetch(`/api/events-leave/${eventId}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authTokens.access}`,
-        },
-      });
-
-      if (response.ok) {
-        setJoined(false); // Successfully joined the event
-      } 
-    } catch (error) {
-      console.error("Error joining the event:", error);
-      
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, leave it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`/api/events-leave/${eventId}/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authTokens.access}`,
+            },
+          });
+  
+          if (response.ok) {
+            setJoined(false);
+            Swal.fire({
+              title: "Left!",
+              text: "You have successfully left the event.",
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to leave the event. Please try again.",
+              icon: "error",
+            });
+          }
+        } catch (error) {
+          console.error("Error leaving the event:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Something went wrong. Please try again later.",
+            icon: "error",
+          });
+        }
+      }
+    });
   };
+  
 
   return (
     <div>
@@ -124,13 +152,14 @@ const Join = ({ eventId }) => {
         </p>
         <button
           onClick={handleLeave} // Trigger leave event
-          className=" px-6 py-3.5 font-semibold rounded-md shadow bg-red-600 text-white hover:bg-red-800"
+          className=" px-7 py-5 text-lg font-semibold rounded-md shadow bg-red-600 text-white hover:bg-red-800"
         >
           Leave
         </button>
 
 
         </div>
+        
       ) : (
         <div className="mt-8">
         <p className="text-lg font-medium text-gray-700 mb-4">
@@ -138,7 +167,7 @@ const Join = ({ eventId }) => {
         </p>
         <button
           onClick={handleJoin} // Trigger join event
-          className="px-6 py-3.5 font-semibold rounded-md shadow bg-green-600 text-white hover:bg-green-800"
+          className="px-7 py-5 text-lg font-semibold  rounded-md shadow bg-green-600 text-white hover:bg-green-800"
         >
           Join
         </button>

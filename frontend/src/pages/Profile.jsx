@@ -130,7 +130,7 @@ const Profile = () => {
       {/* <h1 className="flex justify-center text-4xl font-bold text-black">Profile</h1> */}
 
       {userOther && (
-        <div className="w-3/6 rounded-lg text-gray-900 bg-white px-6 pb-8 shadow-xl ">
+        <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative ">
           <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500">
       
           </div>

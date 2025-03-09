@@ -54,7 +54,7 @@ const Home = () => {
       <img 
         src={bgImage} 
         alt="img"
-        className="absolute right-0 top-28 h-[70vh] object-cover"
+        className="absolute right-0 top-28 sm:h-[70vh] sm:object-cover"
       />
 
       {/* Search Bar */}
@@ -96,12 +96,12 @@ const Home = () => {
         
         {/* Left Side - Text */}
         <div className="max-w-2xl flex flex-col">
-          <h3 className="text-xl font-normal text-gray-700 leading-relaxed">
+          <h3 className="text-2xl font-normal text-gray-700 leading-relaxed">
             LyfEvents helps you find all kinds of events where you can meet new people, discover new activities,
             and make lasting memories. Whether it's for fun, work, or learning,
-            LyfeVents connects you to events that fit your interests. Join your first event now.
+            LyfEvents connects you to events that fit your interests. Join your first event now.
           </h3>
-          <div className="mt-12">
+          <div className="mt-12 text">
             <Carousele events={chosenEvents.slice(0, 8)} />
           </div>
         </div>
