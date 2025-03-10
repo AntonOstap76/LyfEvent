@@ -87,7 +87,7 @@ def apiOverview(request):
 
 @api_view(['GET'])
 def eventList(request):
-    events = Event.objects.all().order_by('-updated')
+    events = Event.objects.all().order_by('-created')
     serializer = EventSerializer(events, many=True )
     return Response(serializer.data)
 
@@ -97,6 +97,7 @@ def eventDetail(request, pk):
     events = Event.objects.get(id=pk)
     serializer = EventSerializer(events, many=False )
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -333,12 +334,20 @@ def register(request):
     if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
         return Response({"error": "Username or email already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Create user but keep it inactive
     user = User.objects.create_user(username=username, email=email, password=password)
-    user.is_active = False 
+    user.is_active = False  
     user.save()
 
+    # If the email contains '@student.', set the student status
+    if '@student.' in email:
+        profile = get_object_or_404(Profile, user=user)
+        profile.student = True  
+        profile.save()
+
+    # Generate activation token and send email
     activation_token = str(uuid.uuid4())  
-    ActivationToken.objects.create(user=user, token=activation_token)  
+    ActivationToken.objects.create(user=user, token=activation_token)
 
     activation_link = request.build_absolute_uri(reverse('activate', args=[activation_token]))
 
@@ -346,15 +355,14 @@ def register(request):
     email_body = f"Click the link to activate your account: {activation_link}"
 
     send_mail(
-        subject=email_subject,
-        message=email_body,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[user.email],
+        email_subject,
+        email_body,
+        'noreply@lyfevents.com',  # Replace with your actual email
+        [email],
         fail_silently=False,
     )
 
-    return Response({"message": "User created successfully. Check your email for activation."}, status=status.HTTP_201_CREATED)
-
+    return Response({"message": "Registration successful. Please check your email to activate your account."}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
@@ -393,17 +401,6 @@ def get_user_by_id(request, pk):
 def get_user_by_username(request, username):
     user = get_object_or_404(User, username=username)
     return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
-
-
-from django.core.files.base import ContentFile
-import base64
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-from django.shortcuts import get_object_or_404
-from .models import Profile
-from .serializers import ProfileSerializer
-
 
 
 

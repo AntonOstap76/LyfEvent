@@ -18,11 +18,7 @@ const EventsPage = () => {
   const getEvents = async () => {
     let response = await fetch("/api/events-list/");
     let data = await response.json();
-    const today = new Date().toISOString().split("T")[0];
-    const validEvents = data.filter(event => event.date >= today);
-
-    console.log(validEvents);
-    setEvents(validEvents);
+    setEvents(data);
   };
 
   // Get Current Events (Pagination)
