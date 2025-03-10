@@ -96,7 +96,7 @@ const Home = () => {
         
         {/* Left Side - Text */}
         <div className="max-w-2xl flex flex-col">
-          <h3 className="text-2xl font-normal text-gray-700 leading-relaxed">
+          <h3 className="text-2xl font-normal text-gray-700 leading-relaxed text-center">
             LyfEvents helps you find all kinds of events where you can meet new people, discover new activities,
             and make lasting memories. Whether it's for fun, work, or learning,
             LyfEvents connects you to events that fit your interests. Join your first event now.

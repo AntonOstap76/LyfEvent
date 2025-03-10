@@ -25,13 +25,18 @@ const CreateEventPage = ({eventId}) => {
       image: '',
       capacity: '',
       category: '',
+
     },
     
     validationSchema: basicSchema,
     onSubmit: async (values) => {
+      const date = new Date(values.date);  // Create a Date object from the form date
+      const utcDate = date.toISOString();
       const finalData = {
         ...values,
+        date: utcDate,
         image: picUrl.current, // Include image URL from your state
+        
       };
   
       try {
@@ -54,15 +59,15 @@ const CreateEventPage = ({eventId}) => {
 
           let timerInterval;
           Swal.fire({
-            position: "top-end",
+            position: "center",
             icon: "success",
-            title: "Event has been created.",
+            title: "Event has been created or changed.",
             showConfirmButton: false,
             timer: 1500
           });
           navigate("/my-events");  // Redirect to 'My Events' page
 
-          navigate("/my-events");  // Navigate after successful creation or update
+
 
         } else {
           Swal.fire({
@@ -171,7 +176,7 @@ const CreateEventPage = ({eventId}) => {
 
         <h1 className="text-center text-4xl font-bold text-black-800 mb-6">{eventId ? "Edit Event" : "Create Event"}</h1>
 
-
+        
 
         <form className="grid grid-cols-1 gap-6" onSubmit={formik.handleSubmit}>
   

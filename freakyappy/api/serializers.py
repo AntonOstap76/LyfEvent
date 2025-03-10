@@ -17,6 +17,8 @@ class EventSerializer(serializers.ModelSerializer):
                   "category", "image", "participants", 'date', 'location']
         read_only_fields = ['updated', 'created', 'host']
 
+
+
     def get_host(self, obj):
         return {
             "id": obj.host.id,

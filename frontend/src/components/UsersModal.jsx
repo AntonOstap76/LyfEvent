@@ -104,7 +104,7 @@ const UsersModal = ({ closeModal, eventID}) => {
                     {event.host.username === user.username ? (
                     <div className="flex flex-row gap-2 items-center justify-between  overflow-hidden whitespace-nowrap">
                       <span className="font-medium text-lg truncate  ">{user.username}</span>
-                      <span className="text-xs text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full">Host</span>
+                      <span className="text-xs text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full font-semibold">Host</span>
                     </div>
                     ) : (
                       <span className="font-medium text-lg truncate   ">{ user.username}</span>

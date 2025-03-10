@@ -31,6 +31,10 @@ class Event(models.Model):
     date = models.DateTimeField(verbose_name="Event Date")
     location = models.CharField(max_length=255, verbose_name="Event Location")
 
+
+    
+
+
     def save(self, *args, **kwargs):
         if not self.pk and self.host.events.count() >= 8:  # Only check limit when creating (not updating)
             raise ValidationError("You can only create up to 8 events.")

@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2"
 
+
 const Join = ({ eventId }) => {
   const [joined, setJoined] = useState(false);
   const { authTokens, user } = useContext(AuthContext);
@@ -62,30 +63,33 @@ const Join = ({ eventId }) => {
       const joinResponse = await fetch(`/api/events-join/${eventId}/`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authTokens.access}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authTokens.access}`,
         },
-      });
-  
-      if (joinResponse.ok) {
+    });
+
+
+
+    if (joinResponse.ok) {
         setJoined(true);
         Swal.fire({
-          title: "🎉 Success!",
-          text: "You have successfully joined the event.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
+            title: "🎉 Success!",
+            text: "You have successfully joined the event.",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
         });
-      }
-    } catch (error) {
-      console.error("Error joining the event:", error);
-      Swal.fire({
+
+    }
+} catch (error) {
+    console.error("Error joining the event:", error);
+    Swal.fire({
         title: "⚠️ Oops!",
         text: "Something went wrong. Please try again later.",
         icon: "error",
         confirmButtonColor: "#d33",
-      });
-    }
-  };
+    });
+}
+};
 
   const handleLeave = async () => {
     Swal.fire({
@@ -167,10 +171,11 @@ const Join = ({ eventId }) => {
         </p>
         <button
           onClick={handleJoin} // Trigger join event
-          className="px-7 py-5 text-lg font-semibold  rounded-md shadow bg-green-600 text-white hover:bg-green-800"
+          className="px-7 py-5 text-lg font-semibold  rounded-md shadow bg-green-600 text-white hover:bg-green-800  "
         >
           Join
         </button>
+        
         </div>
       )}
     </div>
