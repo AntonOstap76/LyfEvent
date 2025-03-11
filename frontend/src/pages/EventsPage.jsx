@@ -9,7 +9,6 @@ const EventsPage = () => {
   let [currentPage, setCurrentPage] = useState(1);
   let [eventsPerPage] = useState(12);
   const [searchText, setSearchText] = useState("");
-  const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
