@@ -180,7 +180,9 @@ const Profile = () => {
           )}
 
           {/* Facts */}
-          <div className={`w-full flex flex-col ${isMobile ? 'gap-6' : 'justify-between gap-3'} mt-6 relative z-10`}>
+          {!isMobile && (
+
+          <div className="h-[24vh] w-full flex justify-between gap-3 mt-6 relative z-10">
             {[1, 2, 3].map((fact) => (
               <div
                 key={fact}
@@ -202,6 +204,8 @@ const Profile = () => {
               </div>
             ))}
           </div>
+          )}
+
 
           {!isMobile && (
           <div className="flex justify-center items-center mt-8">
