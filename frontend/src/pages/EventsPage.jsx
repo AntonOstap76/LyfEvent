@@ -103,7 +103,7 @@ const EventsPage = () => {
           </div>
         ) : (
           <div className="flex justify-center items-center  ">
-            <p className="text-xl font-bold text-gray-600">EVENTS COMING...</p>
+            <p className="text-xl font-bold text-gray-600 ">EVENTS COMING...</p>
           </div>
         )}
       </div>
