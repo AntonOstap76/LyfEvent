@@ -86,15 +86,13 @@ const UsersModal = ({ closeModal, eventID}) => {
 
             {/* Users/Filtered Users */}
             <div className="mt-4">
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <Link to="/profile" state={{ user: user }}>
+            {filteredUsers.length > 0 ? (
+              [...filteredUsers].reverse().map((user) => (  // Reverse the filteredUsers array
+                <Link to="/profile" state={{ user: user }} key={user.username}>
                   <div
-                    key={user.username}
                     className="truncate flex-1 flex items-center gap-3 p-2 hover:bg-customBlue-100 transition"
                   >
                     {/* Display user avatar with fallback */}
-
                     <img
                       src={avatars[user.id] || ava}  // Fallback to `ava` if no avatar
                       className="w-10 h-10 rounded-full ring-1 ring-black"
@@ -102,21 +100,21 @@ const UsersModal = ({ closeModal, eventID}) => {
                       alt={`${user.username} avatar`}
                     />
                     {event.host.username === user.username ? (
-                    <div className="flex flex-row gap-2 items-center justify-between  overflow-hidden whitespace-nowrap">
-                      <span className="font-medium text-lg truncate  ">{user.username}</span>
-                      <span className="text-xs text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full font-semibold">Host</span>
-                    </div>
+                      <div className="flex flex-row gap-2 items-center justify-between overflow-hidden whitespace-nowrap">
+                        <span className="font-medium text-lg truncate">{user.username}</span>
+                        <span className="text-md text-center text-white bg-[#6d6fff] w-[55px] px-2 py-1 rounded-full">Host</span>
+                      </div>
                     ) : (
-                      <span className="font-medium text-lg truncate   ">{ user.username}</span>
+                      <span className="font-medium text-lg truncate">{user.username}</span>
                     )}
-
                   </div>
-                  </Link>
-                ))
-              ) : (
-                <p className="text-center text-gray-500">No users found</p>
-              )}
-            </div>
+                </Link>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No users found</p>
+            )}
+          </div>
+
 
             <button
               onClick={closeModal}

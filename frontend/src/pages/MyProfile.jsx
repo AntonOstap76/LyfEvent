@@ -470,7 +470,7 @@ const closeFollowersModal = () => {
                   onClick={getJoinedEvents}
                   className="p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold w-2/6 flex items-center justify-center hover:scale-110 transition "
                 >
-                  Joined Events
+                  Joined Events 
                 </button>
               </div>
             </div>

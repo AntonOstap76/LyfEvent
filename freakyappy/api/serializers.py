@@ -14,7 +14,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ['id', 'host', 'title', 'description', "updated", "capacity", 
-                  "category", "image", "participants", 'date', 'location']
+                  "category", "image", "participants", 'date', 'location', 'for_students']
         read_only_fields = ['updated', 'created', 'host']
 
 
@@ -35,7 +35,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['id', 'avatar', 'fact1', 'fact2', 'fact3', 'followers', 'following', 'user']
+        fields = ['id', 'avatar', 'fact1', 'fact2', 'fact3', 'followers', 'following', 'user', 'student']
         read_only_fields = ['user']
 
     def get_following(self, obj):

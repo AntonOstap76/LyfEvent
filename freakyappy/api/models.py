@@ -30,13 +30,15 @@ class Event(models.Model):
     participants = models.ManyToManyField(User, related_name="joined_event", blank=True)
     date = models.DateTimeField(verbose_name="Event Date")
     location = models.CharField(max_length=255, verbose_name="Event Location")
+    for_students = models.BooleanField(default=False)
+    
 
 
     
 
 
     def save(self, *args, **kwargs):
-        if not self.pk and self.host.events.count() >= 8:  # Only check limit when creating (not updating)
+        if not self.pk and self.host.events.count() >= 8: 
             raise ValidationError("You can only create up to 8 events.")
         super().save(*args, **kwargs)
    
@@ -60,6 +62,6 @@ class Profile(models.Model):
     fact2 = models.TextField(blank=True, null=True)
     fact3 = models.TextField(blank=True, null=True)
     followers = models.ManyToManyField("self", symmetrical=False, related_name="following", blank=True)
-
+    student = models.BooleanField(default=False)
 
 

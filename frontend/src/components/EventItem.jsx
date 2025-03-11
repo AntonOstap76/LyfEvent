@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const EventItem = ({ event }) => {
   const navigate = useNavigate();
-  const { authTokens } = useContext(AuthContext); // Access authTokens from context
+  const { authTokens, user } = useContext(AuthContext); // Access authTokens and user from context
 
   // Check if the user is logged in based on authTokens
   const isLoggedIn = !!authTokens;
@@ -14,21 +14,19 @@ const EventItem = ({ event }) => {
     ? new Date(event.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : "TBD";
 
-  const handleClick = (e) => {
-    if (!isLoggedIn) {
-      e.preventDefault(); // Prevent the default action (navigation to event overview)
-      navigate("/login"); // Redirect to login page if not logged in
-    }
-  };
 
   return (
-    <div>
-      {/* If logged in, Link to the event overview page, otherwise trigger the login redirect */}
-      <Link 
-        to={isLoggedIn ? `/event/${event.id}` : '#'} 
-        onClick={handleClick}
-      >
+    <div className="relative">
+
+      <Link to={`/event/${event.id}`}>
         <div className="bg-gray-20 border border-gray-200 rounded-lg shadow border-black-700 transform hover:scale-105 transition-transform duration-300">
+
+      {/* Conditional "FOR STUDENTS" label */}
+      {event?.for_students && (
+        <div className="absolute top-2 left-2 bg-customBlue-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow z-20">
+          FOR STUDENTS
+        </div>
+      )}
           {/* Image */}
           <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 ratio */}
             <img
