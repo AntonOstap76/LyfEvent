@@ -248,7 +248,7 @@ const AllChats = () => {
                   <div className="flex flex-col  justify-center flex-1">
                     <div
                       onClick={() => navigate('/profile', { state: { user: selectedEvent?.host } })}
-                      className="flex items-center gap-3 p-2 hover:bg-customBlue-100 transition cursor-pointer rounded-lg"
+                      className="flex items-center gap-3 p-2 hover:bg-customBlue-100 transition cursor-pointer rounded-lg font-semibold"
                     >
 
                       <img

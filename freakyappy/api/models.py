@@ -33,6 +33,10 @@ class Event(models.Model):
     for_students = models.BooleanField(default=False)
     
 
+
+    
+
+
     def save(self, *args, **kwargs):
         if not self.pk and self.host.events.count() >= 8: 
             raise ValidationError("You can only create up to 8 events.")

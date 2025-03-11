@@ -29,9 +29,13 @@ const CreateEventPage = ({ eventId }) => {
     },
     validationSchema: basicSchema,
     onSubmit: async (values) => {
+      const date = new Date(values.date);  // Create a Date object from the form date
+      const utcDate = date.toISOString();
       const finalData = {
         ...values,
+        date: utcDate,
         image: picUrl.current, // Include image URL from your state
+        
       };
 
       try {

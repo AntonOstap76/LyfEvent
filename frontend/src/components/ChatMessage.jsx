@@ -50,19 +50,24 @@ const ChatMessage = ({ content, authorName }) => {
           <Link to="/my-profile">
             <img src={authorData?.avatar || ava} className="w-8 h-8 rounded-full ring-1 ring-black ml-2 mb-3" alt="User" />
           </Link>
+          
         </li>
       ) : (
         <li className="flex justify-start mb-4 items-center gap-2">
-          <Link to="/profile" state={{ user: authorData }}>
-            <img src={authorData?.avatar || ava} className="w-8 h-8 rounded-full ring-1 ring-black cursor-pointer" alt="Author Avatar" />
-          </Link>
-          <div className="bg-gray-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
-            <span className="truncate flex-1 block text-md font-medium text-customBlue-400 mb-2">
-              {authorName}
-            </span>
-            <span>{content}</span>
-          </div>
-        </li>
+  <Link to="/profile" state={{ user: authorData }}>
+    <img 
+      src={authorData?.avatar || ava} 
+      className="w-8 h-8 rounded-full ring-1 ring-black cursor-pointer" 
+      alt="Author Avatar" 
+    />
+  </Link>
+  <div className="bg-gray-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
+    <Link to="/profile" state={{ user: authorData }} className="truncate flex-1 block text-md font-medium text-customBlue-400 mb-2 hover:underline cursor-pointer">
+      {authorName}
+    </Link>
+    <span>{content}</span>
+  </div>
+</li>
       )}
     </div>
   );

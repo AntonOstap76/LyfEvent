@@ -9,6 +9,7 @@ const EventsPage = () => {
   let [currentPage, setCurrentPage] = useState(1);
   let [eventsPerPage] = useState(12);
   const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -40,8 +41,8 @@ const EventsPage = () => {
 
   const filterEvents = (e) => {
     e.preventDefault();  // Prevent form submission if inside a form
-  
-    // Check if searchText is empty
+    
+    // Ensure searchText is not empty
     if (!searchText.trim()) {
       console.error("Search text cannot be empty");
       return; // Exit early if no search text
