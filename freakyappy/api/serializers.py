@@ -26,6 +26,7 @@ class EventSerializer(serializers.ModelSerializer):
     def get_joined_count(self, obj):
         return obj.participants.count()
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()

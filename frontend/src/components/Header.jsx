@@ -14,7 +14,7 @@ const Header = () => {
 
         {/* Logo */}
         <a href="/" className="flex items-center">
-          <img src={logo} className="mr-3 h-20 sm:h-20" alt="Logo" />
+          <img src={logo} className="mr-4 h-20 sm:h-20" alt="Logo" />
         </a>
 
         {/* Desktop Navigation */}
@@ -52,13 +52,14 @@ const Header = () => {
                 <ProfileIcon className="w-9 h-7 sm:w-8 sm:h-8" />
               </a>
             </>
+
           ) : (
             <>
-              <a href="/login" className="text-gray-800 text-xl hover:bg-gray-50 rounded-lg px-4 py-4 transition-all font-semibold">
+              <a href="/login" className="text-gray-800 text-md sm:text-xl hover:bg-gray-50 rounded-lg px-2 sm:px-4 py-2 sm:py-4 transition-all font-semibold">
                 Log in
               </a>
 
-              <a href="/register" className="text-white text-xl bg-customBlue-600 hover:bg-customBlue-700 rounded-lg px-4 py-4 ml-2 transition-all font-semibold">
+              <a href="/register" className="text-white text-md sm:text-xl bg-customBlue-600 hover:bg-customBlue-700 rounded-lg px-2 sm:px-4 py-2 sm:py-4 ml-2 mr-2 transition-all font-semibold">
                 Get started
               </a>
             </>
@@ -67,15 +68,14 @@ const Header = () => {
 
         {/* Mobile Menu Button - Ensure it's Visible */}
         <button 
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="33" height="33" viewBox="0 0 50 50">
-<path d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z"></path>
-</svg>
-          </button>
-        </div>
-
+          className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="33" height="33" viewBox="0 0 50 50">
+            <path d="M 0 9 L 0 11 L 50 11 L 50 9 Z M 0 24 L 0 26 L 50 26 L 50 24 Z M 0 39 L 0 41 L 50 41 L 50 39 Z"></path>
+          </svg>
+        </button>
+      </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
@@ -95,9 +95,6 @@ const Header = () => {
               {item.name}
             </a>
           ))}
-
-
-          
         </div>
       )}
     </header>

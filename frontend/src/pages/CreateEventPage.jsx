@@ -13,6 +13,7 @@ const CreateEventPage = ({ eventId }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const picUrl = useRef(null);
   const fileInputRef = useRef(null);
+
   const [profile, setProfile] = useState([]);
 
   const formik = useFormik({
@@ -163,8 +164,6 @@ const CreateEventPage = ({ eventId }) => {
   const updatePic = (image) => {
     picUrl.current = image;
   };
-
-  console.log(profile);
 
   return (
     <div className="min-h-screen container mx-auto p-4 max-w-2xl bg-white shadow-lg rounded-lg">
