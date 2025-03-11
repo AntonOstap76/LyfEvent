@@ -21,7 +21,7 @@ const Carousele = ({ events }) => {
   const slider = React.useRef(null);
 
   return (
-    <div className="slider-container w-full max-w-2xl pl-10">
+    <div className="slider-container w-full min-w-full max-w-full">
       <div className="flex justify-center ">
         <h1 className="text-center text-2xl font-bold pb-4">UPCOMING EVENTS</h1>
       </div>
@@ -34,7 +34,7 @@ const Carousele = ({ events }) => {
             </div>
 
              {/* Buttons positioned on the left and right */}
-      <div className="absolute top-1/2 left-0 transform -translate-y-1/2 ml-4">
+      <div className="absolute top-1/3 left-0 transform -translate-y-1/2 ml-4">
         <button
           className="bg-white text-black p-2 rounded-full shadow-md"
           onClick={() => slider?.current?.slickPrev()}
@@ -45,7 +45,7 @@ const Carousele = ({ events }) => {
         </button>
       </div>
   
-      <div className="absolute top-1/2 right-0 transform -translate-y-1/2 mr-4">
+      <div className="absolute top-1/3 right-0 transform -translate-y-1/2 mr-4 ">
         <button
           className="bg-white text-black p-2 rounded-full shadow-md"
           onClick={() => slider?.current?.slickNext()}

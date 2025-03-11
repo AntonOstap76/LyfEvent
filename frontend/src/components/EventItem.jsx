@@ -18,7 +18,8 @@ const EventItem = ({ event }) => {
   return (
     <div className="relative">
 
-      <Link to={`/event/${event.id}`}>
+      <Link to={user ? `/event/${event.id}` : "/login"}
+      >
         <div className="bg-gray-20 border border-gray-200 rounded-lg shadow border-black-700 transform hover:scale-105 transition-transform duration-300">
 
       {/* Conditional "FOR STUDENTS" label */}

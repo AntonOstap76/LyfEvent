@@ -9,10 +9,21 @@ const EventsPage = () => {
   let [currentPage, setCurrentPage] = useState(1);
   let [eventsPerPage] = useState(12);
   const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     getEvents();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const getEvents = async () => {
@@ -34,30 +45,45 @@ const EventsPage = () => {
     // Ensure searchText is not empty
     if (!searchText.trim()) {
       console.error("Search text cannot be empty");
-      return;
+      return; // Exit early if no search text
     }
-
-    // Filter events based on searchText
-    const filteredEvents = events.filter((event) => 
-      event.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchText.toLowerCase())
-    );
-
-    navigate("/events-search/", { state: { events: filteredEvents, value: searchText } });
+  
+    fetch("/api/filter_text/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: searchText }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // Handle non-200 responses
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        navigate("/events-search/", { state: { events: data, value: searchText } });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Content Wrapper */}
-
       <div className="flex items-center mb-6">
+
         {/* Left Box (Empty or something else) */}
-        <div className="flex-shrink-0 w-1/6"></div>
+        {!isMobile && <div className="flex-shrink-0 w-1/6"></div>}
+
 
         {/* Center Box (Search Input) */}
-        <div className="w-full flex justify-center mb-6">
+        <div className={`w-full flex justify-center mb-6 `}>
           <div className="w-full max-w-2xl z-10">
-            <div className="relative">
+
+            <div className={ ` relative mx-4` }>
               <form onSubmit={filterEvents}>
                 <input
                   value={searchText}
@@ -77,36 +103,52 @@ const EventsPage = () => {
                 </button> 
               </form>
             </div>
-            <h1 className='flex justify-center text-4xl font-bold text-black mt-4'>All Events</h1>    
+
+            <h1 className={`flex justify-center text-4xl font-bold text-black mt-4 ${isMobile ? 'text-center' : ''}`}>All Events</h1>    
+            
           </div>
         </div>
 
         {/* Right Box (Pagination) */}
-        <div className="flex-shrink-0 w-1/6">
-          {events.length > 0 && (
-            <Pagination
-              eventsPerPage={eventsPerPage}
-              totalEvents={events.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          )}
-        </div>
+        {!isMobile && (
+          <div className="flex-shrink-0 w-1/6">
+            {events.length > 0 && (
+              <Pagination
+                eventsPerPage={eventsPerPage}
+                totalEvents={events.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            )}
+          </div>
+        )}
       </div>
 
       <div className="px-6">
         {events.length > 0 ? (
-          <div className="grid lg:grid-cols-6 gap-6 container mx-auto ">
+          <div className={`grid ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-6'} gap-6 container mx-auto`}>
             {currentEvents.map((event) => (
               <EventItem key={event.id} event={event} />
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center  ">
-            <p className="text-xl font-bold text-gray-600 ">EVENTS COMING...</p>
+          <div className="flex justify-center items-center">
+            <p className="text-xl font-bold text-gray-600">EVENTS COMING...</p>
           </div>
         )}
       </div>
+
+      {/* Pagination at the bottom for mobile */}
+      {isMobile && events.length > 0 && (
+        <div className="mt-6 mb-6">
+          <Pagination
+            eventsPerPage={eventsPerPage}
+            totalEvents={events.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </div>
+      )}
     </div>
   );
 };
