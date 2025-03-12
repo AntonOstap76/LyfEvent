@@ -238,7 +238,30 @@ const closeFollowersModal = () => {
     }
   };
 
+  const calculateProgress = () => {
+    let progress = 0;
+    if (formik.values.avatar) progress += 27;
+    if (formik.values.fact1) progress += 32;
+    if (formik.values.fact2) progress += 18;
+    if (formik.values.fact3) progress += 23;
+    return progress;
+  };
 
+  const progress = calculateProgress();
+
+  useEffect(() => {
+    if (progress === 100 && !localStorage.getItem("profileCompletePopupShown")) {
+      Swal.fire({
+        title: "🎉 Congratulations!",
+        text: "You did it! Your profile is complete.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
+  
+      // Set flag in local storage to prevent repeat popups
+      localStorage.setItem("profileCompletePopupShown", "true");
+    }
+  }, [progress]);
 
   const editActivate = ()=>{
     setEdit(true)
@@ -410,7 +433,20 @@ const closeFollowersModal = () => {
               <h2 className="font-semibold text-2xl">{user.username}</h2>
             </div>
   
-    
+    {/* Progress Bar */}
+    <div className="mt-4">
+            <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-2 bg-[#6d6fff] transition-all duration-700 ease-in-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <p className="text-center text-gray-700 font-semibold mt-2">
+              Profile Completion: {progress}%
+            </p>
+          </div>
+
+          
             <div className={`relative  transition-all duration-300 z-0`}>
    
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
@@ -467,7 +503,7 @@ const closeFollowersModal = () => {
 
             {/* Edit & Logout Buttons */}
             <div className="flex justify-center items-center mt-8 relative z-10">
-              <div className="flex flex-row justify-around w-full">
+              <div className="flex flex-row justify-around w-full font-semibold">
                 <button
                   onClick={() => {
                     if (edit) {

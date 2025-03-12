@@ -2,7 +2,10 @@ from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from .models import Event, Profile
 from chat.models import ChatGroup
-
+from django.db.models.signals import post_save, pre_save
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.db.models.signals import post_migrate
 from django.contrib.auth.models import User
 
 @receiver(m2m_changed, sender=Event.participants.through)
@@ -34,3 +37,16 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     # Save the Profile when the User instance is saved (to update any changes if needed)
     instance.profile.save()
+
+@receiver(post_save, sender=Event)
+def delete_expired_events(sender, instance, created, **kwargs):
+    """
+    Deletes all expired events every time any event is saved.
+    """
+    now = timezone.now()
+    
+    # Delete all events that have expired
+    expired_events = Event.objects.filter(date__lt=now)
+    expired_count = expired_events.count()
+    expired_events.delete()
+    print(f"Deleted {expired_count} expired events.")

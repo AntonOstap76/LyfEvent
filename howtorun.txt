@@ -6,7 +6,7 @@ python manage.py runserver
 
 source ./.venv/scripts/activate
 cd frontend
-npm run dev
+npm run dev -- --host
 
 install requirements in freakyappy(backend)
 cd freakyappy

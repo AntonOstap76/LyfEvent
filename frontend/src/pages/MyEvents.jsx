@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import EventItem from '../components/EventItem';
-import Pagination from '../components/Pagination';
 import { AuthContext } from '../context/AuthContext';
 
 const EventsPage = () => {

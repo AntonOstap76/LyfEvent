@@ -17,6 +17,8 @@ class EventSerializer(serializers.ModelSerializer):
                   "category", "image", "participants", 'date', 'location', 'for_students']
         read_only_fields = ['updated', 'created', 'host']
 
+
+
     def get_host(self, obj):
         return {
             "id": obj.host.id,
@@ -25,6 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_joined_count(self, obj):
         return obj.participants.count()
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
