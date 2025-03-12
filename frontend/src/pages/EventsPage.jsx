@@ -8,8 +8,11 @@ const EventsPage = () => {
   let [events, setEvents] = useState([]);
   let [currentPage, setCurrentPage] = useState(1);
   let [eventsPerPage] = useState(12);
-  const [searchText, setSearchText] = useState()
+  const [searchText, setSearchText] = useState();
+  const [searchCat, setSearchCat] = useState();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const options = ["Arts", "Music", "Sports", "Entertainment", "Study", "Chill"];
 
   useEffect(() => {
     getEvents();
@@ -29,14 +32,13 @@ const EventsPage = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const filterEvents = (e) => {
-    e.preventDefault();  // Prevent form submission if inside a form
-  
-    // Check if searchText is empty
+    e.preventDefault();
+
     if (!searchText.trim()) {
       console.error("Search text cannot be empty");
-      return; // Exit early if no search text
+      return;
     }
-  
+
     fetch("/api/filter_text/", {
       method: "POST",
       headers: {
@@ -46,7 +48,6 @@ const EventsPage = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          // Handle non-200 responses
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }
         return response.json();
@@ -59,92 +60,148 @@ const EventsPage = () => {
       });
   };
 
+  const filterCategoryEvents = (searchCat) => {
+    if (!searchCat) {
+      console.error("Search category cannot be empty");
+      return;
+    }
+
+    fetch("/api/filter_category/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ category: searchCat }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        navigate("/events-search/", { state: { events: data, valueCat: searchCat } });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    filterCategoryEvents(searchCat);
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Content Wrapper */}
-      
+  {/* Content Wrapper */}
+  <div className="relative inline-block mb-6">
+    {/* Filter Button & Search Section */}
+    <div className="flex justify-center mb-6 w-full">
+      <div className="relative w-full max-w-2xl flex items-center">
 
-      <div className="flex items-center mb-6">
-  {/* Left Box (Empty or something else) */}
-  <div className="flex-shrink-0 w-1/6"></div>
-
-  {/* Center Box (Search Input) */}
-  {/* Search Bar */}
-<div className="w-full flex justify-center mb-6">
-  
-  <div className="w-full max-w-2xl z-10">
-    <div className="relative">
-      <form onSubmit={filterEvents}>
-        <input
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className="w-full bg-white placeholder:text-slate-400 text-slate-900 text-md border border-slate-200 rounded-lg
-          pl-3 pr-28 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-          placeholder="Search events..." 
-        />
+        {/* Filter Button */}
         <button
-          className="absolute top-2 bottom-2 right-2 flex items-center rounded bg-[#6d6fff] py-1 px-2.5 border border-transparent text-md text-white transition-all hover:scale-125"
-          type="submit"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
-            <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
-          </svg>
-          Search
-        </button> 
-      </form>
+          Filter
+        </button>
+
+        {/* Search Input */}
+        <form onSubmit={filterEvents} className="flex w-full">
+          <input
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="w-full bg-white placeholder:text-slate-400 text-slate-900 text-md border border-slate-200 rounded-lg pl-3 pr-28 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            placeholder="Search events..."
+          />
+          <button
+            className="absolute top-2 bottom-2 right-2 flex items-center rounded bg-[#6d6fff] py-1 px-2.5 border border-transparent text-md text-white transition-all hover:scale-125"
+            type="submit"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
+              <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+            </svg>
+            Search
+          </button>
+        </form>
+
+        {/* Dropdown for Filter Options */}
+        {isOpen && (
+          <div className="absolute mt-2 w-40 bg-white shadow-lg rounded-md z-20 left-0">
+            {options.map((option, index) => (
+              <div
+                key={index}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setSearchCat(option);
+                  filterCategoryEvents(option); // Apply filter immediately
+                  setIsOpen(false);
+                }}
+              >
+                {option}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-    <h1 className='flex justify-center text-4xl font-bold text-black mt-4'>All Events</h1>    
   </div>
-  
-</div>
 
+  {/* Events Section */}
+  <div className="flex items-center mb-6 justify-between">
+    {/* Left Box (Empty or something else) */}
+    <div className="flex-shrink-0 w-1/6"></div>
 
-  {/* Right Box (Pagination) */}
-  <div className="flex-shrink-0 w-1/6">
-    {events.length > 0 && (
+    {/* Center Box (Search Input and Filter, already included above) */}
+    <div className="w-full flex justify-center mb-6">
+      <div className="w-full max-w-2xl z-10">
+        <h1 className="flex justify-center text-4xl font-bold text-black mt-4">All Events</h1>
+      </div>
+    </div>
+
+    {/* Right Box (Pagination) */}
+    <div className="flex-shrink-0 w-1/6">
+      {events.length > 0 && (
+        <Pagination
+          eventsPerPage={eventsPerPage}
+          totalEvents={events.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
+      )}
+    </div>
+  </div>
+
+  {/* Event Items Display */}
+  <div className="px-6">
+    {events.length > 0 ? (
+      <div className="grid lg:grid-cols-6 gap-6 container mx-auto">
+        {currentEvents.map((event) => (
+          <EventItem key={event.id} event={event} />
+        ))}
+      </div>
+    ) : (
+      <div className="flex justify-center items-center">
+        <p className="text-xl font-bold text-gray-600">EVENTS COMING...</p>
+      </div>
+    )}
+  </div>
+
+  {/* Pagination */}
+  {events.length > 0 && (
+    <div className="py-4 container mx-auto">
       <Pagination
         eventsPerPage={eventsPerPage}
         totalEvents={events.length}
         paginate={paginate}
         currentPage={currentPage}
       />
-    )}
-  </div>
-</div>
-
-
-      <div className="px-6">
-        {events.length > 0 ? (
-          <div className="grid lg:grid-cols-6 gap-6 container mx-auto ">
-            {currentEvents.map((event) => (
-              <EventItem key={event.id} event={event} />
-            ))}
-          </div>
-        ) : (
-          <div className="flex justify-center items-center  ">
-            <p className="text-xl font-bold text-gray-600">EVENTS COMING...</p>
-          </div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {/* {events.length > 0 && (
-        <div className="absolute bottom-0 left-0 right-0 py-4 container mx-auto">
-          <Pagination
-            eventsPerPage={eventsPerPage}
-            totalEvents={events.length}
-            paginate={paginate}
-            currentPage={currentPage}
-          />
-        </div>
-      )} */}
-
-
     </div>
-
-  );
-};
+  )}
+</div>
+  )}
 
 export default EventsPage;
-
