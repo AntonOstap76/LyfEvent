@@ -136,6 +136,9 @@ def eventCreate(request):
         "message": "Invalid data",
         "errors": serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
         
 @api_view(['PUT'])
 def eventUpdate(request, pk):
@@ -270,6 +273,17 @@ def filter_by_text(request):
     serialized_events = EventSerializer(results, many=True)
     return Response(serialized_events.data)
 
+@api_view(['POST', 'GET'])
+def filter_category(request):
+    category = request.data.get("category", "").strip()  
+
+    if category is not None:
+        events = Event.objects.filter(category=category)
+    else:
+        events = Event.objects.all()
+
+    serialized_events = EventSerializer(events, many=True)
+    return Response(serialized_events.data)
 
 
 @api_view(['GET'])
