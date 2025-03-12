@@ -139,6 +139,7 @@ def eventCreate(request):
         
 @api_view(['PUT'])
 def eventUpdate(request, pk):
+    print(request.data)
     try:
         event = Event.objects.get(id=pk)
     except Event.DoesNotExist:
@@ -161,9 +162,13 @@ def eventUpdate(request, pk):
             # This assumes the image URL is already set on the event model
             request.data['image'] = event.image
 
+    if 'for_students' in request.data and request.data['for_students'] == '':
+        request.data['for_students'] = False
+        
+
     # Now we proceed with the regular update logic
     serializer = EventSerializer(instance=event, data=request.data)
-    
+    print(serializer)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

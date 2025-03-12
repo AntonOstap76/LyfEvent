@@ -37,10 +37,10 @@ class Event(models.Model):
     
 
 
-    def save(self, *args, **kwargs):
-        if not self.pk and self.host.events.count() >= 8: 
-            raise ValidationError("You can only create up to 8 events.")
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.pk and self.host.events.count() >= 8: 
+    #         raise ValidationError("You can only create up to 8 events.")
+    #     super().save(*args, **kwargs)
    
     def __str__(self):
         return f"{self.title} - Event"

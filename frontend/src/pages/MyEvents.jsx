@@ -41,8 +41,8 @@ const EventsPage = () => {
  
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <h1 className='flex justify-center text-4xl font-bold text-black mb-6'>My Events</h1>
+    <div className="flex flex-col min-h-screen mb-4">
+      <h1 className='flex justify-center text-4xl font-bold text-black mb-12'>My Events</h1>
       {/* Content Wrapper */}
       <div>
         {myEvents.length > 0 ? (
@@ -52,8 +52,8 @@ const EventsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center h-64">
-            <p className="text-xl font-bold text-gray-600">You've not created any events yet...</p>
+          <div className="flex flex-col items-center mx-auto relative">
+            <p className="text-xl text-center font-bold text-gray-600">You've not created any events yet...</p>
           </div>
         )}
       </div>

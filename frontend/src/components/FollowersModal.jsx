@@ -89,7 +89,7 @@ const FollowersModal = ({ closeModal, users, title }) => {
     <div className="relative z-10" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-opacity-80 transition-all backdrop-blur-sm"></div>
       <div className="fixed inset-0 z-10 flex justify-center pt-12 pb-12">
-        <div className="relative w-[40%] sm:w-[40%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
+        <div className="relative w-[90%] sm:w-[40%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
           <div className="px-5 py-5">
             <h1 className="text-center text-xl font-bold">{title}</h1>
 

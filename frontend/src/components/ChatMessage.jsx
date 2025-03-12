@@ -43,8 +43,8 @@ const ChatMessage = ({ content, authorName }) => {
   return (
     <div>
       {authorName === user.username ? (
-        <li className="flex justify-end items-end mb-4">
-          <div className="bg-customBlue-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
+        <li className="flex justify-end items-end mb-2">
+          <div className="bg-customBlue-200 p-2 sm:p-4 rounded chat-bubble sm:max-w-xs max-w-[200px] break-words whitespace-normal">
             <span>{content}</span>
           </div>
           <Link to="/my-profile">
@@ -61,7 +61,7 @@ const ChatMessage = ({ content, authorName }) => {
       alt="Author Avatar" 
     />
   </Link>
-  <div className="bg-gray-200 p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
+  <div className="bg-gray-200 p-2 sm:p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
     <Link to="/profile" state={{ user: authorData }} className="truncate flex-1 block text-md font-medium text-customBlue-400 mb-2 hover:underline cursor-pointer">
       {authorName}
     </Link>

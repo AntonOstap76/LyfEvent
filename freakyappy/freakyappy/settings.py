@@ -201,7 +201,7 @@ CORS_ALLOWED_ORIGINS = [
     
 ]
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "192.168.0.171"]
 
 
 MEDIA_URL = '/media/'

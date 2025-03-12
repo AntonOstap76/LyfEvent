@@ -57,7 +57,7 @@ const CreateEventPage = ({ eventId }) => {
         if (response.ok) {
           Swal.fire({
             icon: "success",
-            title: "Event has been created/changed.",
+            title: "Event has been created/changed",
             showConfirmButton: true,
           });
           navigate("/my-events");  // Redirect to 'My Events' page
@@ -123,7 +123,7 @@ const CreateEventPage = ({ eventId }) => {
 
   useEffect(() => { 
     checkStudentStatus()
-  }, [profile]);
+  }, [user]);
 
   const checkStudentStatus = async () => {
     try {
@@ -351,43 +351,44 @@ const CreateEventPage = ({ eventId }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <input
-              type="datetime-local"
-              id="date"
-              name="date"
-              value={formik.values.date ? formik.values.date.slice(0, 16) : ""}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
-                ${formik.errors.date && formik.touched.date 
-                  ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
-                  : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
-            />
-            {formik.errors.date && formik.touched.date && (
-              <p className="text-red-600 text-sm mt-1">{formik.errors.date}</p>
-            )}
-          </div>
+  <div className="w-full">
+    <input
+      type="datetime-local"
+      id="date"
+      name="date"
+      value={formik.values.date ? formik.values.date.slice(0, 16) : ""}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
+        ${formik.errors.date && formik.touched.date 
+          ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
+          : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
+    />
+    {formik.errors.date && formik.touched.date && (
+      <p className="text-red-600 text-sm mt-1">{formik.errors.date}</p>
+    )}
+  </div>
 
-          <div>
-            <input
-              type="number"
-              id="capacity"
-              name="capacity"
-              value={formik.values.capacity}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Capacity"
-              className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
-                ${formik.errors.capacity && formik.touched.capacity 
-                  ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
-                  : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
-            />
-            {formik.errors.capacity && formik.touched.capacity && (
-              <p className="text-red-600 text-sm mt-1">{formik.errors.capacity}</p>
-            )}
-          </div>
-        </div>
+  <div className="w-full">
+    <input
+      type="number"
+      id="capacity"
+      name="capacity"
+      value={formik.values.capacity}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      placeholder="Capacity"
+      className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
+        ${formik.errors.capacity && formik.touched.capacity 
+          ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
+          : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
+    />
+    {formik.errors.capacity && formik.touched.capacity && (
+      <p className="text-red-600 text-sm mt-1">{formik.errors.capacity}</p>
+    )}
+  </div>
+</div>
+
 
         <div className="mt-4">
           <button

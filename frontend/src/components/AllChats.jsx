@@ -25,9 +25,22 @@ const AllChats = () => {
 
   const [avatars, setAvatars] = useState({});
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [expanded, setExpanded] = useState(false);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
   useEffect(() => {
     if (location.state?.eventId) {
-      setSelectedChatId(Number(location.state.eventId)); // Ensure it's a number
+      setSelectedChatId(Number(location.state.eventId)); 
+      setExpanded(true)
       // Clear the location state
       navigate(location.pathname, { replace: true });
     }
@@ -143,7 +156,121 @@ const AllChats = () => {
 
   return (
     <>
-      {/* SIDEBAR LEFT */}
+
+      {isMobile ? (
+        <div className="flex ">
+          {expanded && selectedChat ? (
+
+            <div className="relative w-full min-h-screen">
+
+              <button 
+                onClick={() => setExpanded(false)} 
+                className="absolute z-50 top-4 left-4 bg-gray-300 px-3 py-1 rounded-lg"
+              >
+                Back
+              </button>
+
+                <div className="mx-1 truncate flex-1 mb-3">
+                <ChatPage chat={selectedChat} />
+              </div>
+
+
+                  {/* SIDEBAR RIGHT 1 */}
+                  <Link to={`/event/${selectedChat.event}`} className="mt-auto">
+                  <div className="mx-auto flex-1 bg-white shadow-md ring-2 ring-black rounded-lg h-auto w-[90%] flex flex-col relative p-4 mb-3">
+                  <h1 className=" flex-1 flex justify-center text-2xl font-bold text-black mb-2">
+                    {selectedChat.chat_name}
+                  </h1>
+
+                  <img
+                    src={(() => {
+                      const event = events.find((event) => event.id === selectedChat.event);
+                      return event ? event.image : "";
+                    })()}
+                    className="w-[80%] h-auto mx-auto rounded-md object-cover shadow-md"
+                    alt="Event's name"
+                  />
+
+                  {selectedEvent && (
+                    <div className="mt-4 space-y-1 text-gray-700">
+                      <p className="text-lg font-medium">
+                        <span className="font-bold text-black">Location:</span> {selectedEvent.location}
+                      </p>
+                      <p className="text-lg font-medium">
+                        <span className="font-bold text-black">Date:</span>{" "}
+                        {new Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(new Date(selectedEvent.date))}
+                      </p>
+                      <p className="text-lg font-medium">
+                        <span className="font-bold text-black">Time:</span>{" "}
+                        {new Intl.DateTimeFormat("en-US", { timeStyle: "short" }).format(new Date(selectedEvent.date))}
+                      </p>
+                    </div>
+                  )}
+
+                  <Link to={`/event/${selectedChat.event}`} className="mt-auto">
+                    <button className="w-full bg-[#6d6fff] text-white py-2 mt-2 rounded-lg text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
+                      See All Info
+                    </button>
+                  </Link>
+                </div>
+                </Link>
+
+            </div>
+          ) : (
+            <>
+            <div className="flex flex-col min-h-screen w-full border-r-2 overflow-y-auto">
+              <div className="border-b-2 py-4 px-2">
+                <input
+                  type="text"
+                  placeholder="Search chats"
+                  className="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
+                  value={search}
+                  onChange={handleSearch}
+                />
+              </div>
+
+            <ul className="w-full">
+              {filteredChats.length > 0 ? (
+                filteredChats.map((chat) => (
+                  <li
+                    key={chat.id}
+                    onClick={() => {
+                      setSelectedChatId(Number(chat.id));
+                      setExpanded(true);
+                    }}
+                    className="flex flex-row py-4 px-2 items-center border-b-2 cursor-pointer"
+                  >
+                    <div className="w-12 h-12 flex-shrink-0">
+                      <img
+                        src={(() => {
+                          const event = events.find(event => event.id === chat.event);
+                          return event ? event.image : '';
+                        })()}
+                        className="object-cover h-12 w-12 rounded-full"
+                        alt={chat.chat_name}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="w-full ml-2 overflow-hidden">
+                      <div className="truncate text-lg font-semibold max-w-[250px]">
+                        {chat.chat_name}
+                      </div>
+                      <span className="text-gray-500 truncate block max-w-[180px]">{chat.last_message}</span>
+                    </div>
+                  </li>
+                ))
+              ) : (
+                <p className="text-center text-gray-500">No chats found</p>
+              )}
+            </ul>
+
+
+
+          </div>
+            </>
+          )}
+        </div>
+    ) : (
       <div className="flex mb-6">
         <div className="flex flex-col h-[82vh] w-1/4 border-r-2 overflow-y-auto">
           <div className="border-b-2 py-4 px-2">
@@ -287,6 +414,9 @@ const AllChats = () => {
           )}
         </div>
       </div>
+    )}
+
+      
     </>
   );
 };
