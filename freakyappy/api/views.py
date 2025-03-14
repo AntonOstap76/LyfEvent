@@ -414,6 +414,7 @@ def profile_update(request, pk):
     profile = get_object_or_404(Profile, user__id=pk)
 
     # Process avatar only if it exists and is not None
+    print(request.data)
     avatar = request.data.get('avatar', None)
     if avatar:
         if "data:image" in avatar:

@@ -44,7 +44,21 @@ const AllChats = () => {
       // Clear the location state
       navigate(location.pathname, { replace: true });
     }
-  }, [location.state, navigate, location.pathname, selectedChat, selectedEvent]);
+
+
+  }, [location.state]);
+
+
+  useEffect(() => {
+    console.log('Selected Chat ID:', selectedChatId);
+    console.log('Chats:', chats);
+  
+    if (selectedChatId) {
+      const chat = chats.find((chat) => Number(chat.id) === Number(selectedChatId));
+      console.log('Found Chat:', chat);
+      setSelectedChat(chat || null);
+    }
+  }, [selectedChatId, chats]);
   
 
   useEffect(() => {
@@ -55,16 +69,16 @@ const AllChats = () => {
     getEvents();
   }, [user]);
 
-  useEffect(() => {
-    if (location.state?.eventId) {
-      setSelectedChatId(Number(location.state.eventId)); // Ensure it's a number
-    }
-  }, [location.state]);
+  // useEffect(() => {
+  //   if (location.state?.eventId) {
+  //     setSelectedChatId(Number(location.state.eventId)); // Ensure it's a number
+  //   }
+  // }, [location.state]);
   
       
 
   useEffect(() => {
-    if (selectedChatId && chats.length > 0 && events.length > 0) {
+    if (selectedChatId ) {
       const chattt = chats.find((chat) => Number(chat.id) === Number(selectedChatId));
       setSelectedChat(chattt || null);
       if (selectedChat) {
@@ -153,7 +167,9 @@ const AllChats = () => {
   };
 
   // const selectedChat = chats.find((chat) => Number(chat.id) === Number(selectedChatId));
-
+  console.log(expanded)
+  console.log(selectedChat)
+  console.log(selectedChatId)
   return (
     <>
 

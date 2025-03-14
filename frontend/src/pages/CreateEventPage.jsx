@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useFormik } from "formik";
 import basicSchema from '../schemas/FormValidator';
 import Swal from "sweetalert2";
+import heic2any from "heic2any"
 
 const CreateEventPage = ({ eventId }) => {
   const { authTokens, user } = useContext(AuthContext);
@@ -15,6 +16,8 @@ const CreateEventPage = ({ eventId }) => {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState([]);
+
+  
 
   const formik = useFormik({
     initialValues: {
@@ -139,35 +142,94 @@ const CreateEventPage = ({ eventId }) => {
     }
   };
 
-  const onSelectFile = (e) => {
+  const onSelectFile = async (e) => {
     const file = e.target.files?.[0];
+  
+    if (!file) return;
+  
+    console.log("Selected file:", file);
+  
+    const reader = new FileReader();
+  
+    try {
+      let processedFile = file;
 
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const imageUrl = reader.result?.toString() || "";
-
-        formik.setFieldValue("image", file);
-        setImageSrc(imageUrl); // Set preview image
-        setModalOpen(true);
-      });
-
-      reader.readAsDataURL(file);
-    } else {
-      // If no file is selected, mark as touched and show error
-      if (picUrl.current) {
-        return;
+      if (file.type === "image/heic" || file.name.toLowerCase().endsWith(".heic")) {
+        const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.3 });
+        processedFile = new File([blob], file.name.replace(/\.heic$/, ".jpeg"), { type: "image/jpeg" });
       }
 
-      formik.setFieldTouched("image", true);
-      formik.setFieldValue("image", null);
-      setImageSrc(null); // Clear preview
+      const img = new Image();
+      img.src = URL.createObjectURL(processedFile);
+  
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+  
+        // Set canvas dimensions to match image dimensions
+        canvas.width = img.width;
+        canvas.height = img.height;
+  
+        // Draw the image on the canvas
+        ctx.drawImage(img, 0, 0);
+  
+        // Compress the image by reducing quality
+        let quality = 0.8; // Start with 80% quality
+        let compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+  
+        // Check file size and decrease quality if it's over 3MB
+        while (compressedDataUrl.length > 3 * 1024 * 1024 && quality > 0.1) {
+          quality -= 0.05; // Reduce quality in steps of 5%
+          compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+        }
+  
+        // Convert the compressed data URL back to a Blob
+        const byteString = atob(compressedDataUrl.split(",")[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uintArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+          uintArray[i] = byteString.charCodeAt(i);
+        }
+  
+        const compressedBlob = new Blob([uintArray], { type: "image/jpeg" });
+        processedFile = new File([compressedBlob], file.name, { type: "image/jpeg" });
+  
+        // Set the image source for display and update the form field value
+        setImageSrc(compressedDataUrl);
+
+        formik.setFieldValue("image", processedFile);
+  
+        setModalOpen(true);
+      };
+    } catch (error) {
+      console.error("File processing error:", error);
     }
   };
-
-  const updatePic = (image) => {
-    picUrl.current = image;
+  
+  
+  const updatePic = (imageUrl) => {
+    picUrl.current = imageUrl;
+  
+    // Fetch the image and get its size
+    fetch(imageUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        console.log(`Image file size: ${blob.size} bytes`);
+  
+        // Create a new Image object to get the dimensions
+        const img = new Image();
+        img.src = imageUrl;
+  
+        img.onload = () => {
+          console.log(`Image dimensions: ${img.naturalWidth}x${img.naturalHeight}`);
+        };
+      })
+      .catch((error) => {
+        console.error('Error fetching image:', error);
+      });
   };
+  
+  
 
   return (
     <div className="min-h-screen container mx-auto p-4 max-w-2xl bg-white shadow-lg rounded-lg">

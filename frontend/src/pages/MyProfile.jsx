@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import ModalAva from '../components/ModalAva';
 import { useNavigate } from 'react-router-dom';
 import FactsModal from '../components/FactsModal';
+import heic2any from "heic2any"; // Import the library
 
 const MyProfile = () => {
   const { user, logoutUser, authTokens } = useContext(AuthContext);
@@ -144,30 +145,66 @@ const MyProfile = () => {
     }
   }, [selectedFact]);
 
-  const onSelectFile = (e) => {
+
+  
+  const onSelectFile = async (e) => {
     const file = e.target.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const imageUrl = reader.result?.toString() || "";
-
-        formik.setFieldValue("avatar", file);
-        setImageSrc(imageUrl);
-        setAvaModal(true);
-      });
-
-      reader.readAsDataURL(file);
-    } else {
-      if (picUrl.current) {
-        return;
+  
+    if (!file) return;
+  
+    try {
+      let processedFile = file;
+  
+      // Convert HEIC to JPEG
+      if (file.type === "image/heic" || file.name.toLowerCase().endsWith(".heic")) {
+        const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.8 });
+        processedFile = new File([blob], file.name.replace(/\.heic$/, ".jpeg"), { type: "image/jpeg" });
       }
-
-      formik.setFieldTouched("avatar", true);
-      formik.setFieldValue("avatar", null);
-      setImageSrc(null);
+  
+      const img = new Image();
+      img.src = URL.createObjectURL(processedFile);
+  
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+  
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+  
+        // Compress the image with decreasing quality until it's below 3MB
+        let quality = 0.8;
+  
+        const compressAndSetImage = (blob) => {
+          const compressedFile = new File([blob], processedFile.name, { type: "image/jpeg" });
+  
+          // Update state
+          setImageSrc(URL.createObjectURL(blob));
+          setAvaModal(true);
+          formik.setFieldValue("avatar", compressedFile);
+        };
+  
+        const checkSizeAndCompress = () => {
+          canvas.toBlob((blob) => {
+            if (blob.size > 3 * 1024 * 1024 && quality > 0.1) {
+              quality -= 0.05;
+              checkSizeAndCompress();
+            } else {
+              compressAndSetImage(blob);
+            }
+          }, "image/jpeg", quality);
+        };
+  
+        checkSizeAndCompress();
+      };
+    } catch (error) {
+      console.error("Error processing image:", error);
     }
   };
+  
+
+
+
 
   const updatePic = (image) => {
     picUrl.current = image;
