@@ -2,11 +2,11 @@ configure venv
 
 source ./.venv/scripts/activate
 cd freakyappy
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 
 source ./.venv/scripts/activate
 cd frontend
-npm run dev -- --host
+npm run dev -- --host --port 5176
 
 install requirements in freakyappy(backend)
 cd freakyappy
