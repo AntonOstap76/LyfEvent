@@ -6,6 +6,18 @@ const JoinedModal = ({ closeModal, events, profile }) => {
   const [search, setSearch] = useState("");
   const [filteredEvents, setFilteredEvents] = useState([]);
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+
   useEffect(() => {
     // Separate hosted and joined events
     const hostedEvents = events.filter(event => event.host.id === profile.user.id);
@@ -36,13 +48,13 @@ const JoinedModal = ({ closeModal, events, profile }) => {
       <div className="fixed inset-0 bg-opacity-80 transition-all backdrop-blur-sm"></div>
 
       <div className="fixed inset-0 z-10 flex justify-center pt-12 pb-12">
-        <div className="relative w-[45%] sm:w-[45%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
+        <div className="relative w-[90%] sm:w-[45%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
           <div className="px-5 py-5">
             <h1 className="text-center text-xl font-bold">
-              Joined Events of {profile?.user?.username}
+              Events of {profile?.user?.username}
             </h1>
 
-            <p className="text-center text-gray-500 mt-1">{events.length} events</p>
+            <p className="text-center text-gray-500 mt-1">{events.length} event(s)</p>
 
             {/* Search Input */}
             <div className="border-b-2 py-4 px-2">
@@ -83,18 +95,23 @@ const JoinedModal = ({ closeModal, events, profile }) => {
 
                       {/* Right side: Date & Time */}
                       <div className="flex items-center gap-2 text-gray-600">
-                        <span className="font-medium">
-                          {new Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(
-                            new Date(event.date)
+                        <div className="flex flex-col md:flex-row md:gap-2">
+                          <span className="font-medium">
+                            {new Intl.DateTimeFormat("en-GB", { dateStyle: "short" }).format(
+                              new Date(event.date)
+                            )}
+                          </span>
+                          {!isMobile && (
+                            <span className="font-medium">|</span>
                           )}
-                        </span>
-                        <span className="font-medium">|</span>
-                        <span className="font-medium">
-                          {new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(
-                            new Date(event.date)
-                          )}
-                        </span>
+                          <span className="font-medium">
+                            {new Intl.DateTimeFormat("en-GB", { timeStyle: "short" }).format(
+                              new Date(event.date)
+                            )}
+                          </span>
+                        </div>
                       </div>
+
                     </div>
                   </Link>
                 ))

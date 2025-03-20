@@ -139,6 +139,7 @@ def eventCreate(request):
         
 @api_view(['PUT'])
 def eventUpdate(request, pk):
+    print(request.data)
     try:
         event = Event.objects.get(id=pk)
     except Event.DoesNotExist:
@@ -161,9 +162,13 @@ def eventUpdate(request, pk):
             # This assumes the image URL is already set on the event model
             request.data['image'] = event.image
 
+    if 'for_students' in request.data and request.data['for_students'] == '':
+        request.data['for_students'] = False
+        
+
     # Now we proceed with the regular update logic
     serializer = EventSerializer(instance=event, data=request.data)
-    
+    print(serializer)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -323,7 +328,7 @@ def unfollow(request, pk):
     serializer = ProfileSerializer(profile)
     return Response(serializer.data, status=200)
 
-
+from freakyappy.settings import FRONTEND
 @api_view(['POST'])
 def register(request):
     email = request.data.get('email')
@@ -349,7 +354,8 @@ def register(request):
     activation_token = str(uuid.uuid4())  
     ActivationToken.objects.create(user=user, token=activation_token)
 
-    activation_link = request.build_absolute_uri(reverse('activate', args=[activation_token]))
+    frontend_url = f"{FRONTEND}/activate"
+    activation_link = f"{frontend_url}?token={activation_token}"
 
     email_subject = "LyfeVents Email Confirmation"
     email_body = f"Click the link to activate your account: {activation_link}"
@@ -377,15 +383,7 @@ def activate_account(request, token):
         
         user_token.delete()
         
-        html_content = f"""
-        <html>
-            <body>
-                <h2>Email was Confirmed!</h2>
-                <p>Your account has been activated successfully. You can now <a href="{settings.FRONTEND}/login/"> sign in </a>.</p>
-            </body>
-        </html>
-        """
-        return HttpResponse(html_content)
+        return Response(status=200)
     
     except ActivationToken.DoesNotExist:
         return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)
@@ -409,6 +407,7 @@ def profile_update(request, pk):
     profile = get_object_or_404(Profile, user__id=pk)
 
     # Process avatar only if it exists and is not None
+    print(request.data)
     avatar = request.data.get('avatar', None)
     if avatar:
         if "data:image" in avatar:

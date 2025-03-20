@@ -79,8 +79,8 @@ const EventsPage = () => {
 
 
         {/* Center Box (Search Input) */}
-        <div className={`w-full flex justify-center mb-6 `}>
-          <div className="w-full max-w-2xl z-10 ">
+        <div className={`w-full flex justify-center mt-4 mb-6 `}>
+          <div className="w-full max-w-2xl z-10">
 
             <div className={ ` relative mx-4` }>
               <form onSubmit={filterEvents}>

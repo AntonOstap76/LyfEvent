@@ -86,11 +86,13 @@ const EventPage = () => {
 
 
   return (
-    <div className="min-h-screen text-gray-900 flex flex-col items-center py-12 px-6">
-      <h1 className="flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]">Event Overview</h1>
-
+      <>
       {event?.for_students && !profile?.student ? (
+        <div className="min-h-screen text-gray-900 flex flex-col items-center py-12 px-6">
+        <h1 className="flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]">Event Overview</h1>
+
         <div className="flex flex-col items-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+
           <p className="block sm:inline">
             This event is only for <strong className="font-bold">Students</strong>.
           </p>
@@ -98,17 +100,20 @@ const EventPage = () => {
             Login with student email to have an access.
           </p>
         </div>
+        </div>
 
 
 
 ) : editOpen ? (
   <CreateEventPage eventId={id} />
 ) : (
-  <>
+
+  <div className="min-h-screen text-gray-900 flex flex-col items-center py-12 px-6">
+    <h1 className="flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]">Event Overview</h1>
     {/* Image Container */}
-    <div className="w-full max-w-2xl">
+    <div className="sm:w-[60vh] w-auto max-w-2xl">
       <img
-        className="w-full h-full object-cover rounded-lg shadow-lg"
+        className="w-full h-auto sm:w-full object-cover rounded-lg shadow-lg"
         src={event?.image || "/placeholder-image.jpg"}
         alt="Event"
       />
@@ -212,11 +217,9 @@ const EventPage = () => {
         )}
       </div>
     </div>
-  </>
+  </div>
 )}
-
-
-    </div>
+</>
 );
 };
 

@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useFormik } from "formik";
 import basicSchema from '../schemas/FormValidator';
 import Swal from "sweetalert2";
+import heic2any from "heic2any"
 
 const CreateEventPage = ({ eventId }) => {
   const { authTokens, user } = useContext(AuthContext);
@@ -15,6 +16,10 @@ const CreateEventPage = ({ eventId }) => {
   const fileInputRef = useRef(null);
 
   const [profile, setProfile] = useState([]);
+
+  const [loading, setLoading] =  useState(false)
+
+  
 
   const formik = useFormik({
     initialValues: {
@@ -28,6 +33,7 @@ const CreateEventPage = ({ eventId }) => {
       for_students: false,
     },
     validationSchema: basicSchema,
+
     onSubmit: async (values) => {
       const date = new Date(values.date);  // Create a Date object from the form date
       const utcDate = date.toISOString();
@@ -38,7 +44,9 @@ const CreateEventPage = ({ eventId }) => {
         
       };
 
+      setLoading(true)
       try {
+
         // Check if eventId exists (if it's an update or new event)
         const method = eventId ? 'PUT' : 'POST';  // Use PUT if eventId exists
         const url = eventId ? `/api/events-update/${eventId}/` : '/api/events-create/';  // Use the right URL based on eventId
@@ -55,9 +63,10 @@ const CreateEventPage = ({ eventId }) => {
         const data = await response.json();
 
         if (response.ok) {
+          setLoading(false)
           Swal.fire({
             icon: "success",
-            title: "Event has been created/changed.",
+            title: "Event has been created/changed",
             showConfirmButton: true,
           });
           navigate("/my-events");  // Redirect to 'My Events' page
@@ -123,7 +132,7 @@ const CreateEventPage = ({ eventId }) => {
 
   useEffect(() => { 
     checkStudentStatus()
-  }, [profile]);
+  }, [user]);
 
   const checkStudentStatus = async () => {
     try {
@@ -139,35 +148,79 @@ const CreateEventPage = ({ eventId }) => {
     }
   };
 
-  const onSelectFile = (e) => {
+  const onSelectFile = async (e) => {
     const file = e.target.files?.[0];
+  
+    if (!file) return;
+  
+    setLoading(true)
+  
+    const reader = new FileReader();
+  
+    try {
+      let processedFile = file;
 
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const imageUrl = reader.result?.toString() || "";
-
-        formik.setFieldValue("image", file);
-        setImageSrc(imageUrl); // Set preview image
-        setModalOpen(true);
-      });
-
-      reader.readAsDataURL(file);
-    } else {
-      // If no file is selected, mark as touched and show error
-      if (picUrl.current) {
-        return;
+      if (file.type === "image/heic" || file.name.toLowerCase().endsWith(".heic")) {
+        const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.3 });
+        processedFile = new File([blob], file.name.replace(/\.heic$/, ".jpeg"), { type: "image/jpeg" });
       }
 
-      formik.setFieldTouched("image", true);
-      formik.setFieldValue("image", null);
-      setImageSrc(null); // Clear preview
+      const img = new Image();
+      img.src = URL.createObjectURL(processedFile);
+  
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+  
+        // Set canvas dimensions to match image dimensions
+        canvas.width = img.width;
+        canvas.height = img.height;
+  
+        // Draw the image on the canvas
+        ctx.drawImage(img, 0, 0);
+  
+        // Compress the image by reducing quality
+        let quality = 0.8; // Start with 80% quality
+        let compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+  
+        // Check file size and decrease quality if it's over 3MB
+        while (compressedDataUrl.length > 3 * 1024 * 1024 && quality > 0.1) {
+          quality -= 0.05; // Reduce quality in steps of 5%
+          compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+        }
+  
+        // Convert the compressed data URL back to a Blob
+        const byteString = atob(compressedDataUrl.split(",")[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const uintArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+          uintArray[i] = byteString.charCodeAt(i);
+        }
+  
+        const compressedBlob = new Blob([uintArray], { type: "image/jpeg" });
+        processedFile = new File([compressedBlob], file.name, { type: "image/jpeg" });
+  
+        // Set the image source for display and update the form field value
+        setImageSrc(compressedDataUrl);
+
+        formik.setFieldValue("image", processedFile);
+  
+        setModalOpen(true);
+        setLoading(false)
+      };
+    } catch (error) {
+      console.error("File processing error:", error);
     }
   };
-
-  const updatePic = (image) => {
-    picUrl.current = image;
+  
+  
+  const updatePic = (imageUrl) => {
+  
+    picUrl.current = imageUrl;
+  
   };
+  
+  
 
   return (
     <div className="min-h-screen container mx-auto p-4 max-w-2xl bg-white shadow-lg rounded-lg">
@@ -351,51 +404,58 @@ const CreateEventPage = ({ eventId }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <input
-              type="datetime-local"
-              id="date"
-              name="date"
-              value={formik.values.date ? formik.values.date.slice(0, 16) : ""}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
-                ${formik.errors.date && formik.touched.date 
-                  ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
-                  : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
-            />
-            {formik.errors.date && formik.touched.date && (
-              <p className="text-red-600 text-sm mt-1">{formik.errors.date}</p>
-            )}
-          </div>
+  <div className="w-full">
+    <input
+      type="datetime-local"
+      id="date"
+      name="date"
+      value={formik.values.date ? formik.values.date.slice(0, 16) : ""}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
+        ${formik.errors.date && formik.touched.date 
+          ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
+          : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
+    />
+    {formik.errors.date && formik.touched.date && (
+      <p className="text-red-600 text-sm mt-1">{formik.errors.date}</p>
+    )}
+  </div>
 
-          <div>
-            <input
-              type="number"
-              id="capacity"
-              name="capacity"
-              value={formik.values.capacity}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Capacity"
-              className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
-                ${formik.errors.capacity && formik.touched.capacity 
-                  ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
-                  : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
-            />
-            {formik.errors.capacity && formik.touched.capacity && (
-              <p className="text-red-600 text-sm mt-1">{formik.errors.capacity}</p>
-            )}
-          </div>
-        </div>
+  <div className="w-full">
+    <input
+      type="number"
+      id="capacity"
+      name="capacity"
+      value={formik.values.capacity}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      placeholder="Capacity"
+      className={`block w-full rounded-md border shadow-sm p-3 bg-gray-50 
+        ${formik.errors.capacity && formik.touched.capacity 
+          ? "border-red-600 focus:border-red-600 focus:ring-red-600" 
+          : "border-gray-300 focus:border-blue-600 focus:ring-blue-600"}`}
+    />
+    {formik.errors.capacity && formik.touched.capacity && (
+      <p className="text-red-600 text-sm mt-1">{formik.errors.capacity}</p>
+    )}
+  </div>
+</div>
+
 
         <div className="mt-4">
-          <button
-            type="submit"
-            className="block w-full bg-customBlue-500 hover:bg-customBlue-600 text-white font-bold py-3 px-4 rounded-lg"
-          >
-            {eventId ? "Save Changes" : "Create"}
-          </button>
+
+        <button
+
+          disabled={loading}
+          className="block w-full bg-customBlue-500 hover:bg-customBlue-600 text-white font-bold py-3 px-4 rounded-lg flex justify-center items-center"
+        >
+          {loading ? (
+            <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+          ) : eventId ? "Save Changes" : "Create"}
+        </button>
+
+
         </div>
       </form>
     </div>

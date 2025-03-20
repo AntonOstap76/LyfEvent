@@ -12,6 +12,17 @@ const UsersModal = ({ closeModal, eventID}) => {
   const [avatars, setAvatars] = useState({});  
   const {authTokens} = useContext(AuthContext)
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     allUsers();
   }, [eventID]);
@@ -69,7 +80,7 @@ const UsersModal = ({ closeModal, eventID}) => {
     <div className="relative z-10" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-opacity-80 transition-all backdrop-blur-sm"></div>
       <div className="fixed inset-0 z-10 flex justify-center pt-12 pb-12">
-        <div className="relative w-[40%] sm:w-[40%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
+        <div className="relative w-[90%] sm:w-[40%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
 
           <div className="px-5 py-5">
           <h1 className="text-center text-xl font-bold">Users Joined </h1>
@@ -87,7 +98,7 @@ const UsersModal = ({ closeModal, eventID}) => {
             {/* Users/Filtered Users */}
             <div className="mt-4">
             {filteredUsers.length > 0 ? (
-              [...filteredUsers].reverse().map((user) => (  // Reverse the filteredUsers array
+              [...filteredUsers].map((user) => (  // Reverse the filteredUsers array
                 <Link to="/profile" state={{ user: user }} key={user.username}>
                   <div
                     className="truncate flex-1 flex items-center gap-3 p-2 hover:bg-customBlue-100 transition"

@@ -12,8 +12,7 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
 
 
   const imgRef = useRef(null)
-
-  const canvasRef =useRef(null)
+  const canvasRef = useRef(null)
 
   const handleCropChange = (newCrop) => {
     setCrop(newCrop);
@@ -25,36 +24,30 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
     const crop = makeAspectCrop({ unit: '%', width: cropInPercent }, ASPECT_RATIO, width, height);
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
+
+
   };
-
-  // const handleSaveClick = () => {
-  //   if (canvasRef.current && imgRef.current) {
-  //     setCanvas(
-  //       imgRef.current,
-  //       canvasRef.current,
-  //       convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
-  //     );
-  //     const dataURL = canvasRef.current.toDataURL();
-  //     console.log("Cropped Image:", dataURL);  // Log the cropped image as a data URL
-  //     addImage(dataURL);
-  //     closeModal()
-  // };}
-
-
-  const handleSaveClick = () => {
+  const handleSaveClick = (event) => {
+    event.preventDefault(); 
+  
     if (canvasRef.current && imgRef.current && crop) {
       setCanvas(
         imgRef.current,
         canvasRef.current,
         convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
       );
-      const dataURL = canvasRef.current.toDataURL();
   
-      updatePic(dataURL);
-      closeModal(); 
+      canvasRef.current.toBlob((blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          updatePic(reader.result);
+          closeModal();
+        };
+      }, "image/jpeg", 0.6);
     }
   };
-  
+
   const setCanvas = (
     image, // HTMLImageElement
     canvas, // HTMLCanvasElement
@@ -65,7 +58,6 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
       throw new Error("No 2d context");
     }
   
-
     const pixelRatio = window.devicePixelRatio;
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
@@ -95,8 +87,6 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
   
     ctx.restore();
   };
-  
-
 
   return (
     <>
@@ -119,27 +109,24 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
 
           <button
             onClick={handleSaveClick}
-            className="text-white  text-lg py-3 px-6 rounded-3xl mt-4 bg-customBlue-500 hover:bg-customBlue-600"
-            >
+            className="text-white text-lg py-3 px-6 rounded-3xl mt-4 bg-customBlue-500 hover:bg-customBlue-600"
+          >
             Save
-        </button>
+          </button>
         </div>
       )}
-
-   
-        <canvas
-          ref={canvasRef}
-          className="mt-4"
-          style={{
-            display: "none",
-            border: "1px solid black",
-            objectFit: "contain",
-            width: 150,
-            height: 150,
-          }}
-        />
-
-
+  
+      <canvas
+        ref={canvasRef}
+        className="mt-4"
+        style={{
+          display: "none",
+          border: "1px solid black",
+          objectFit: "contain",
+          width: 150,
+          height: 150,
+        }}
+      />
     </>
   );
 };

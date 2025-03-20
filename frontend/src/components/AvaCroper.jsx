@@ -18,15 +18,11 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
   const onImageLoad = (e) => {
     const { width, height } = e.currentTarget;
     
-    // Start with the max possible size
     const maxSize = Math.min(width, height);
     const cropWidthInPercent = (maxSize / width) * 100;
     
     const crop = makeAspectCrop(
-      {
-        unit: "%",
-        width: cropWidthInPercent,
-      },
+      { unit: "%", width: cropWidthInPercent },
       ASPECT_RATIO,
       width,
       height
@@ -35,17 +31,25 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
     setCrop(centeredCrop);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = (event) => {
+    event.preventDefault(); 
     if (canvasRef.current && imgRef.current && crop) {
       setCanvas(
         imgRef.current,
         canvasRef.current,
         convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
       );
-      const dataURL = canvasRef.current.toDataURL();
-      setCroppedImageUrl(dataURL);
-      updatePic(dataURL);
-      closeModal();
+      
+      canvasRef.current.toBlob((blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          const compressedImageUrl = reader.result;
+          setCroppedImageUrl(compressedImageUrl);
+          updatePic(compressedImageUrl);
+          closeModal();
+        };
+      }, "image/jpeg", 0.6); // Use JPEG format with 80% quality to reduce file size
     }
   };
 
@@ -55,34 +59,24 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
       throw new Error("No 2d context");
     }
 
-    const pixelRatio = window.devicePixelRatio;
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
-    canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+    canvas.width = Math.floor(crop.width * scaleX);
+    canvas.height = Math.floor(crop.height * scaleY);
 
-    ctx.scale(pixelRatio, pixelRatio);
     ctx.imageSmoothingQuality = "high";
-    ctx.save();
-
-    const cropX = crop.x * scaleX;
-    const cropY = crop.y * scaleY;
-
-    ctx.translate(-cropX, -cropY);
     ctx.drawImage(
       image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
       0,
       0,
-      image.naturalWidth,
-      image.naturalHeight,
-      0,
-      0,
-      image.naturalWidth,
-      image.naturalHeight
+      crop.width * scaleX,
+      crop.height * scaleY
     );
-
-    ctx.restore();
   };
 
   return (
@@ -123,11 +117,7 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
         </div>
       )}
 
-      <canvas
-        ref={canvasRef}
-        className="mt-4"
-        style={{ display: 'none' }}
-      />
+      <canvas ref={canvasRef} className="mt-4" style={{ display: 'none' }} />
     </>
   );
 };

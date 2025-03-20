@@ -52,7 +52,7 @@ const FactsModal = ({ closeModal, Fact, updateFact }) => {
             <button
               onClick={handleDone}
               className={`px-8 py-2 rounded-md text-lg font-bold transition ${
-                fact.length > 100 ? "bg-gray-400 cursor-not-allowed" : "bg-customBlue-500 text-white hover:bg-blue-600"
+                fact.length > 100 ? "bg-gray-400 cursor-not-allowed" : "bg-customBlue-500 text-white hover:bg-customBlue-600"
               }`}
               disabled={fact.length > 100}
             >

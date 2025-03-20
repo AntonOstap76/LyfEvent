@@ -21,58 +21,55 @@ import Register from './pages/Register'
 import AllChats from './components/AllChats'
 
 
+import { useState, useEffect } from "react";
+import ActivateEmail from './components/ActivateEmail'
+
 function App() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Router>
-      <div className='App'>
+      <div className="App">
         <AuthProvider>
           <Header />
-          
+
           <Routes>
-            <Route path='/' exact element={<Home />} />
-            <Route path='/event/:id' element={<EventPage />}/>
-            <Route path='/events' element={<EventsPage />}/>
-            <Route path='/events-search' element={<EventsFiltered />}/>
-            
-            <Route path='/about' element={<About/>}/>
-
-            <Route path='/register' element={<Register/>}/>
-
-            <Route path='/create-event/*' element={
-              <PrivateRoute element={<CreateEventPage/>}/>
-            }/>
-
-            <Route path='/my-profile/*' element={
-              <PrivateRoute element={<MyProfile/>}/>
-            }/>
-
-            <Route path='/profile/*' element={
-              <PrivateRoute element={<Profile/>}/>
-            }/>
-
-
-            <Route path='/chat/*' element={
-              <PrivateRoute element={<AllChats/>}/>
-            }/>
-
-
-            <Route path='/my-events/*' element={
-              <PrivateRoute element={<MyEvents/>}/>
-            }/>
-
-            <Route path='/login' element={<LoginPage />}/>
+            <Route path="/" exact element={<Home />} />
+            <Route path="/event/:id" element={<EventPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/events-search" element={<EventsFiltered />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/create-event/*" element={<PrivateRoute element={<CreateEventPage />} />} />
+            <Route path="/my-profile/*" element={<PrivateRoute element={<MyProfile />} />} />
+            <Route path="/profile/*" element={<PrivateRoute element={<Profile />} />} />
+            <Route path="/chat/*" element={<PrivateRoute element={<AllChats />} />} />
+            <Route path="/my-events/*" element={<PrivateRoute element={<MyEvents />} />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/activate" element={<ActivateEmail />} />
           </Routes>
-          </AuthProvider>
+        </AuthProvider>
 
-          <footer >
+
+        {!isMobile && (
+          <footer>
             <Footer />
           </footer>
-
-
+        )}
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -49,7 +49,7 @@ const ChatPage = ({ chat }) => {
     const token = authTokens.access;
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(
-      `${protocol}://localhost:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
+      `${protocol}://192.168.0.171:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
     );
 
     socket.onopen = () => {
@@ -122,8 +122,8 @@ const ChatPage = ({ chat }) => {
   return (
     <div className="container mx-auto ">
       <div className="bg-white shadow-md rounded-lg  h-[80vh]  flex flex-col">
-        <div className="p-4 border-b bg-[#6d6fff] text-white rounded-t-lg flex justify-between items-center relative">
-          <p className="text-lg font-semibold">{chat.chat_name} Event</p>
+        <div className="p-4 border-b bg-[#6d6fff] text-white rounded-t-lg flex  justify-center  relative">
+            <p className="text-xl font-semibold mb-3">{chat.chat_name} Event</p>
           <p
             id="online_count"
             className="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2 font-semibold"
