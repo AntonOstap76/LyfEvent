@@ -1,9 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import logo from "../assets/logo/logo.svg";
-
+import { useLocation } from 'react-router-dom';
 
 const About = () => {
+  const location = useLocation(); // To track the current location and URL
+
+  useEffect(() => {
+    // Check if the URL contains the hash for 'how-to-use'
+    if (location.hash === '#how-to-use') {
+      const section = document.getElementById('how-to-use');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location.hash]);
+
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col items-center space-y-12">
       
@@ -48,26 +60,27 @@ const About = () => {
           </p>
         </section>
 
-        {/* How to Use the Site */}
-        <section className="bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-4xl font-bold text-[#6d6fff] mb-2 text-center">How to Use the Site</h2>
-          <ul className="space-y-4 ">
-            {[
-              "Sign up and create your personal profile.",
-              "Discover and join events in your city.",
-              "Create events on topics that matter to you.",
-              "Explore event categories like music, sports, workshops, and networking.",
-              "Connect with other attendees through chats and forums.",
-              "Join virtual events happening from anywhere.",
-              "Have fun and be happy."
-            ].map((text, index) => (
-              <li key={index} className="flex items-center text-gray-700 text-xl text-center ">
-                <FaCheckCircle className="text-[#6d6fff] mr-3 text-xl" />
-                {text}
-              </li>
-            ))}
-          </ul>
-        </section>
+        <section id="how-to-use" className="bg-white p-8 rounded-lg shadow-lg">
+  <h2 className="text-4xl font-bold text-[#6d6fff] mb-6 text-center">How to Use the Site</h2>
+  <ul className="space-y-4">
+    {[
+      "Create an account and complete your profile.",
+      "Explore and join events happening in your city.",
+      "Browse different event categories like music, sports, workshops, and networking.",
+      "Host your own events on topics that interest you.",
+      "As a student, you can join and create both regular events and exclusive student-only events.",
+      "Interact with other attendees through chats and discussion forums.",
+      "Join virtual events that you can attend from anywhere.",
+      "Enjoy yourself and make the most out of your experiences!"
+    ].map((text, index) => (
+      <li key={index} className="flex items-center text-gray-700 text-xl text-center">
+        <span className="mr-2">{index + 1}.</span> {text}
+      </li>
+    ))}
+  </ul>
+</section>
+
+
       </div>
 
     </div>

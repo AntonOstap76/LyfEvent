@@ -87,7 +87,7 @@ const Header = () => {
 
         {/* Logo */}
         <a href="/" className="flex items-center">
-          <img src={logo} className="mr-4 h-20 sm:h-20" alt="Logo" />
+          <img src={logo} className="mr-4 h-20 sm:h-20 mb-3" alt="Logo" />
         </a>
 
         {/* Desktop Navigation */}
@@ -100,7 +100,7 @@ const Header = () => {
         </nav>
 
         {/* Right Side - Icons and Auth Links */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-3">
           {user ? (
             <>
               {/* Chat Icon */}

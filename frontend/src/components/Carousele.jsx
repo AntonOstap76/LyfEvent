@@ -3,8 +3,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import EventItem from "./EventItem";
+import { Link } from 'react-router-dom';
+
 
 const Carousele = ({ events }) => {
+  if (events.length <2) return null;
+  
   const settings = {
     dots: true,
     arrows: false, // Disable default arrows from slick-carousel
@@ -19,6 +23,8 @@ const Carousele = ({ events }) => {
   };
 
   const slider = React.useRef(null);
+
+
 
   return (
     <div className="slider-container w-full min-w-full max-w-full">
@@ -66,7 +72,20 @@ const Carousele = ({ events }) => {
           <a href="/events" className="underline text-customBlue-600 ">
             See more
           </a>
+       
+          <div>
+          <Link 
+          to="/about" 
+          className="ml-4 underline text-customBlue-600"
+        >
+          How to use site
+        </Link>
           </div>
+
+          </div>
+
+        
+
 
     </div>
   );

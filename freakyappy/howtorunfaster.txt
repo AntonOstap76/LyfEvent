@@ -1,0 +1,5 @@
+you need 3 terminals
+
+python manage.py runserver
+celery -A freakyappy worker --pool=solo --loglevel=INFO
+celery -A freakyappy beat --loglevel=INFO

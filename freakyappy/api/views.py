@@ -105,9 +105,9 @@ def eventCreate(request):
     serializer = EventSerializer(data=request.data)
     
 
-    if Event.objects.filter(host=request.user).count() >= 8:
+    if Event.objects.filter(host=request.user).count() >= 4:
         return Response(
-            {"detail": "You can only create up to 8 events."}, 
+            {"detail": "You can only create up to 4 events."}, 
             status=status.HTTP_400_BAD_REQUEST
         )
     #decoding image from url to file

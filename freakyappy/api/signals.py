@@ -38,3 +38,4 @@ def save_user_profile(sender, instance, **kwargs):
     # Save the Profile when the User instance is saved (to update any changes if needed)
     instance.profile.save()
 
+

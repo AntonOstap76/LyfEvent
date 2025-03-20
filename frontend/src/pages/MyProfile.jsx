@@ -33,6 +33,8 @@ const MyProfile = () => {
 
   const [loading, setLoading] = useState(false)
 
+  const [profileComplete, setProfileComplete] = useState(false);
+
   const openFollowersModal = (type) => {
     setModalType(type);
   };
@@ -265,7 +267,8 @@ const MyProfile = () => {
 
       localStorage.setItem("profileCompletePopupShown", "true");
     }
-  }, [progress]);
+}, [progress]);
+
 
   const editActivate = () => {
     setEdit(true);
@@ -453,13 +456,26 @@ const MyProfile = () => {
           </form>
         ) : (
           <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative">
-            <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500"></div>
 
-            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
-              <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
+            <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
+  
+
+            <div className="rounded-lg  h-32 overflow-hidden bg-customBlue-500 relative z-10">
+
+
             </div>
+  
+            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
+  <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
 
+</div>
+{profileComplete && (
+    <div className="relative ml-60 pl-40 top-[-25px] left-16 text-sm font-bold rounded-full transform z-10">
+      ⭐
+    </div>
+  )}  
             <div className="truncate flex-1 text-center mt-2 relative z-10">
+
               <h2 className="font-semibold text-2xl">{user.username}</h2>
             </div>
 
@@ -474,6 +490,20 @@ const MyProfile = () => {
                 Profile Completion: {progress}%
               </p>
             </div>
+  
+  
+    {/* Progress Bar */}
+    <div className="mt-4">
+            <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-2 bg-[#6d6fff] transition-all duration-700 ease-in-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <p className="text-center text-gray-700 font-semibold mt-2">
+              Profile Completion: {progress}%
+            </p>
+          </div>
 
             <div className={`relative transition-all duration-300 z-0`}>
               <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">

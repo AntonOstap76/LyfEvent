@@ -25,7 +25,6 @@ INSTALLED_APPS = [
 
     "daphne",
 
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +47,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     
     'channels',
+
+    'django_celery_beat',
+    'freakyappy',
 ]
 
 
@@ -215,8 +217,17 @@ ALLOWED_HOSTS = ["*"]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
+# Optional: Set the default queue for Celery tasks
+CELERY_DEFAULT_QUEUE = 'default'
 
+# Optional: Configure task retries
+CELERY_TASK_RETRY_LIMIT = 3
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com" 

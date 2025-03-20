@@ -73,7 +73,7 @@ const CreateEventPage = ({ eventId }) => {
         } else {
           Swal.fire({
             title: "⚠️ Oops!",
-            text: data.detail || "You can only create up to 8 events.",
+            text: data.detail || "You can only create up to 4 events.",
             icon: "error",
             confirmButtonColor: "#d33",
           });
