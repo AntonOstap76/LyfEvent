@@ -61,7 +61,7 @@ const ChatMessage = ({ content, authorName }) => {
       alt="Author Avatar" 
     />
   </Link>
-  <div className="bg-gray-200 p-2 sm:p-4 rounded chat-bubble max-w-xs break-words whitespace-normal">
+  <div className="bg-gray-200 p-2 sm:p-4 rounded chat-bubble sm:max-w-xs max-w-[200px] break-words whitespace-normal">
     <Link to="/profile" state={{ user: authorData }} className="truncate flex-1 block text-md font-medium text-customBlue-400 mb-2 hover:underline cursor-pointer">
       {authorName}
     </Link>

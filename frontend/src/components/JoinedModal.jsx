@@ -51,7 +51,7 @@ const JoinedModal = ({ closeModal, events, profile }) => {
         <div className="relative w-[90%] sm:w-[45%] min-h-[60vh] ring-2 ring-black rounded-2xl bg-white text-left shadow-xl transition-all overflow-auto">
           <div className="px-5 py-5">
             <h1 className="text-center text-xl font-bold">
-              Joined Events of {profile?.user?.username}
+              Events of {profile?.user?.username}
             </h1>
 
             <p className="text-center text-gray-500 mt-1">{events.length} event(s)</p>

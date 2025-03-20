@@ -17,6 +17,8 @@ const CreateEventPage = ({ eventId }) => {
 
   const [profile, setProfile] = useState([]);
 
+  const [loading, setLoading] =  useState(false)
+
   
 
   const formik = useFormik({
@@ -31,6 +33,7 @@ const CreateEventPage = ({ eventId }) => {
       for_students: false,
     },
     validationSchema: basicSchema,
+
     onSubmit: async (values) => {
       const date = new Date(values.date);  // Create a Date object from the form date
       const utcDate = date.toISOString();
@@ -41,7 +44,9 @@ const CreateEventPage = ({ eventId }) => {
         
       };
 
+      setLoading(true)
       try {
+
         // Check if eventId exists (if it's an update or new event)
         const method = eventId ? 'PUT' : 'POST';  // Use PUT if eventId exists
         const url = eventId ? `/api/events-update/${eventId}/` : '/api/events-create/';  // Use the right URL based on eventId
@@ -58,6 +63,7 @@ const CreateEventPage = ({ eventId }) => {
         const data = await response.json();
 
         if (response.ok) {
+          setLoading(false)
           Swal.fire({
             icon: "success",
             title: "Event has been created/changed",
@@ -147,7 +153,7 @@ const CreateEventPage = ({ eventId }) => {
   
     if (!file) return;
   
-    console.log("Selected file:", file);
+    setLoading(true)
   
     const reader = new FileReader();
   
@@ -200,6 +206,7 @@ const CreateEventPage = ({ eventId }) => {
         formik.setFieldValue("image", processedFile);
   
         setModalOpen(true);
+        setLoading(false)
       };
     } catch (error) {
       console.error("File processing error:", error);
@@ -208,25 +215,9 @@ const CreateEventPage = ({ eventId }) => {
   
   
   const updatePic = (imageUrl) => {
+  
     picUrl.current = imageUrl;
   
-    // Fetch the image and get its size
-    fetch(imageUrl)
-      .then((response) => response.blob())
-      .then((blob) => {
-        console.log(`Image file size: ${blob.size} bytes`);
-  
-        // Create a new Image object to get the dimensions
-        const img = new Image();
-        img.src = imageUrl;
-  
-        img.onload = () => {
-          console.log(`Image dimensions: ${img.naturalWidth}x${img.naturalHeight}`);
-        };
-      })
-      .catch((error) => {
-        console.error('Error fetching image:', error);
-      });
   };
   
   
@@ -453,12 +444,18 @@ const CreateEventPage = ({ eventId }) => {
 
 
         <div className="mt-4">
-          <button
-            type="submit"
-            className="block w-full bg-customBlue-500 hover:bg-customBlue-600 text-white font-bold py-3 px-4 rounded-lg"
-          >
-            {eventId ? "Save Changes" : "Create"}
-          </button>
+
+        <button
+
+          disabled={loading}
+          className="block w-full bg-customBlue-500 hover:bg-customBlue-600 text-white font-bold py-3 px-4 rounded-lg flex justify-center items-center"
+        >
+          {loading ? (
+            <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+          ) : eventId ? "Save Changes" : "Create"}
+        </button>
+
+
         </div>
       </form>
     </div>

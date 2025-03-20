@@ -49,7 +49,7 @@ const ChatPage = ({ chat }) => {
     const token = authTokens.access;
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(
-      `${protocol}:///192.168.0.171:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
+      `${protocol}://192.168.0.171:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
     );
 
     socket.onopen = () => {

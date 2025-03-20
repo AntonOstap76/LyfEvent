@@ -55,7 +55,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
     "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",
@@ -148,8 +148,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,  # Timeout in seconds (adjust as necessary)
+        },
     }
 }
+
 
 
 # Password validation
@@ -193,15 +197,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FRONTEND = "http://localhost:5173"
+FRONTEND = " http://192.168.0.171:5176"
 
 CORS_ALLOWED_ORIGINS = [
-
-    FRONTEND,
-    
+    "http://localhost:5173",  
+    "http://127.0.0.1:5173",
+    "http://192.168.x.x:5173",
+    FRONTEND,  
+    "http://10.10.2.13:5176",
 ]
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "192.168.0.171"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "192.168.0.171",  "192.168.x.x", "10.10.2.13"]
+
+ALLOWED_HOSTS = ["*"]
 
 
 MEDIA_URL = '/media/'

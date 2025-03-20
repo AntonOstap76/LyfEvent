@@ -9,7 +9,7 @@ let MIN_DIMENSION = 1500;
 const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
 
   const [crop, setCrop] = useState(null);
-  const [imageSize, setImageSize] = useState(null);
+
 
   const imgRef = useRef(null)
   const canvasRef = useRef(null)
@@ -25,13 +25,11 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
 
-    // Print the image size in bytes when it's loaded
-    const file = e.currentTarget;
-    console.log("Image size: " + file.naturalWidth + "x" + file.naturalHeight);
-    console.log("Image file size: " + (file.src.length / 1024).toFixed(2) + " KB");
-  };
 
-  const handleSaveClick = () => {
+  };
+  const handleSaveClick = (event) => {
+    event.preventDefault(); 
+  
     if (canvasRef.current && imgRef.current && crop) {
       setCanvas(
         imgRef.current,
@@ -39,7 +37,6 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
         convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height)
       );
   
-      // Convert to JPEG with compression (80% quality)
       canvasRef.current.toBlob((blob) => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -47,10 +44,9 @@ const ImageCroper = ({ imageSrc , updatePic, closeModal}) => {
           updatePic(reader.result);
           closeModal();
         };
-      }, "image/jpeg", 0.6); // Set JPEG format with 80% quality
+      }, "image/jpeg", 0.6);
     }
   };
-  
 
   const setCanvas = (
     image, // HTMLImageElement

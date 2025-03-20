@@ -31,7 +31,8 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
     setCrop(centeredCrop);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = (event) => {
+    event.preventDefault(); 
     if (canvasRef.current && imgRef.current && crop) {
       setCanvas(
         imgRef.current,
@@ -48,7 +49,7 @@ const AvaCroper = ({ imageSrc, updatePic, closeModal }) => {
           updatePic(compressedImageUrl);
           closeModal();
         };
-      }, "image/jpeg", 0.8); // Use JPEG format with 80% quality to reduce file size
+      }, "image/jpeg", 0.6); // Use JPEG format with 80% quality to reduce file size
     }
   };
 

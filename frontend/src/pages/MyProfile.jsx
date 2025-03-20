@@ -30,6 +30,9 @@ const MyProfile = () => {
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+
+  const [loading, setLoading] = useState(false)
+
   const openFollowersModal = (type) => {
     setModalType(type);
   };
@@ -153,6 +156,7 @@ const MyProfile = () => {
     if (!file) return;
   
     try {
+      setLoading(true)
       let processedFile = file;
   
       // Convert HEIC to JPEG
@@ -181,6 +185,7 @@ const MyProfile = () => {
           // Update state
           setImageSrc(URL.createObjectURL(blob));
           setAvaModal(true);
+          setLoading(false)
           formik.setFieldValue("avatar", compressedFile);
         };
   
@@ -286,7 +291,7 @@ const MyProfile = () => {
                 whileHover={{ rotate: 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="absolute w-12 h-12 bg-white/40 flex items-center justify-center rounded-full mb-2"
-              >
+              > 
                 <Plus className="text-white" />
               </motion.div>
               {edit && (
@@ -414,24 +419,25 @@ const MyProfile = () => {
 
           
 
-            <div className="flex justify-center items-center mt-8 relative z-10">
-              <div className="flex flex-row justify-around w-full">
-                <button
-                  onClick={() => {
-                    if (edit) {
-                      formik.handleSubmit();
-                    } else {
-                      setEdit(true);
-                    }
-                  }}
-                  type={edit ? "submit" : "button"}
-                  className="w-3/6 bg-customBlue-500 text-white py-3 rounded-lg hover:bg-customBlue-600 transition font-semibold"
-                >
-                  {edit ? "Save" : "Edit Profile"}
-                </button>
-               
-              </div>
-            </div>
+<div className="flex justify-center items-center mt-8 relative z-10">
+  <div className="w-full flex justify-center">
+    <button
+      disabled={loading}
+    
+      type={edit ? "submit" : "button"}
+      className="w-3/6 bg-customBlue-500 text-white py-3 rounded-lg hover:bg-customBlue-600 transition font-semibold flex justify-center items-center"
+    >
+      {loading ? (
+        <span className="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+      ) : edit ? (
+        "Save"
+      ) : (
+        "Edit Profile"
+      )}
+    </button>
+  </div>
+</div>
+
 
             {avaModal && <ModalAva closeModal={() => setAvaModal(false)} imageSrc={imageSrc} updatePic={updatePic} />}
             {factModal && (
@@ -491,7 +497,7 @@ const MyProfile = () => {
             <button
               onClick={getJoinedEvents}
               className='p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold w-2/6 flex items-center justify-center hover:scale-110 transition'>
-              Joined Events
+              Events
             </button>
           </div>) }
 
@@ -500,7 +506,7 @@ const MyProfile = () => {
             <button
               onClick={getJoinedEvents}
               className='p-2 ring-2 ring-black rounded-xl text-black text-xl font-bold mx-8 w-full flex items-center justify-center hover:scale-110 transition'>
-              Joined Events
+              Events
             </button>
           </div>)}
 
@@ -586,6 +592,8 @@ const MyProfile = () => {
                 >
                   {edit ? "Save" : "Edit Profile"}
                 </button>
+
+
                 <button
                   onClick={logoutUser}
                   className="w-2/6 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-semibold"

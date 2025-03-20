@@ -10,15 +10,12 @@ const ModalRegister = ({ close }) => {
                 <div className="relative w-[90%] max-w-md min-h-[40vh] ring-2 ring-black rounded-2xl bg-white text-center shadow-xl p-6 overflow-auto">
                     <h1 className="text-xl font-bold">Confirm Email</h1>
                     <p className="mt-4 text-gray-700">
-                        Before signing in, confirm your email first. We sent a link to your email,
-                        click on it, and then sign in.
+                        We sent a  link to your email.
+                        Click on it and your email will be verified.
+                        Before signing in, please verify your email.
+                        P.S. Check the spam, if you can't find the email.
                     </p>
 
-                    <a href="https://mail.google.com/" className='text-customBlue-600 hover:underline hover:cursor-pointer'>
-                      <p className='mt-2'>
-                        Go to my Emails
-                      </p>
-                    </a>
                     
                     <button
                         onClick={close}
