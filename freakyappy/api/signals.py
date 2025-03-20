@@ -38,15 +38,3 @@ def save_user_profile(sender, instance, **kwargs):
     # Save the Profile when the User instance is saved (to update any changes if needed)
     instance.profile.save()
 
-@receiver(post_save, sender=Event)
-def delete_expired_events(sender, instance, created, **kwargs):
-    """
-    Deletes all expired events every time any event is saved.
-    """
-    now = timezone.now()
-    
-    # Delete all events that have expired
-    expired_events = Event.objects.filter(date__lt=now)
-    expired_count = expired_events.count()
-    expired_events.delete()
-    print(f"Deleted {expired_count} expired events.")
