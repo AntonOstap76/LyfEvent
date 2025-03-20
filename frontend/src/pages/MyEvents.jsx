@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 const EventsPage = () => {
   const [myEvents, setMyEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [eventsPerPage] = useState(8);
+  const [eventsPerPage] = useState(4);
   const { authTokens } = useContext(AuthContext);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const EventsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <h1 className='flex justify-center text-4xl font-bold text-black mb-6'>My Events</h1>
+      <h1 className='flex justify-center text-4xl font-bold text-black mb-10 mt-3'>My Events</h1>
       {/* Content Wrapper */}
       <div>
         {myEvents.length > 0 ? (

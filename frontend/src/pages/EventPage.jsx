@@ -108,7 +108,7 @@ const EventPage = () => {
     {/* Image Container */}
     <div className="w-full max-w-2xl">
       <img
-        className="w-full h-80 object-cover rounded-lg shadow-lg"
+        className="w-full h-full object-cover rounded-lg shadow-lg"
         src={event?.image || "/placeholder-image.jpg"}
         alt="Event"
       />

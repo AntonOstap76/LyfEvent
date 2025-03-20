@@ -14,11 +14,11 @@ const Header = () => {
 
         {/* Logo */}
         <a href="/" className="flex items-center">
-          <img src={logo} className="mr-4 h-20 sm:h-20" alt="Logo" />
+          <img src={logo} className="mr-4 h-20 sm:h-20 mb-3" alt="Logo" />
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex space-x-6 text-xl font-medium pb-4">
+        <nav className="hidden lg:flex space-x-6 text-2xl font-medium pb-4">
           {[
             { name: "Home", href: "/" },
             { name: "Events", href: "/events" },
@@ -41,7 +41,7 @@ const Header = () => {
         </nav>
 
         {/* Right Side - Icons and Auth Links */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-3">
           {user ? (
             <>
               <a href="/chat" className="px-4 py-2 hover:scale-110 transition-transform">

@@ -99,7 +99,7 @@ const Home = () => {
 
       {/* Title */}
       <div className="text-center mt-4 z-10">
-        <h1 className="text-4xl font-extrabold text-customBlue-600 tracking-wide uppercase leading-tight">
+        <h1 className="text-6xl font-extrabold text-customBlue-600 tracking-wide uppercase leading-tight mb-8 mt-5 ">
           Never miss a fun again
         </h1>
       </div>
@@ -133,7 +133,7 @@ const Home = () => {
 
       
       {!isMobile && (
-          <div className="flex mt-12 text w-8/12">
+          <div className="flex mt-10 text w-8/12 mb-20">
           <Carousele events={chosenEvents.slice(0, 8)} />
         </div>
       )}

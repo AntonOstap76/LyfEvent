@@ -24,6 +24,7 @@ const MyProfile = () => {
   
   const [modalType, setModalType] = useState(null);
 
+  const [profileComplete, setProfileComplete] = useState(false);
 
 const openFollowersModal = (type) => {
   setModalType(type);
@@ -249,26 +250,19 @@ const closeFollowersModal = () => {
 
   const progress = calculateProgress();
 
-  useEffect(() => {
-    if (progress === 100 && !localStorage.getItem("profileCompletePopupShown")) {
-      Swal.fire({
-        title: "🎉 Congratulations!",
-        text: "You did it! Your profile is complete.",
-        icon: "success",
-        confirmButtonColor: "#4CAF50",
-      });
-  
-      // Set flag in local storage to prevent repeat popups
-      localStorage.setItem("profileCompletePopupShown", "true");
+ useEffect(() => {
+    if (progress === 100) {
+        setProfileComplete(true);
+    } else {
+        setProfileComplete(false);
     }
-  }, [progress]);
+}, [progress]);
+
 
   const editActivate = ()=>{
     setEdit(true)
 
   }
-
-  console.log("data: ",data);
 
 
   return (
@@ -419,19 +413,29 @@ const closeFollowersModal = () => {
 
         ) : (
           <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative">
-            {/* Background Blur Effect (applies only to the content inside) */}
+
             <div className="absolute inset-0 w-full h-full bg-white/30 rounded-lg z-0"></div>
   
 
-            <div className="rounded-lg  h-32 overflow-hidden bg-customBlue-500 relative z-10"></div>
+            <div className="rounded-lg  h-32 overflow-hidden bg-customBlue-500 relative z-10">
+
+
+            </div>
   
             <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200 z-10">
-               <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
-            </div>
-  
+  <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
+
+</div>
+{profileComplete && (
+    <div className="relative ml-60 pl-40 top-[-25px] left-16 text-sm font-bold rounded-full transform z-10">
+      ⭐
+    </div>
+  )}  
             <div className="truncate flex-1 text-center mt-2 relative z-10">
+
               <h2 className="font-semibold text-2xl">{user.username}</h2>
             </div>
+  
   
     {/* Progress Bar */}
     <div className="mt-4">

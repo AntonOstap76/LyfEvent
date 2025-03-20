@@ -80,7 +80,7 @@ const EventsPage = () => {
 
         {/* Center Box (Search Input) */}
         <div className={`w-full flex justify-center mb-6 `}>
-          <div className="w-full max-w-2xl z-10">
+          <div className="w-full max-w-2xl z-10 ">
 
             <div className={ ` relative mx-4` }>
               <form onSubmit={filterEvents}>
@@ -123,7 +123,7 @@ const EventsPage = () => {
         )}
       </div>
 
-      <div className="px-6">
+      <div className="px-6 ">
         {events.length > 0 ? (
           <div className={`grid ${isMobile ? 'grid-cols-1' : 'lg:grid-cols-6'} gap-6 container mx-auto`}>
             {currentEvents.map((event) => (
@@ -131,7 +131,7 @@ const EventsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center ">
             <p className="text-xl font-bold text-gray-600">EVENTS COMING...</p>
           </div>
         )}
