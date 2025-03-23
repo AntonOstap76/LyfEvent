@@ -438,3 +438,69 @@ def profile_update(request, pk):
         "message": "Invalid data",
         "errors": serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET'])
+def reset_pass_link(request):
+    email = request.query_params.get("email")
+
+    if not email:
+        return Response({"error": "Email is required"}, status=400)
+
+    user = get_object_or_404(User, email=email)
+
+    if user and user.is_active:
+        if ActivationToken.objects.filter(user=user).exists():
+            return Response({"message": "Password reset link already sent"}, status=200)
+
+        reset_token = str(uuid.uuid4())
+        ActivationToken.objects.create(user=user, token=reset_token)
+
+        frontend_url = settings.FRONTEND
+        reset_link = f"{frontend_url}/password-update?token={reset_token}"
+
+        email_subject = "LyfeVents Password Reset"
+        email_body = f"Click the link to reset your password: {reset_link}"
+
+        send_mail(
+            email_subject,
+            email_body,
+            'noreply@lyfevents.com',
+            [email],
+            fail_silently=False,
+        )
+
+        return Response({"message": "Password reset link sent"}, status=200)
+
+    return Response({"error": "User not found or inactive"}, status=403)
+
+
+
+
+from django.contrib.auth.hashers import make_password
+@api_view(['POST'])
+def update_pass(request):
+    password = request.data.get("password")
+    token = request.data.get("token")
+
+    if not password or not token:
+        return Response({"error": "Password and token are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user_token = ActivationToken.objects.get(token=token)
+        user = user_token.user
+
+        if not user.is_active:
+            return Response({"error": "User is not found"}, status=status.HTTP_403_FORBIDDEN)
+
+
+        user.password = make_password(password)
+        user.save()
+
+        user_token.delete()
+
+        return Response({"message": "Password successfully updated"}, status=status.HTTP_200_OK)
+
+    except ActivationToken.DoesNotExist:
+        return Response({"error": "Invalid or expired token"}, status=status.HTTP_400_BAD_REQUEST)

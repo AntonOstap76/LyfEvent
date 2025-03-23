@@ -23,6 +23,7 @@ import AllChats from './components/AllChats'
 
 import { useState, useEffect } from "react";
 import ActivateEmail from './components/ActivateEmail'
+import PasswordUpdate from './pages/ForgotPassword'
 
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -58,15 +59,16 @@ function App() {
             <Route path="/my-events/*" element={<PrivateRoute element={<MyEvents />} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/activate" element={<ActivateEmail />} />
+            <Route path="/password-update" element={<PasswordUpdate/>} />
           </Routes>
         </AuthProvider>
 
 
-        {!isMobile && (
+        {/* {!isMobile && (
           <footer>
             <Footer />
           </footer>
-        )}
+        )} */}
       </div>
     </Router>
   );

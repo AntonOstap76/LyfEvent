@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'channels',
 
     'django_celery_beat',
+    
     'freakyappy',
 ]
 
