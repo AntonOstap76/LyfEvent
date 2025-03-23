@@ -92,7 +92,7 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-6 text-xl font-medium pb-4">
-          {[{ name: "Home", href: "/" }, { name: "Events", href: "/events" }, { name: "My Events", href: "/my-events" }, { name: "Create Event", href: "/create-event" }, { name: "About", href: "/about" }].map((item) => (
+          {[{ name: "Home", href: "/" }, { name: "Events", href: "/events" }, { name: "My Events", href: "/my-events" }, { name: "Create Event", href: "/create-event" }, { name: "About", href: "/about"}, { name: "Contact", href: "/contact" },].map((item) => (
             <a key={item.href} href={item.href} className="py-2 transition-colors duration-200 text-gray-800 hover:text-customBlue-600">
               {item.name}
             </a>
@@ -155,6 +155,7 @@ const Header = () => {
             { name: "My Events", href: "/my-events" },
             { name: "Create Event", href: "/create-event" },
             { name: "About", href: "/about" },
+            { name: "Contact", href: "/contact" },
           ].map((item) => (
             <a 
               key={item.href} 

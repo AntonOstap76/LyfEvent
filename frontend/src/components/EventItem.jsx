@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from '../context/AuthContext';
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import { FaInfoCircle } from "react-icons/fa";
 
 const EventItem = ({ event }) => {
   const navigate = useNavigate();
   const { authTokens, user } = useContext(AuthContext); // Access authTokens and user from context
 
+  
   // Check if the user is logged in based on authTokens
   const isLoggedIn = !!authTokens;
 
@@ -24,9 +28,22 @@ const EventItem = ({ event }) => {
 
       {/* Conditional "FOR STUDENTS" label */}
       {event?.for_students && (
-        <div className="absolute top-2 left-2 bg-customBlue-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow z-20">
-          FOR STUDENTS
-        </div>
+       <div>
+
+       <div 
+            data-tooltip-id={`student-tooltip-${event.id}`}
+            className="absolute top-2 left-2 bg-[#6d6fff] text-white text-xs font-semibold px-2 py-1 rounded-md shadow z-20 cursor-pointer flex items-center space-x-2"
+      >
+            <span>FOR STUDENTS</span>
+            <FaInfoCircle className="text-white text-sm" />
+      </div>
+     
+       {/* Tooltip */}
+       <Tooltip id={`student-tooltip-${event.id}`} place="top" content="Only users with a student email can participate."
+       style={{ backgroundColor: "#5a5ae6", color: "white", fontWeight: "600"}} />
+
+     </div>
+        
       )}
           {/* Image */}
           <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 ratio */}

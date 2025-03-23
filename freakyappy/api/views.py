@@ -438,3 +438,31 @@ def profile_update(request, pk):
         "message": "Invalid data",
         "errors": serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import ContactMessage
+
+class ContactMessageView(APIView):
+    def post(self, request):
+        data = request.data
+        ContactMessage.objects.create(
+            name=data.get("name"),
+            email=data.get("email"),
+            message=data.get("message")
+        )
+        return Response({"message": "Message sent successfully"}, status=status.HTTP_201_CREATED)
+
+from django.http import JsonResponse
+import random
+
+def get_random_event(request):
+    events = list(Event.objects.all())
+    if not events:
+        return JsonResponse({"error": "No events available"}, status=404)
+
+    random_event = random.choice(events)  # Pick a random event
+    return JsonResponse({"id": random_event.id, "name": random_event.title}) 

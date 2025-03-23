@@ -257,6 +257,10 @@ const MyProfile = () => {
   const progress = calculateProgress();
 
   useEffect(() => {
+    setProfileComplete(progress === 100);
+  }, [progress]);
+
+  useEffect(() => {
     if (progress === 100 && !localStorage.getItem("profileCompletePopupShown")) {
       Swal.fire({
         title: "🎉 Congratulations!",
@@ -469,28 +473,19 @@ const MyProfile = () => {
   <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
 
 </div>
-{profileComplete && (
+
+{!isMobile && profileComplete && ( 
     <div className="relative ml-60 pl-40 top-[-25px] left-16 text-sm font-bold rounded-full transform z-10">
-      ⭐
-    </div>
-  )}  
-            <div className="truncate flex-1 text-center mt-2 relative z-10">
+    ⭐️
+  </div>
+)}
 
-              <h2 className="font-semibold text-2xl">{user.username}</h2>
-            </div>
+{isMobile && profileComplete && (  
+  <div className="absolute ml-40 mt-[-24px] left-16 text-sm font-bold rounded-full transform z-10">
+  ⭐️
+</div>
+)}
 
-            <div className="mt-4">
-              <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-2 bg-[#6d6fff] transition-all duration-700 ease-in-out"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-              <p className="text-center text-gray-700 font-semibold mt-2">
-                Profile Completion: {progress}%
-              </p>
-            </div>
-  
   
     {/* Progress Bar */}
     <div className="mt-4">

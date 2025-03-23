@@ -19,7 +19,7 @@ import EventsFiltered from './pages/EventsFiltered'
 import MyProfile from './pages/MyProfile'
 import Register from './pages/Register'
 import AllChats from './components/AllChats'
-
+import ContactPage from './pages/Contact'
 
 import { useState, useEffect } from "react";
 import ActivateEmail from './components/ActivateEmail'
@@ -58,6 +58,7 @@ function App() {
             <Route path="/my-events/*" element={<PrivateRoute element={<MyEvents />} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/activate" element={<ActivateEmail />} />
+            <Route path="/contact" element={<ContactPage />}></Route>
           </Routes>
         </AuthProvider>
 

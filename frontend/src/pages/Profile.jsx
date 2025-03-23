@@ -166,7 +166,7 @@ const Profile = () => {
 
 
           {isMobile && (
-          <div className="flex justify-center items-center mt-8">
+          <div className="flex justify-center items-center mt-8 font-semibold">
           <button
             onClick={toggleFollow}
             className={`w-full mx-8 py-4 rounded-lg text-white transition ${
@@ -237,7 +237,7 @@ const Profile = () => {
                   )}
 
 
-{ !isMobile && (        <div className="flex justify-center items-center mt-8">
+{ !isMobile && (        <div className="flex justify-center items-center mt-8 font-semibold">
         <button
           onClick={toggleFollow}
           className={`w-2/6 py-3 rounded-lg text-white transition ${

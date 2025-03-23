@@ -123,7 +123,7 @@ const ChatPage = ({ chat }) => {
     <div className="container mx-auto ">
       <div className="bg-white shadow-md rounded-lg  h-[80vh]  flex flex-col">
         <div className="p-4 border-b bg-[#6d6fff] text-white rounded-t-lg flex  justify-center  relative">
-            <p className="text-xl font-semibold mb-3">{chat.chat_name} Event</p>
+            <p className="text-xl font-semibold mb-3">{chat.chat_name}</p>
           <p
             id="online_count"
             className="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2 font-semibold"

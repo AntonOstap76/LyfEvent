@@ -75,7 +75,7 @@ const Carousele = ({ events }) => {
        
           <div>
           <Link 
-          to="/about" 
+          to="/about#how-to-use" 
           className="ml-4 underline text-customBlue-600"
         >
           How to use site

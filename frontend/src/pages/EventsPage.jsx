@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EventItem from '../components/EventItem';
 import Pagination from '../components/Pagination';
 import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const EventsPage = () => {
   let [events, setEvents] = useState([]);
@@ -11,6 +11,9 @@ const EventsPage = () => {
   const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isPopular = searchParams.get("popular") === "true";
 
   useEffect(() => {
     getEvents();
@@ -31,6 +34,22 @@ const EventsPage = () => {
     setEvents(data);
   };
 
+
+  useEffect(() => {
+    getEvents2();
+  }, [isPopular]);
+
+  // Fetch events based on 'isPopular'
+  const getEvents2 = async () => {
+    let response = await fetch("/api/events-list/");
+    let data = await response.json();
+    if (isPopular) {
+      setEvents(data.filter(event => event.participants.length >= 5)); // ✅ Filter popular events
+    } else {
+      setEvents(data);
+    }
+  };
+  
   // Get Current Events (Pagination)
   let indexOfLastEvent = currentPage * eventsPerPage;
   let indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
