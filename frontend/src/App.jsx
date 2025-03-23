@@ -23,6 +23,7 @@ import ContactPage from './pages/Contact'
 
 import { useState, useEffect } from "react";
 import ActivateEmail from './components/ActivateEmail'
+import PasswordUpdate from './pages/ForgotPassword'
 
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -58,16 +59,17 @@ function App() {
             <Route path="/my-events/*" element={<PrivateRoute element={<MyEvents />} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/activate" element={<ActivateEmail />} />
-            <Route path="/contact" element={<ContactPage />}></Route>
+            <Route path="/password-update" element={<PasswordUpdate/>} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </AuthProvider>
 
 
-        {!isMobile && (
+        {/* {!isMobile && (
           <footer>
             <Footer />
           </footer>
-        )}
+        )} */}
       </div>
     </Router>
   );

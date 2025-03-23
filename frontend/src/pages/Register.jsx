@@ -3,11 +3,15 @@ import { useFormik } from 'formik';
 import registerSchema from '../schemas/RegisterValidator';
 import { useNavigate } from 'react-router-dom';
 import ModalRegister from '../components/ModalRegister';
+import Consents from '../components/Consents';
 
 const Register = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [consentModal, setConsentModal] = useState(false);
+  const [error, setError] = useState(false); // Track consent error
 
   const formik = useFormik({
     initialValues: {
@@ -18,6 +22,11 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
+      if (!consent) {
+        setError(true); // Show error if consent is not checked
+        return;
+      }
+
       setLoading(true);
       const finalData = { ...values };
 
@@ -52,6 +61,7 @@ const Register = () => {
               </h1>
 
               <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+                {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
                     Email
@@ -75,6 +85,7 @@ const Register = () => {
                   )}
                 </div>
 
+                {/* Username Field */}
                 <div>
                   <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">
                     Username
@@ -98,6 +109,7 @@ const Register = () => {
                   )}
                 </div>
 
+                {/* Password Field */}
                 <div>
                   <label htmlFor="password1" className="block mb-2 text-sm font-medium text-gray-900">
                     Password
@@ -121,6 +133,7 @@ const Register = () => {
                   )}
                 </div>
 
+                {/* Confirm Password Field */}
                 <div>
                   <label htmlFor="password2" className="block mb-2 text-sm font-medium text-gray-900">
                     Confirm Password
@@ -144,44 +157,53 @@ const Register = () => {
                   )}
                 </div>
 
+                {/* Consent Checkbox */}
+                <div className="mt-2">
+                  <div className="flex items-center space-x-1">
+                    <span className="text-red-500 font-bold text-lg">*</span> {/* Star near the checkbox */}
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      className="w-5 h-5 accent-blue-600 cursor-pointer"
+                      checked={consent}
+                      onChange={() => {
+                        setConsent(!consent);
+                        setError(false); // Remove error when checked
+                      }}
+                    />
+                    <label htmlFor="terms" className="text-sm text-gray-700 flex items-center cursor-pointer">
+                      I agree to the  
+                      <button
+                        type="button" // Prevents form submission
+                        onClick={() => setConsentModal(true)}
+                        className="text-customBlue-600 hover:underline ml-1"
+                      >
+                        Terms and Consents
+                      </button>
+                    </label>
+                  </div>
+
+                  {/* Error message if checkbox is not checked */}
+                  {error && <p className="text-red-600 text-sm mt-1">You must agree to the terms to proceed</p>}
+                </div>
+
+                {/* Terms and Consents Modal */}
+                {consentModal && <Consents closeModal={() => setConsentModal(false)} />}
+
+                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full text-white bg-customBlue-600 hover:bg-customBlue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center"
+                  className="w-full text-white bg-customBlue-600 hover:bg-customBlue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   disabled={loading}
                 >
-                  {loading ? (
-                    <>
-                      <svg
-                        aria-hidden="true"
-                        className="w-5 h-5 mr-2 text-white animate-spin"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M100 50.5C100 77.614 77.614 100 50.5 100S1 77.614 1 50.5 22.886 1 50.5 1c10.16 0 19.776 2.983 27.796 8.088"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        />
-                      </svg>
-                      Processing...
-                    </>
-                  ) : (
-                    'Sign Up'
-                  )}
+                  {loading ? "Processing..." : "Sign Up"}
                 </button>
-
-                <p className="text-sm font-light text-gray-500">
-                  Already have an account?{' '}
-                  <a href="/login" className="font-medium text-customBlue-600 hover:underline">
-                    Sign In
-                  </a>
-                </p>
               </form>
             </div>
           </div>
         </div>
 
+        {/* Registration Success Modal */}
         {modal && <ModalRegister close={() => navigate('/login/')} />}
       </section>
     </div>

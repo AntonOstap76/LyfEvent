@@ -8,22 +8,11 @@ source ./.venv/scripts/activate
 cd frontend
 npm run dev -- --host --port 5176
 
-install requirements in freakyappy(backend)
+install requirements for backend (freakyappy)
 cd freakyappy
 pip install -r requirements.txt
 
-install all dependencies in frontend
+install all dependencies for frontend
+cd frontend
 npm install
 
-run django server
-you can check by going to local host/api/ and see all api overview
-
-run react server
-npm run dev
-
-go to react server
-app should work
-
-with my migrations ,data base and media , it will be some events at events page,
- ability to create event, upload picture, save event, check event details, edit event, 
- django for api, react for frontend

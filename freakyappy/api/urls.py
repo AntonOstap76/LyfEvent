@@ -22,6 +22,8 @@ urlpatterns = [
     path('activate/<str:token>/', views.activate_account, name='activate'),
     path('user_by_id/<str:pk>/', views.get_user_by_id, name='user-by-id'), 
     path('user_by_username/<str:username>/', views.get_user_by_username, name='user-by-username'), 
+    path('reset-pass-link/', views.reset_pass_link, name='reset_pass_link'),
+    path('update-password/', views.update_pass, name="update_pass"),     
     path('contact/', ContactMessageView.as_view(), name="contact-message"),
     path("random-event/", views.get_random_event, name="random-event"),
 ]

@@ -33,3 +33,5 @@ zope.interface==7.2
 dj_rest_auth==7.0.1
 django-allauth==65.4.1
 requests==2.32.3
+selery==5.4.0
+django_celery_beat==2.7.0

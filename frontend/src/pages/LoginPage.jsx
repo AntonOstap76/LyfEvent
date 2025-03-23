@@ -48,7 +48,7 @@ const LoginPage = () => {
                 <div className="flex items-center justify-between">
 
                   <a
-                    href="#"
+                    href="/password-update"
                     className="text-sm font-medium text-customBlue-600 hover:underline"
                   >
                     Forgot password?
