@@ -64,6 +64,8 @@ class Profile(models.Model):
     followers = models.ManyToManyField("self", symmetrical=False, related_name="following", blank=True)
     student = models.BooleanField(default=False)
 
+    def is_complete(self):
+            return bool(self.avatar and self.fact1 and self.fact2 and self.fact3)
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=255)

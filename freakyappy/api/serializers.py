@@ -33,10 +33,14 @@ class ProfileSerializer(serializers.ModelSerializer):
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
     user = UserSerializer(read_only=True)
+    is_complete = serializers.SerializerMethodField()
 
+    def get_is_complete(self, obj):
+        return obj.is_complete()
+    
     class Meta:
         model = Profile
-        fields = ['id', 'avatar', 'fact1', 'fact2', 'fact3', 'followers', 'following', 'user', 'student']
+        fields = ['id', 'avatar', 'fact1', 'fact2', 'fact3', 'followers', 'following', 'user', 'student', "is_complete"]
         read_only_fields = ['user']
 
     def get_following(self, obj):

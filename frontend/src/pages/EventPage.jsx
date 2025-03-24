@@ -4,6 +4,7 @@ import CreateEventPage from "./CreateEventPage";
 import { AuthContext } from "../context/AuthContext";
 import Join from "../components/Join";
 import UsersModal from '../components/UsersModal';
+import Swal from "sweetalert2"
 
 const EventPage = () => {
   const { id } = useParams();
@@ -63,16 +64,35 @@ const EventPage = () => {
   const handleEdit = () => setEditOpen(true);
 
   const handleDelete = async () => {
-    try {
-      const response = await fetch(`/api/events-delete/${id}/`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) navigate("/my-events");
-      else throw new Error("Failed to delete the event.");
-    } catch (error) {
-      console.error("Error deleting event:", error.message);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to delete this event?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(`/api/events-delete/${id}/`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
+  
+          if (response.ok) {
+            navigate("/my-events");
+            Swal.fire("Deleted!", "The event has been deleted.", "success");
+          } else {
+            throw new Error("Failed to delete the event.");
+          }
+        } catch (error) {
+          console.error("Error deleting event:", error.message);
+          Swal.fire("Error", "Failed to delete the event.", "error");
+        }
+      }
+    });
   };
 
   const handleJoinSuccess = () => {

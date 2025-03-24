@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import {jwtDecode} from "jwt-decode"
 import { useNavigate } from 'react-router-dom'
-
+import Swal from "sweetalert2";
 // Create AuthContext
 export const AuthContext = createContext();
 
@@ -37,12 +37,26 @@ export const AuthProvider = ({ children }) => {
     
   };
 
-  const logoutUser =  ()=>{
-    setAuthtokens(null)
-    setUser(null)
-    localStorage.removeItem('authTokens')
-    navigate('/login')
-  }
+  const logoutUser = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setAuthtokens(null);
+        setUser(null);
+        localStorage.removeItem("authTokens");
+        navigate("/login");
+        Swal.fire("Logged out!", "You have been logged out successfully.", "success");
+      }
+    });
+  };
 
 
   const updateToken = async () => {

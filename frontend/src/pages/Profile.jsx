@@ -4,6 +4,7 @@ import JoinedModal from '../components/JoinedModal';
 import ava from '../assets/img/ava.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FollowersModal from '../components/FollowersModal';
+import { FaStar } from "react-icons/fa";
 
 const Profile = () => {
   const { user, authTokens } = useContext(AuthContext);
@@ -121,7 +122,23 @@ const Profile = () => {
     <div className="min-h-screen flex flex-col items-center">
       {userOther && (
         <div className="w-full max-w-[920px] rounded-lg text-gray-900 bg-white px-4 sm:px-6 pb-8 shadow-xl relative">
-          <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500"></div>
+          <div className="rounded-lg h-32 overflow-hidden bg-customBlue-500 relative">
+  {data.is_complete && (
+    <>
+      {!isMobile && data.is_complete && (
+        <div className="absolute ml-60 pl-40 top-5 left-4 text-2xl font-bold rounded-full transform z-10">
+          ⭐️
+        </div>
+      )}
+
+      {isMobile && data.is_complete && (
+        <div className="absolute ml-40 top-5 left-2 text-2xl font-bold rounded-full transform z-10">
+          ⭐️
+        </div>
+      )}
+    </>
+  )}
+</div>
 
           <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden bg-gray-200">
             <img src={data.avatar || ava} alt="" />
