@@ -523,6 +523,7 @@ class ContactMessageView(APIView):
         )
         return Response({"message": "Message sent successfully"}, status=status.HTTP_201_CREATED)
 
+
 from django.http import JsonResponse
 import random
 

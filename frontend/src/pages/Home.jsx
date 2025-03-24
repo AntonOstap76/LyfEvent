@@ -3,6 +3,7 @@ import '../App.css';
 import bgImage from '../assets/img/BG.svg';
 import Carousele from '../components/Carousele';
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Home = () => {
 
   return (
 
-
+<>
     <div className="relative min-h-screen flex flex-col justify-start items-center text-left px-6 md:px-20">
 
       {/* Background Image Positioned on the Right */}
@@ -67,7 +68,7 @@ const Home = () => {
         <img
           src={bgImage}
           alt="img"
-          className="absolute right-0 top-28 sm:h-[70vh] sm:object-cover"
+          className="absolute -right-0 top-28 sm:h-[68vh] sm:object-cover"
         />
       )}
 
@@ -99,7 +100,7 @@ const Home = () => {
 
       {/* Title */}
       <div className="text-center mt-4 z-10">
-        <h1 className="text-6xl font-extrabold text-customBlue-600 tracking-wide uppercase leading-tight mb-8 mt-5 ">
+        <h1 className="text-5xl font-extrabold text-customBlue-600 tracking-wide uppercase leading-tight mb-8 mt-5 ">
           Never miss a fun again
         </h1>
       </div>
@@ -121,7 +122,7 @@ const Home = () => {
         <img
           src={bgImage}
           alt="img"
-          className="mt-4 w-full h-auto object-cover"
+          className="mt-4 mx-auto w-full h-auto object-cover"
         />
       )}
 
@@ -144,8 +145,15 @@ const Home = () => {
         </div>
       </div>
 
-
     </div>
+
+{isMobile && (
+  <div className="mt-8 w-full ">
+  <Footer/>
+  </div>
+)}
+
+</>
   );
 };
 

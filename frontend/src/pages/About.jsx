@@ -1,10 +1,24 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import logo from "../assets/logo/logo.svg";
 import { useLocation } from 'react-router-dom';
+import Footer from "../components/Footer";
+
 
 const About = () => {
   const location = useLocation(); // To track the current location and URL
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
 
   useEffect(() => {
     // Check if the URL contains the hash for 'how-to-use'
@@ -17,7 +31,7 @@ const About = () => {
   }, [location.hash]);
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col items-center space-y-12">
+    <div className="bg-gray-50 min-h-screen flex flex-col items-center space-y-12  mb-8">
       
       {/* Hero Section */}
       <div className="w-full bg-[#6d6fff] text-white py-16 text-center shadow-lg">
@@ -25,11 +39,13 @@ const About = () => {
         <p className="font-semibold text-3xl">
           We connect people to meaningful events
         </p>
+        <a href="/">
         <img
           src={logo}
           className="mt-6 mx-auto w-32 h-auto rounded-lg shadow-md"
           alt="Company Logo"
         />
+        </a>
       </div>
 
       {/* Content Container */}
@@ -82,6 +98,7 @@ const About = () => {
     ))}
   </ul>
 </section>
+
 <section className="bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-4xl font-bold text-[#6d6fff] mb-4 text-center">Connect with Founders</h2>
         <div>
@@ -152,6 +169,12 @@ const About = () => {
     </section>
 
       </div>
+
+      {isMobile && (
+        <div className="">
+        <Footer/>
+        </div>
+      )}
 
     </div>
   );

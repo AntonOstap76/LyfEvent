@@ -79,8 +79,12 @@ const EventItem = ({ event }) => {
           {/* Show a star icon if the user is the host of the event */}
           {user && event.host.id === user.user_id && (
             <div className="absolute top-2 right-2 text-yellow-500 z-30">
-              <FaStar size={14} />
+              
+              <span className="text-xs text-center text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-md font-semibold">
+                              HOST
+                            </span>
             </div>
+            
           )}
           
         </div>

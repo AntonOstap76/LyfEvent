@@ -89,6 +89,7 @@ const EventsPage = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col min-h-screen">
       {/* Content Wrapper */}
       <div className="flex items-center mb-6">
@@ -168,6 +169,9 @@ const EventsPage = () => {
         </div>
       )}
     </div>
+
+
+</>
   );
 };
 

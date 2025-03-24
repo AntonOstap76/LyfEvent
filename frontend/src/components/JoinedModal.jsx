@@ -84,7 +84,7 @@ const JoinedModal = ({ closeModal, events, profile }) => {
                         {event.host.id === profile.user.id ? (
                           <div className="flex flex-col gap-2 justify-between overflow-hidden whitespace-nowrap">
                             <span className="font-medium text-lg truncate">{event.title}</span>
-                            <span className="text-xs text-center text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full">
+                            <span className="text-xs text-center text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-full font-semibold">
                               Host
                             </span>
                           </div>
