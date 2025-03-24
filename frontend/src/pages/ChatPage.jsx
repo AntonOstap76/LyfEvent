@@ -11,6 +11,8 @@ const ChatPage = ({ chat }) => {
   const [ws, setWs] = useState(null);
   const chatContainerRef = useRef(null);
   let [isJoined, setIsJoined] = useState(false);
+  const [error, setError] = useState("");
+
 
   useEffect(() => {
     const checkJoined = async () => {
@@ -49,7 +51,7 @@ const ChatPage = ({ chat }) => {
     const token = authTokens.access;
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(
-      `${protocol}://192.168.0.171:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
+      `${protocol}://localhost:8000/ws/chat/${encodeURIComponent(chat.id)}/?token=${encodeURIComponent(token)}`
     );
 
     socket.onopen = () => {
@@ -105,6 +107,7 @@ const ChatPage = ({ chat }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+    if (input.length > 151) return
     if (ws && input.trim()) {
       const data = {
         text: input,
@@ -118,6 +121,16 @@ const ChatPage = ({ chat }) => {
   if (!isJoined) {
     return <p>Join event to have access to this chat group.</p>;
   }
+
+  const handleChange = (e) => {
+    const newInput = e.target.value;
+    if (newInput.length > 151) {
+      setError("Message cannot exceed 150 characters.");
+    } else {
+      setError("");
+      setInput(newInput);
+    }
+  };
 
   return (
     <div className="container mx-auto ">
@@ -152,20 +165,26 @@ const ChatPage = ({ chat }) => {
             <div className="flex items-center">
               <input
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 type="text"
                 name="text"
                 className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#6d6fff]"
                 placeholder="Type a message..."
               />
+
               <button
                 id="send-button"
                 type="submit"
                 className="bg-[#6d6fff] text-white px-4 py-2 rounded-r-md hover:bg-[#5a5ae6] transition duration-300 font-semibold"
+                disabled={input.length > 150}
+
               >
                 Send
               </button>
+
+
             </div>
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </form>
         </div>
       </div>
