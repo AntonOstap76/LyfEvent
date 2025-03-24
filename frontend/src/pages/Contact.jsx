@@ -55,7 +55,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-full bg-gray-100 flex items-center justify-center pb-20">
+    <div className="min-h-full  flex items-center justify-center pb-20">
       <div className="bg-white shadow-xl rounded-3xl w-full max-w-3xl pt-10 relative overflow-hidden">
         <h2 className="text-4xl font-bold text-center text-black mb-6">
           Contact Us
@@ -73,7 +73,7 @@ const ContactPage = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-customBlue-400"
               placeholder="Your Name"
               required
             />
@@ -86,7 +86,7 @@ const ContactPage = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-customBlue-400"
               placeholder="Your Email"
               required
             />
@@ -99,7 +99,7 @@ const ContactPage = () => {
               rows="6"
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-6 py-5 bg-gray-50 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-customBlue-400"
               placeholder="Your Message"
               required
             ></textarea>

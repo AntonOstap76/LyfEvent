@@ -522,9 +522,9 @@ class ContactMessageView(APIView):
         )
         return Response({"message": "Message sent successfully"}, status=status.HTTP_201_CREATED)
 
+
 from django.http import JsonResponse
 import random
-
 def get_random_event(request):
     events = list(Event.objects.all())
     if not events:

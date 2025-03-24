@@ -70,17 +70,10 @@ const Carousele = ({ events }) => {
   
       <div className="flex justify-center text-xl ">
           <a href="/events" className="underline text-customBlue-600 ">
-            See more
+            More Events
           </a>
        
-          <div>
-          <Link 
-          to="/about#how-to-use" 
-          className="ml-4 underline text-customBlue-600"
-        >
-          How to use site
-        </Link>
-          </div>
+
 
           </div>
 
