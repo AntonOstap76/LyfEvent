@@ -91,7 +91,7 @@ const Header = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex space-x-6 text-xl font-medium pb-4">
+        <nav className="hidden lg:flex space-x-6 text-2xl font-medium pb-4">
           {[{ name: "Home", href: "/" }, { name: "Events", href: "/events" }, { name: "My Events", href: "/my-events" }, { name: "Create Event", href: "/create-event" }, { name: "About", href: "/about"}, { name: "Contact", href: "/contact" },].map((item) => (
             <a key={item.href} href={item.href} className="py-2 transition-colors duration-200 text-gray-800 hover:text-customBlue-600">
               {item.name}
@@ -148,7 +148,7 @@ const Header = () => {
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden flex flex-col items-center bg-white border-t mt-3 py-4 shadow-lg">
+        <div className="lg:hidden flex flex-col items-center bg-white border-t mt-3 py-4 shadow-lg font-semibold">
           {[
             { name: "Home", href: "/" },
             { name: "Events", href: "/events" },

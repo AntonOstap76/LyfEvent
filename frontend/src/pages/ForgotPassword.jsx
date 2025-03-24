@@ -97,7 +97,7 @@ const PasswordUpdate = () => {
         <div className="flex flex-col items-center px-6 py-8 mx-auto lg:py-0">
           <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
                 Reset Password
               </h1>
 
@@ -175,7 +175,7 @@ const PasswordUpdate = () => {
                             onClick={sendLink}
                             className="w-full text-white bg-customBlue-600 hover:bg-customBlue-700 font-medium rounded-lg mt-4 text-sm px-5 py-2.5 text-center"
                             >
-                            Get link for resetting password
+                            Get Reset Link
                             </button>
 
                             {linkModal && <ResetLinkModal close={handleClose} />}
@@ -186,7 +186,7 @@ const PasswordUpdate = () => {
 
                     {/* Success Message */}
                     {success === true && (
-                    <p className="text-customBlue-600 text-center font-large">
+                    <p className="text-customBlue-600 text-center font-semibold text-xl">
                         Password updated successfully! Now you can log in with your new password.<br />
                         <a href="/login" className="text-customBlue-600 underline">
                         Go to Login
@@ -196,7 +196,7 @@ const PasswordUpdate = () => {
 
                     {/* Error Message */}
                     {success === false && (
-                    <p className="text-red-500 text-center font-large">
+                    <p className="text-red-500 text-center font-semibold">
                         Something went wrong. Try again or{" "}
                         <a href="#" className="text-customBlue-600 underline">
                         contact us

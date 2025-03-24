@@ -20,10 +20,29 @@ const Footer = () => {
   };
 
 
+  
   const handleRandomJoin = async () => {
     try {
-      const response = await fetch("/api/random-event/");
-      
+      const tokens = JSON.parse(localStorage.getItem("authTokens"));
+      const token = tokens?.access;
+  
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+  
+      const response = await fetch("/api/random-event/", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 401) {
+        navigate("/login");
+        return;
+      }
+  
       if (!response.ok) {
         throw new Error("No events available");
       }
@@ -36,9 +55,11 @@ const Footer = () => {
       navigate(`/event/${data.id}`); // Redirect to the random event page
     } catch (error) {
       console.error("Error fetching random event:", error);
-      alert("No events available at the moment. Try again later!"); // Friendly alert
+      alert("No events available at the moment. Try again later!");
     }
   };
+  
+  
 
   return (
     <footer className="bg-[#6d6fff] text-white text-white pt-12">
@@ -94,7 +115,7 @@ const Footer = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-3 p-2 w-full rounded text-black"
+            className="mt-3 p-2 w-full rounded text-black opacity-50 hover:opacity-100 focus:opacity-100"
           />
           <button
             className="mt-2 bg-[#6d6fff] border-2 text-white font-semibold p-2 w-full rounded"

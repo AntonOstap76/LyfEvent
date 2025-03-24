@@ -64,12 +64,11 @@ function App() {
           </Routes>
         </AuthProvider>
 
-
-        {/* {!isMobile && (
+        {!isMobile && (
           <footer>
             <Footer />
           </footer>
-        )} */}
+        )} 
       </div>
     </Router>
   );

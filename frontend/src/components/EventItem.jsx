@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from '../context/AuthContext';
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { FaInfoCircle } from "react-icons/fa";
+import { FaStar } from "react-icons/fa"; // Add the star icon for host
 
 const EventItem = ({ event }) => {
   const navigate = useNavigate();
   const { authTokens, user } = useContext(AuthContext); // Access authTokens and user from context
 
-  
+
   // Check if the user is logged in based on authTokens
   const isLoggedIn = !!authTokens;
 
@@ -18,33 +19,28 @@ const EventItem = ({ event }) => {
     ? new Date(event.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : "TBD";
 
-
   return (
     <div className="relative">
-
-      <Link to={user ? `/event/${event.id}` : "/login"}
-      >
+      <Link to={user ? `/event/${event.id}` : "/login"}>
         <div className="bg-gray-20 border border-gray-200 rounded-lg shadow border-black-700 transform hover:scale-105 transition-transform duration-300">
+          
+          {/* Conditional "FOR STUDENTS" label */}
+          {event?.for_students && (
+            <div>
+              <div 
+                data-tooltip-id={`student-tooltip-${event.id}`}
+                className="absolute top-2 left-2 bg-[#6d6fff] text-white text-xs font-semibold px-2 py-1 rounded-md shadow z-20 cursor-pointer flex items-center space-x-2"
+              >
+                <span>FOR STUDENTS</span>
+                <FaInfoCircle className="text-white text-sm" />
+              </div>
 
-      {/* Conditional "FOR STUDENTS" label */}
-      {event?.for_students && (
-       <div>
-
-       <div 
-            data-tooltip-id={`student-tooltip-${event.id}`}
-            className="absolute top-2 left-2 bg-[#6d6fff] text-white text-xs font-semibold px-2 py-1 rounded-md shadow z-20 cursor-pointer flex items-center space-x-2"
-      >
-            <span>FOR STUDENTS</span>
-            <FaInfoCircle className="text-white text-sm" />
-      </div>
-     
-       {/* Tooltip */}
-       <Tooltip id={`student-tooltip-${event.id}`} place="top" content="Only users with a student email can participate."
-       style={{ backgroundColor: "#5a5ae6", color: "white", fontWeight: "600"}} />
-
-     </div>
-        
-      )}
+              {/* Tooltip */}
+              <Tooltip id={`student-tooltip-${event.id}`} place="top" content="Only users with a student email can participate."
+                style={{ backgroundColor: "#5a5ae6", color: "white", fontWeight: "600"}} />
+            </div>
+          )}
+          
           {/* Image */}
           <div className="relative w-full" style={{ paddingTop: '56.25%' }}> {/* 16:9 ratio */}
             <img
@@ -79,6 +75,14 @@ const EventItem = ({ event }) => {
               <strong>Joined:</strong> {event?.participants?.length || 0} / {event?.capacity || "Unlimited"}
             </p>
           </div>
+          
+          {/* Show a star icon if the user is the host of the event */}
+          {user && event.host.id === user.user_id && (
+            <div className="absolute top-2 right-2 text-yellow-500 z-30">
+              <FaStar size={14} />
+            </div>
+          )}
+          
         </div>
       </Link>
     </div>

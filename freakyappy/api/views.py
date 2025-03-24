@@ -329,6 +329,7 @@ def unfollow(request, pk):
     return Response(serializer.data, status=200)
 
 from freakyappy.settings import FRONTEND
+
 @api_view(['POST'])
 def register(request):
     email = request.data.get('email')
@@ -525,10 +526,40 @@ class ContactMessageView(APIView):
 from django.http import JsonResponse
 import random
 
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_random_event(request):
-    events = list(Event.objects.all())
-    if not events:
+    user = request.user  # Get the current user
+    session_key = f"last_random_event_{user.id}"  # Create a unique key per user in the session
+
+    # Check if the user is a student through the Profile model
+    is_student = user.profile.student  # Accessing the student field in the related Profile model
+
+    # Filter out events created by the user or that the user has joined
+    events = Event.objects.exclude(host=user).exclude(participants=user)
+
+    # If the user is not a student, exclude events that are only for students
+    if not is_student:
+        events = events.exclude(for_students=True)
+
+    # Retrieve the last picked event from the session
+    last_event_id = request.session.get(session_key)
+
+    # If a last event exists, exclude it from the selection
+    if last_event_id:
+        events = events.exclude(id=last_event_id)
+
+    if not events.exists():
         return JsonResponse({"error": "No events available"}, status=404)
 
-    random_event = random.choice(events)  # Pick a random event
-    return JsonResponse({"id": random_event.id, "name": random_event.title}) 
+    # Convert to a list to use random.choice
+    event_list = list(events)
+
+    # Pick a random event
+    random_event = random.choice(event_list)
+
+    # Save the picked event ID in the session for the next request
+    request.session[session_key] = random_event.id
+
+    return JsonResponse({"id": random_event.id, "name": random_event.title})

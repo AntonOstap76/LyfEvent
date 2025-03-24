@@ -92,7 +92,7 @@ const EventPage = () => {
         <h1 className="flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]">Event Overview</h1>
 
         <div className="flex flex-col items-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-
+        
           <p className="block sm:inline">
             This event is only for <strong className="font-bold">Students</strong>.
           </p>
@@ -109,15 +109,25 @@ const EventPage = () => {
 ) : (
 
   <div className="min-h-screen text-gray-900 flex flex-col items-center py-12 px-6">
+    
     <h1 className="flex justify-center text-4xl font-bold text-black mb-10 mt-[-50px]">Event Overview</h1>
     {/* Image Container */}
-    <div className="sm:w-[60vh] w-auto max-w-2xl">
-      <img
-        className="w-full h-auto sm:w-full object-cover rounded-lg shadow-lg"
-        src={event?.image || "/placeholder-image.jpg"}
-        alt="Event"
-      />
-    </div>
+    <div className="sm:w-[60vh] w-auto max-w-2xl relative">
+    <img
+      className="w-full h-auto sm:w-full object-cover rounded-lg shadow-lg"
+      src={event?.image || "/placeholder-image.jpg"}
+      alt="Event"
+    />
+    {/* For Students Badge */}
+    {event?.for_students && (
+      <div 
+        className="absolute top-2 left-2 bg-[#6d6fff] text-white text-xs font-semibold px-2 py-1 rounded-md shadow z-20"
+      >
+        FOR STUDENTS
+      </div>
+    )}
+  </div>
+
 
     {/* Event Details */}
     <div className="mt-8 max-w-3xl text-center">

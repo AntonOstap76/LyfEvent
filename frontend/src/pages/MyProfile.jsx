@@ -473,15 +473,19 @@ const MyProfile = () => {
   <img src={picUrl.current || ava} alt="Avatar" className="absolute w-full h-full object-cover" />
 
 </div>
+<div className="text-center mt-2 relative">
+              <h2 className="font-semibold text-2xl">{user.username}</h2>
+            </div>
+
 
 {!isMobile && profileComplete && ( 
-    <div className="relative ml-60 pl-40 top-[-25px] left-16 text-sm font-bold rounded-full transform z-10">
+    <div className="absolute ml-60 pl-40 top-2 left-10 top-5 text-2xl font-bold rounded-full transform z-10">
     ⭐️
   </div>
 )}
 
 {isMobile && profileComplete && (  
-  <div className="absolute ml-40 mt-[-24px] left-16 text-sm font-bold rounded-full transform z-10">
+  <div className="absolute ml-40 top-5 left-6 text-2xl font-bold rounded-full transform z-10">
   ⭐️
 </div>
 )}
