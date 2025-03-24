@@ -21,9 +21,6 @@ const Footer = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleSubscribe = () => {
-    setEmail(""); // Hide the input after clicking
-  };
 
 
   const handleRandomJoin = async () => {
@@ -36,7 +33,7 @@ const Footer = () => {
         return;
       }
   
-      const response = await fetch("/api/random-event/", {
+      const response = await fetch("http://127.0.0.1:8000/api/random-event/", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

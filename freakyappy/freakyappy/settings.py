@@ -199,19 +199,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FRONTEND = "http://localhost:5173"
+FRONTEND = "http://localhost:5176"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  
     "http://127.0.0.1:5173",
     "http://192.168.x.x:5173",
+    "http://192.168.x.x:5176",
     FRONTEND,  
     "http://10.10.2.13:5176",
 
     
 ]
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "192.168.0.171",  "192.168.x.x", "10.10.2.13"]
+# ALLOWED_HOSTS = ["localhost", "127.0.0.1" , "192.168.0.171",  "192.168.x.x", "10.10.2.13"]
 
 ALLOWED_HOSTS = ["*"]
 

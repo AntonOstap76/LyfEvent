@@ -532,6 +532,7 @@ import random
 @permission_classes([IsAuthenticated])
 def get_random_event(request):
     user = request.user  # Get the current user
+    print(user)
     session_key = f"last_random_event_{user.id}"  # Create a unique key per user in the session
 
     # Check if the user is a student through the Profile model

@@ -25,5 +25,5 @@ urlpatterns = [
     path('reset-pass-link/', views.reset_pass_link, name='reset_pass_link'),
     path('update-password/', views.update_pass, name="update_pass"),     
     path('contact/', ContactMessageView.as_view(), name="contact-message"),
-    path("random-event/", views.get_random_event, name="random-event"),
+    path('random-event/', views.get_random_event, name="random-event"),
 ]
