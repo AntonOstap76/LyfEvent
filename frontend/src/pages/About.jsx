@@ -99,6 +99,34 @@ const About = () => {
   </ul>
 </section>
 
+
+
+
+<section className="bg-white p-8 rounded-lg shadow-lg">
+  <h2 className="text-4xl font-bold text-[#6d6fff] mb-4 text-center">Student Status</h2>
+  
+  <p className="text-gray-700 leading-relaxed text-xl text-center">
+    If you are a student and want to access special events,  
+    you need to <span className="text-[#6d6fff] font-semibold">create an account</span> using your official  
+    <span className="text-[#6d6fff] font-semibold"> university email</span>.  
+    This email confirms your student status and unlocks exclusive opportunities within our platform.
+  </p>
+
+  <p className="text-gray-700 leading-relaxed text-xl text-center mt-4">
+    Once your student status is verified, you will be able to 
+    <span className="font-semibold text-[#6d6fff]"> create and join events</span> that are specifically for students.  
+
+  </p>
+
+  <p className="text-gray-700 leading-relaxed text-xl text-center mt-4">
+    Additionally, your <span className="text-[#6d6fff] font-semibold">student status</span> will be  
+    <span className="text-[#6d6fff] font-semibold"> displayed on your profile</span>, making it easy for others to recognize and connect with you within the student community.
+  </p>
+</section>
+
+
+
+
 <section className="bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-4xl font-bold text-[#6d6fff] mb-4 text-center">Connect with Founders</h2>
         <div>

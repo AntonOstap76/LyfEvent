@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext} from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from '../context/AuthContext';
 import { Tooltip } from "react-tooltip";
@@ -18,7 +18,7 @@ const EventItem = ({ event }) => {
   const formattedDate = event.date
     ? new Date(event.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
     : "TBD";
-
+    
   return (
     <div className="relative">
       <Link to={user ? `/event/${event.id}` : "/login"}>
@@ -36,8 +36,12 @@ const EventItem = ({ event }) => {
               </div>
 
               {/* Tooltip */}
-              <Tooltip id={`student-tooltip-${event.id}`} place="top" content="Only users with a student email can participate."
-                style={{ backgroundColor: "#5a5ae6", color: "white", fontWeight: "600"}} />
+              <Tooltip
+                id={`student-tooltip-${event.id}`}  // Ensure the ID is unique for each event
+                place="top"
+                content="Requires a university email to join."
+                style={{ backgroundColor: "#5a5ae6", color: "white", fontWeight: "600" }}
+              />
             </div>
           )}
           
@@ -81,10 +85,10 @@ const EventItem = ({ event }) => {
             <div className="absolute top-2 right-2 text-yellow-500 z-30">
               
               <span className="text-xs text-center text-white bg-[#6d6fff] w-[45px] px-2 py-1 rounded-md font-semibold">
-                              HOST
-                            </span>
+                HOST
+              </span>
             </div>
-            
+
           )}
           
         </div>
