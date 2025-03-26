@@ -33,7 +33,10 @@ const EventsPage = () => {
   const searchParams = new URLSearchParams(location.search);
   const isPopular = searchParams.get("popular") === "true";
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortOption, setSortOption] = useState(null);
 
+
+  
   useEffect(() => {
     const fetchEvents = async () => {
       let response = await fetch("/api/events-list/");
@@ -50,10 +53,11 @@ const EventsPage = () => {
   }, [isPopular]);
 
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = () => { 
       setIsMobile(window.innerWidth <= 768);
     };
     window.addEventListener("resize", handleResize);
+    handleResize();  // Call initially to ensure correct state on page load
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -61,14 +65,31 @@ const EventsPage = () => {
     setSelectedCategory(category === selectedCategory ? null : category);
     setCurrentPage(1);
   };
-
   const filteredEvents = selectedCategory
-    ? events.filter(event => event.category?.toLowerCase() === selectedCategory.toLowerCase())
-    : events;
+  ? events.filter(event => event.category?.toLowerCase() === selectedCategory.toLowerCase())
+  : events;
 
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const sortedEvents = [...filteredEvents].sort((a, b) => {
+    switch (sortOption) {
+      case "date-asc":
+        return new Date(a.date) - new Date(b.date);
+      case "date-desc":
+        return new Date(b.date) - new Date(a.date);
+      case "participants-asc":
+        return (a.participants?.length || 0) - (b.participants?.length || 0);
+      case "participants-desc":
+        return (b.participants?.length || 0) - (a.participants?.length || 0);
+
+
+      default:
+        return 0; // No sorting
+    }
+  });
+
+const indexOfLastEvent = currentPage * eventsPerPage;
+const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+const currentEvents = sortedEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -130,6 +151,9 @@ const EventsPage = () => {
         <span className="text-sm mt-1 font-semibold">{cat.name}</span>
       </button>
     ))}
+
+
+
   </div>
 )}
 
@@ -152,6 +176,7 @@ const EventsPage = () => {
 
 
             </div>
+            
           </div>
         </div>
         {!isMobile && <div className="flex-shrink-0 w-1/6">
@@ -163,10 +188,28 @@ const EventsPage = () => {
               currentPage={currentPage}
             />
           )}
+          
+          {!isMobile && (
+  <div className="flex-shrink-0 w-1/6 pl-14 mt-4">
+    <select
+      value={sortOption || ""}
+      onChange={(e) => setSortOption(e.target.value || null)}
+      className="p-3 pr-1 pl-3 border-2 border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-[#6d6fff] hover:border-[#6d6fff] transition-all duration-200 ease-in-out shadow-md font-semibold"
+    >
+      <option value="">Sort By</option>
+      <option value="date-asc"className=''>Date (Closest)</option>
+      <option value="date-desc">Date (Furthest)</option>
+      <option value="participants-desc">Participants (Most)</option>
+      <option value="participants-asc">Participants (Least)</option>
+    </select>
+  </div>
+)}
+
+
         </div>}
       </div>
       <div className="px-6">
-        {filteredEvents.length > 0 ? (
+        {currentEvents.length > 0 ? (
           <div className={`grid ${isMobile ? "grid-cols-1" : "lg:grid-cols-6"} gap-6 container mx-auto`}>
             {currentEvents.map(event => <EventItem key={event.id} event={event} />)}
           </div>
@@ -174,7 +217,9 @@ const EventsPage = () => {
           <div className="flex justify-center items-center">
             <p className="text-xl font-bold text-gray-600">No events found.</p>
           </div>
+          
         )}
+
       </div>
       {isMobile && filteredEvents.length > 0 && (
         <div className="mt-6 mb-6">
@@ -185,7 +230,25 @@ const EventsPage = () => {
             currentPage={currentPage}
           />
         </div>
+        
       )}
+      {isMobile && (
+   <div className="absolute top-80 mt-40 left-0 right-0 flex justify-center">
+   <select
+     value={sortOption || ""}
+     onChange={(e) => setSortOption(e.target.value || null)}
+     className="p-3 pr-10 pl-6 border-2 border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-[#6d6fff] hover:border-[#6d6fff] transition-all duration-200 ease-in-out shadow-md font-semibold"
+     style={{ display: 'block' }}
+   >
+     <option value="">Sort By</option>
+     <option value="date-asc">Date (Closest)</option>
+     <option value="date-desc">Date (Furthest)</option>
+     <option value="participants-desc">Participants (Most First)</option>
+     <option value="participants-asc">Participants (Least First)</option>
+   </select>
+ </div>
+ 
+)}
     </div>
   );
 };

@@ -53,7 +53,6 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         localStorage.removeItem("authTokens");
         navigate("/login");
-        Swal.fire("Logged out!", "You have been logged out successfully.", "success");
       }
     });
   };
