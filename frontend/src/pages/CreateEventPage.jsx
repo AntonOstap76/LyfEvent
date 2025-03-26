@@ -278,7 +278,7 @@ const CreateEventPage = ({ eventId }) => {
             <option value="Music">Music</option>
             <option value="Sports">Sports</option>
             <option value="Arts">Arts</option>
-            <option value="Entertainment">Entertainment</option>
+            <option value="Fun">Fun</option>
             <option value="Study">Study</option>
             <option value="Chill">Chill</option>
           </select>

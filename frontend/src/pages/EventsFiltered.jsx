@@ -69,16 +69,16 @@ const EventsFiltered = () => {
 
         {/* Center Box (Search Input) */}
         <div className={`w-full flex justify-center mb-6 ${isMobile ? 'flex-col items-center' : ''}`}>
-          <div className="w-full max-w-2xl z-10">
-            <div className="relative mx-4">
-              <form onSubmit={filterEvents}>
-                <input
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  className="w-full bg-white placeholder:text-slate-400 text-slate-900 text-md border border-slate-200 rounded-lg
-                  pl-3 pr-28 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                  placeholder="Search events..." 
-                />
+        <div className="w-full max-w-2xl z-10 mt-4">
+        <div className="relative">
+          <form onSubmit={filterEvents}>
+            <input
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="w-full bg-white placeholder:text-slate-400 text-slate-900 text-md border border-slate-200 rounded-lg
+              pl-3 pr-10 py-4 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+              placeholder="Search events..."
+            />
                 <button
                   className="absolute top-2 bottom-2 right-2 flex items-center rounded bg-[#6d6fff] py-1 px-2.5 border border-transparent text-md text-white transition-all hover:scale-125"
                   type="submit"
